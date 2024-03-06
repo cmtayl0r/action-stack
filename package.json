@@ -1,11 +1,17 @@
 {
-  "name": "action-stack",
-  "version": "1.0.0",
-  "description": "Todo list manager",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Christopher Taylor",
-  "license": "ISC"
+    "name": "action-stack",
+    "version": "1.0.0",
+    "description": "Todo list manager",
+    "main": "index.js",
+    "scripts": {
+        "start": "parcel index.html",
+        "build": "parcel build index.html"
+    },
+    "author": "Christopher Taylor",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/core": "^7.24.0",
+        "@babel/preset-env": "^7.24.0",
+        "parcel": "^2.12.0"
+    }
 }
