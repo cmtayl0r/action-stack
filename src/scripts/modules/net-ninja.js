@@ -61,32 +61,44 @@ const createListItem = function (name) {
 
 // Debounce function to limit how often the filter function is called
 const debounceFilterInput = function (func, wait) {
+    // Declare a variable to hold the timeout ID,
+    // allowing us to cancel the timeout later if necessary
     let timeout;
+    // Return a new function that encapsulates the debouncing logic
     return function executedFunction(...args) {
         const later = () => {
+            // Define a function (later) that will be executed after the wait period.
+            // It clears the timeout and calls the passed-in function with all its arguments.
             clearTimeout(timeout);
             func(...args);
         };
+        // Clear any existing timeout,
+        // effectively resetting the timer every time the returned function is called.
         clearTimeout(timeout);
+        // Set a new timeout that calls the 'later' function after the specified wait period.
         timeout = setTimeout(later, wait);
     };
 };
+
 // Filter books
 const filterBooksByTerm = function (evt) {
     // Convert user input to lowercase
     const term = evt.target.value.toLowerCase();
 
+    // Retrieve all list items (books) within the bookList ul
     const books = bookList.getElementsByTagName('li');
 
+    // Convert the HTMLCollection of books into an array (to use array methods)
     Array.from(books).forEach(book => {
-        // Grab span of li called name
+        // Grab the first child of each book (li) element,
+        // which is assumed to be a <span> with the class 'name'
         const title = book.firstElementChild.textContent;
-
+        // Check if the book title includes the search term.
+        // If it does, display the book; otherwise, hide it.
         book.style.display = title.toLowerCase().includes(term)
-            ? 'block'
+            ? 'list-item' // block causes marker issues
             : 'none';
     });
-    console.log('Key released:', evt.key);
 };
 
 // -----------------------------------------------------------------------------
