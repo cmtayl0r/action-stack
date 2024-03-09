@@ -16,14 +16,14 @@ const form = document.querySelector('#add-book');
 const formInput = document.querySelector('#add-book input');
 const formBtn = document.querySelector('#add-book button');
 
+// Delete
+const deleteBtns = document.querySelectorAll('#book-list li .delete');
+
 // -----------------------------------------------------------------------------
 // DEMO
 // -----------------------------------------------------------------------------
 
-export const testFnc = function () {
-    console.log('bookBlock nextSibling is:', bookBlock.nextSibling);
-    console.log('bookBlock nextSibling is:', bookBlock.nextElementSibling);
-};
+export const testFnc = function () {};
 
 // -----------------------------------------------------------------------------
 // FUNCTIONS
@@ -41,6 +41,10 @@ const markup = function (name) {
 export const addBook = function () {
     form.addEventListener('submit', function (evt) {
         evt.preventDefault();
+        // Logs
+        console.log(evt.target);
+        console.log(evt);
+        // Get input value
         const newBook = formInput.value;
         bookList.insertAdjacentHTML('beforeend', markup(newBook));
         console.log(newBook);
@@ -49,4 +53,15 @@ export const addBook = function () {
     });
 };
 
-export const deleteBook = function () {};
+export const deleteBook = function () {
+    bookList.addEventListener('click', function (evt) {
+        // Event Delegation + Bubbling
+        /*
+        By adding an event listener to the parent element (bookList) rather than each delete button individually, the code leverages the concept of event bubbling. Event bubbling is a mechanism where an event triggered on a DOM element propagates up (bubbles) to its ancestors. This approach is more efficient than attaching an event listener to each delete button because it reduces the number of event listeners needed.
+        */
+        if (evt.target.className === 'delete') {
+            const liItem = evt.target.parentElement;
+            bookList.removeChild(liItem);
+        }
+    });
+};
