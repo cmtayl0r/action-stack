@@ -5,9 +5,44 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Action Stack</title>
         <link rel="stylesheet" href="src/styles/main.css" />
-        <script type="module" src="src/scripts/main.js"></script>
+        <script type="module" src="src/scripts/app.js"></script>
     </head>
     <body>
-        <h1>Action Stack</h1>
+        <div id="wrapper">
+            <header>
+                <div id="page-banner">
+                    <h1>Action Stack</h1>
+                    <p>Books for Ninjas</p>
+                    <form id="search-books">
+                        <input type="text" placeholder="Search books..." />
+                    </form>
+                </div>
+            </header>
+            <div id="book-list">
+                <h2 class="title">Books to Read</h2>
+                <ul>
+                    <li>
+                        <span class="name">Name of the Wind</span>
+                        <span class="delete">delete</span>
+                    </li>
+                    <li>
+                        <span class="name">The Wise Man's Fear</span>
+                        <span class="delete">delete</span>
+                    </li>
+                    <li>
+                        <span class="name">Kafka on the Shore</span>
+                        <span class="delete">delete</span>
+                    </li>
+                    <li>
+                        <span class="name">The Master and the Margarita</span>
+                        <span class="delete">delete</span>
+                    </li>
+                </ul>
+            </div>
+            <form id="add-book">
+                <input type="text" placeholder="Add a book..." />
+                <button>Add</button>
+            </form>
+        </div>
     </body>
 </html>
