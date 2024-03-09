@@ -59,6 +59,29 @@ const createListItem = function (name) {
     return li;
 };
 
+// Add book
+const addBookToList = function () {
+    // Get input value
+    const value = addForm.querySelector('input[type="text"]').value;
+
+    // If submit has no input value
+    if (value.trim() === '') {
+        alert(`💥 Please enter a name`);
+        return;
+    }
+
+    // Create list item function
+    bookList.appendChild(createListItem(value));
+
+    // Clear input text
+    addForm.querySelector('input[type="text"]').value = '';
+
+    // Maintain focus on input for better usability
+    addFormInput.focus();
+};
+
+// -----------------------------------------------
+
 // Debounce function to limit how often the filter function is called
 const debounceFilterInput = function (func, wait) {
     // Declare a variable to hold the timeout ID,
@@ -109,20 +132,13 @@ const filterBooksByTerm = function (evt) {
 export const addBook = function () {
     addForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
-        // Get input value
-        const value = addForm.querySelector('input[type="text"]').value;
-
-        // If submit has no input value
-        if (value.trim() === '') {
-            alert(`💥 Please enter a name`);
-            return;
+        addBookToList();
+    });
+    addForm.addEventListener('keydown', function (evt) {
+        if (evt.key === 'Enter') {
+            evt.preventDefault();
+            addBookToList();
         }
-
-        // Create list item function
-        bookList.appendChild(createListItem(value));
-
-        // Clear input text
-        addForm.querySelector('input[type="text"]').value = '';
     });
 };
 
