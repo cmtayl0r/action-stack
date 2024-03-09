@@ -23,7 +23,9 @@ const filterFormInput = document.forms['filter-books'].querySelector('input');
 // Hide
 const hideBox = document.querySelector('#hide');
 
-// Delete
+// Tabs
+const tabs = document.querySelector('.tabs');
+const panels = document.querySelectorAll('.panel');
 
 // -----------------------------------------------------------------------------
 // DEMO
@@ -171,4 +173,23 @@ export const filterBooks = function () {
         'input',
         debounceFilterInput(filterBooksByTerm, 300)
     );
+};
+
+// TAB CONTENT
+export const tabContent = function () {
+    tabs.addEventListener('click', function (evt) {
+        if (evt.target.tagName === 'LI') {
+            const targetPanel = document.querySelector(
+                evt.target.dataset.target
+            );
+            panels.forEach(panel => {
+                // Check if panel equal to target panel
+                if (panel === targetPanel) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        }
+    });
 };

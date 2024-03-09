@@ -6,6 +6,21 @@
         <title>Action Stack</title>
         <link rel="stylesheet" href="src/styles/main.css" />
         <script type="module" src="src/scripts/app.js"></script>
+        <style>
+            #tabbed-content .panel {
+                display: none;
+                border: 1px solid #ddd;
+                padding: 1em;
+                border-radius: 4px;
+            }
+            #tabbed-content .panel.active {
+                display: flex;
+                flex-direction: column;
+            }
+            #tabbed-content li {
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
         <div id="wrapper">
@@ -47,12 +62,13 @@
                 <input type="text" placeholder="Add a book..." />
                 <button>Add</button>
             </form>
-            <div id="" tabbed-content>
+            <div id="tabbed-content">
                 <ul class="tabs">
                     <li data-target="#about" class="active">About</li>
                     <li data-target="#contact">Contact</li>
                 </ul>
                 <div class="panel active" id="about">
+                    <h4>About</h4>
                     <p>
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Accusamus perspiciatis quam nobis dolorem earum
@@ -68,8 +84,14 @@
                         accusamus maiores, fuga similique ratione sint?
                     </p>
                 </div>
-                </div class="panel" id="contact">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem doloremque quam eos facere, deleniti numquam a nesciunt suscipit officiis nulla corporis consectetur nisi magnam neque, modi sint tempora similique! Beatae?</p>    
+                <div class="panel" id="contact">
+                    <h4>Contact</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Rem doloremque quam eos facere, deleniti numquam a
+                        nesciunt suscipit officiis nulla corporis consectetur
+                        nisi magnam neque, modi sint tempora similique! Beatae?
+                    </p>
                 </div>
             </div>
         </div>

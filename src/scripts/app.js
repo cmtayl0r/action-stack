@@ -8,6 +8,7 @@ import {
     deleteBook,
     filterBooks,
     hideBooks,
+    tabContent,
 } from './modules/net-ninja';
 // import * as NetNinja from './modules/net-ninja';
 
@@ -22,6 +23,7 @@ const init = function () {
     deleteBook();
     filterBooks();
     hideBooks();
+    tabContent();
 };
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM is fully loaded and parsed!');
