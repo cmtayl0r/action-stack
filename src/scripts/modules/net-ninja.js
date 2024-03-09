@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 
 // const wrapper = document.querySelector('#wrapper');
-// const banner = document.querySelector('#page-banner');
+const banner = document.querySelector('#page-banner');
 // const wmf = document.querySelector('#book-list li:nth-child(2) .name');
 
 // Book list
@@ -17,7 +17,9 @@ const addFormInput = document.querySelector('#add-book input');
 const addFormBtn = document.querySelector('#add-book button');
 
 // Filter
-const filterForm = document.forms['filter-books'].querySelector('input');
+const filterForm = document.forms['filter-books'];
+const filterFormInput = document.forms['filter-books'].querySelector('input');
+const filterClear = document.querySelector('#clear-input');
 
 // Hide
 const hideBox = document.querySelector('#hide');
@@ -28,13 +30,13 @@ const hideBox = document.querySelector('#hide');
 // DEMO
 // -----------------------------------------------------------------------------
 
-export const logFnc = function () {
-    console.log(addForm);
-};
+export const logFnc = function () {};
 
 // -----------------------------------------------------------------------------
 // HELPER FUNCTIONS
 // -----------------------------------------------------------------------------
+
+// ADD -----------------------------------------------
 
 // Create list item
 const createListItem = function (name) {
@@ -80,7 +82,7 @@ const addBookToList = function () {
     addFormInput.focus();
 };
 
-// -----------------------------------------------
+// FILTER -----------------------------------------------
 
 // Debounce function to limit how often the filter function is called
 const debounceFilterInput = function (func, wait) {
@@ -103,10 +105,48 @@ const debounceFilterInput = function (func, wait) {
     };
 };
 
+const toggleClearButtonVisibility = function () {
+    let btn = document.querySelector('#clear-input');
+
+    if (filterFormInput.value.trim()) {
+        // If the input is not empty and the button doesn't exist, create it
+        if (!btn) {
+            // Create button if it doesn't exist
+            btn = document.createElement('button');
+            btn.textContent = 'Clear';
+            btn.setAttribute('type', 'button');
+            btn.setAttribute('id', 'clear-input');
+            btn.classList.add('btn'); // Example class, add your own as needed
+
+            // Append the newly created button to a specific element, ensure this element exists
+            // Assuming filterForm is an existing variable pointing to a form element
+            filterForm.appendChild(btn);
+
+            btn.addEventListener('click', function () {
+                filterFormInput.value = '';
+                btn.classList.add('is-hidden'); // Hide button immediately
+                filterFormInput.focus(); // Focus on input for better UX
+                // If there's a function to refresh or reset the filtered list, call it here
+            });
+        }
+
+        // If the button exists, ensure it's visible when there's text in the input
+        btn.classList.remove('is-hidden');
+    } else {
+        // If the input is empty and the button exists, hide it
+        if (btn) {
+            btn.classList.add('is-hidden');
+        }
+    }
+};
+
 // Filter books
 const filterBooksByTerm = function (evt) {
     // Convert user input to lowercase
     const term = evt.target.value.toLowerCase();
+
+    // Ensure visibility of clear button is updated based on input
+    toggleClearButtonVisibility();
 
     // Retrieve all list items (books) within the bookList ul
     const books = bookList.getElementsByTagName('li');
@@ -166,8 +206,24 @@ export const hideBooks = function () {
 
 // FILTER
 export const filterBooks = function () {
-    filterForm.addEventListener(
-        'keyup',
+    filterFormInput.addEventListener(
+        'input',
         debounceFilterInput(filterBooksByTerm, 300)
     );
+    // Ensure visibility of clear button updated in real-time
+    filterFormInput.addEventListener('input', toggleClearButtonVisibility);
+
+    // Keyboard event for clear button
+    filterFormInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            this.value = '';
+            const clearButton = document.querySelector('#clear-input');
+            if (clearButton && !clearButton.classList.contains('is-hidden')) {
+                clearButton.classList.add('is-hidden');
+            }
+            filterBooksByTerm({ target: this });
+            this.focus();
+            event.preventDefault();
+        }
+    });
 };
