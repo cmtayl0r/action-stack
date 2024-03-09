@@ -16,6 +16,9 @@ const form = document.querySelector('#add-book');
 const formInput = document.querySelector('#add-book input');
 const formBtn = document.querySelector('#add-book button');
 
+// Search
+const search = document.querySelector('#search-books');
+
 // Delete
 const deleteBtns = document.querySelectorAll('#book-list li .delete');
 
@@ -23,7 +26,7 @@ const deleteBtns = document.querySelectorAll('#book-list li .delete');
 // DEMO
 // -----------------------------------------------------------------------------
 
-export const testFnc = function () {};
+export const logFnc = function () {};
 
 // -----------------------------------------------------------------------------
 // FUNCTIONS
@@ -60,8 +63,13 @@ export const deleteBook = function () {
         By adding an event listener to the parent element (bookList) rather than each delete button individually, the code leverages the concept of event bubbling. Event bubbling is a mechanism where an event triggered on a DOM element propagates up (bubbles) to its ancestors. This approach is more efficient than attaching an event listener to each delete button because it reduces the number of event listeners needed.
         */
         if (evt.target.className === 'delete') {
+            // Target the li containing the delete button
             const liItem = evt.target.parentElement;
             bookList.removeChild(liItem);
         }
     });
+};
+
+export const searchBooks = function () {
+    searchBooks.addEventListener('click', function () {});
 };
