@@ -2,7 +2,13 @@
 // IMPORTS
 // -----------------------------------------------------------------------------
 
-import { logFnc, addBook, deleteBook, searchBooks } from './modules/net-ninja';
+import {
+    logFnc,
+    addBook,
+    deleteBook,
+    filterBooks,
+    hideBooks,
+} from './modules/net-ninja';
 // import * as NetNinja from './modules/net-ninja';
 
 // -----------------------------------------------------------------------------
@@ -14,7 +20,8 @@ const init = function () {
     logFnc();
     addBook();
     deleteBook();
-    searchBooks();
+    filterBooks();
+    hideBooks();
 };
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM is fully loaded and parsed!');

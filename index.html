@@ -13,7 +13,7 @@
                 <div id="page-banner">
                     <h1>Action Stack</h1>
                     <p>Books for Ninjas</p>
-                    <form id="search-books">
+                    <form id="filter-books">
                         <input type="text" placeholder="Search books..." />
                     </form>
                 </div>
@@ -40,6 +40,9 @@
                 </ul>
             </div>
             <form id="add-book">
+                <input type="checkbox" id="hide" />
+                <label for="hide">Hide all books</label>
+                <br />
                 <input type="text" placeholder="Add a book..." />
                 <button>Add</button>
             </form>

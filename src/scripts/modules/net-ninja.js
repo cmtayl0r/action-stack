@@ -2,9 +2,9 @@
 // DOM ELEMENTS
 // -----------------------------------------------------------------------------
 
-const wrapper = document.querySelector('#wrapper');
-const banner = document.querySelector('#page-banner');
-const wmf = document.querySelector('#book-list li:nth-child(2) .name');
+// const wrapper = document.querySelector('#wrapper');
+// const banner = document.querySelector('#page-banner');
+// const wmf = document.querySelector('#book-list li:nth-child(2) .name');
 
 // Book list
 const books = document.querySelectorAll('#book-list li .name');
@@ -12,50 +12,109 @@ const bookList = document.querySelector('#book-list ul');
 const bookBlock = document.querySelector('#book-list');
 
 // Add form
-const form = document.querySelector('#add-book');
-const formInput = document.querySelector('#add-book input');
-const formBtn = document.querySelector('#add-book button');
+const addForm = document.forms['add-book'];
+const addFormInput = document.querySelector('#add-book input');
+const addFormBtn = document.querySelector('#add-book button');
 
-// Search
-const search = document.querySelector('#search-books');
+// Filter
+const filterForm = document.forms['filter-books'].querySelector('input');
+
+// Hide
+const hideBox = document.querySelector('#hide');
 
 // Delete
-const deleteBtns = document.querySelectorAll('#book-list li .delete');
 
 // -----------------------------------------------------------------------------
 // DEMO
 // -----------------------------------------------------------------------------
 
-export const logFnc = function () {};
-
-// -----------------------------------------------------------------------------
-// FUNCTIONS
-// -----------------------------------------------------------------------------
-
-const markup = function (name) {
-    return `
-    <li>
-        <span class="name">${name}</span>
-        <span class="delete">delete</span>
-    </li>
-    `;
+export const logFnc = function () {
+    console.log(addForm);
 };
 
+// -----------------------------------------------------------------------------
+// HELPER FUNCTIONS
+// -----------------------------------------------------------------------------
+
+// Create list item
+const createListItem = function (name) {
+    // Create elements
+    const li = document.createElement('li');
+    const bookName = document.createElement('span');
+    const deleteBtn = document.createElement('span');
+
+    // Add content
+    bookName.textContent = name;
+    deleteBtn.textContent = 'delete';
+
+    // Add classes
+    bookName.classList.add('name');
+    deleteBtn.classList.add('delete');
+    deleteBtn.setAttribute('aria-label', `Delete ${name}`);
+
+    // Append to DOM
+    li.appendChild(bookName);
+    li.appendChild(deleteBtn);
+
+    return li;
+};
+
+// Debounce function to limit how often the filter function is called
+const debounceFilterInput = function (func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
+// Filter books
+const filterBooksByTerm = function (evt) {
+    // Convert user input to lowercase
+    const term = evt.target.value.toLowerCase();
+
+    const books = bookList.getElementsByTagName('li');
+
+    Array.from(books).forEach(book => {
+        // Grab span of li called name
+        const title = book.firstElementChild.textContent;
+
+        book.style.display = title.toLowerCase().includes(term)
+            ? 'block'
+            : 'none';
+    });
+    console.log('Key released:', evt.key);
+};
+
+// -----------------------------------------------------------------------------
+// ACTION FUNCTIONS
+// -----------------------------------------------------------------------------
+
+// ADD
 export const addBook = function () {
-    form.addEventListener('submit', function (evt) {
+    addForm.addEventListener('submit', function (evt) {
         evt.preventDefault();
-        // Logs
-        console.log(evt.target);
-        console.log(evt);
         // Get input value
-        const newBook = formInput.value;
-        bookList.insertAdjacentHTML('beforeend', markup(newBook));
-        console.log(newBook);
+        const value = addForm.querySelector('input[type="text"]').value;
+
+        // If submit has no input value
+        if (value.trim() === '') {
+            alert(`💥 Please enter a name`);
+            return;
+        }
+
+        // Create list item function
+        bookList.appendChild(createListItem(value));
+
         // Clear input text
-        // formInput.value = '';
+        addForm.querySelector('input[type="text"]').value = '';
     });
 };
 
+// DELETE
 export const deleteBook = function () {
     bookList.addEventListener('click', function (evt) {
         // Event Delegation + Bubbling
@@ -70,6 +129,17 @@ export const deleteBook = function () {
     });
 };
 
-export const searchBooks = function () {
-    searchBooks.addEventListener('click', function () {});
+// HIDE
+export const hideBooks = function () {
+    hideBox.addEventListener('change', evt => {
+        bookList.classList.toggle('is-hidden', hideBox.checked);
+    });
+};
+
+// FILTER
+export const filterBooks = function () {
+    filterForm.addEventListener(
+        'keyup',
+        debounceFilterInput(filterBooksByTerm, 300)
+    );
 };
