@@ -1,5 +1,7 @@
 /* Base */
-@import 'base/global';
+@import url('base/variables.css');
+@import url('base/global.css');
+@import url('base/reset.css');
 /* 
 @import 'base/variables';
 @import 'base/reset';

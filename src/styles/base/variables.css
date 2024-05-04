@@ -1,0 +1,14 @@
+:root {
+    /* Typography */
+    --ff-primary: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+        'Noto Sans', 'Liberation Sans', Arial, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Primitive Colours */
+    --clr-white: #f3f3f3;
+    --clr-black: #0a0a23;
+    --clr-gray-light: #c8c8c8;
+    --clr-gray: #8e8e8e;
+    --clr-gray-dark: #444;
+    --clr-yellow: #ffc608;
+}
