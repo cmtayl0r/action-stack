@@ -11,16 +11,19 @@ export class Model {
         );
     }
 
+    // 1 - Get list from model
     getLists() {
         // Return the lists array
         return this.lists;
     }
 
+    // 2 - Find list from model
     findList(listId) {
         // Find the list by its id and return it
         return this.lists.find(list => list.id === listId);
     }
 
+    // 3 - Add list to model
     addList(list) {
         // Add the list to the lists array
         this.lists.push(list);
@@ -28,6 +31,7 @@ export class Model {
         this.save();
     }
 
+    // 4 - Add task to a list, in the model
     addTask(listId, task) {
         // Find the list by its id
         const list = this.findList(listId);
@@ -39,6 +43,7 @@ export class Model {
         this.save();
     }
 
+    // 5 - Update list in the model
     save() {
         // Save the lists array to local storage
         localStorage.setItem(
