@@ -1,6 +1,8 @@
 export class Model {
     constructor() {
+        // task.lists is the key for the lists array in local storage
         this.LOCAL_STORAGE_LIST_KEY = 'task.lists';
+        // task.selectedListId is the key for the selected list id in local storage
         this.LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId';
         this.lists =
             JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_LIST_KEY)) || [];
