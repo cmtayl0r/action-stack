@@ -4,13 +4,13 @@
 // MODEL
 // -----------------------------------------------------------------------------
 
+// Key name for storing the list data in local storage
 const LOCAL_STORAGE_LIST_KEY = 'task.lists';
+// Key name for storing the currently selected list ID in local storage
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId';
-
-// Get the lists from local storage or create an empty array if there are none
+// Fetch the list data from local storage or initialize it to an empty array if none exists
 let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || [];
-
-// Get the selected list id from local storage or set it to null
+// Fetch the currently selected list ID from local storage or initialize to null if none exists
 let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY);
 
 // -----------------------------------------------------------------------------
@@ -41,6 +41,7 @@ const clearCompleteTasksButton = document.querySelector(
 // VIEW [LISTS]
 // -----------------------------------------------------------------------------
 
+// Adds an event listener for list selection changes
 listsContainer.addEventListener('click', e => {
     // Check if the clicked element is an li element
     // If so, set the selected list id to the id of the clicked list
@@ -50,7 +51,10 @@ listsContainer.addEventListener('click', e => {
     }
 });
 
+// Adds an event listener to toggle the completion status of a task
 tasksContainer.addEventListener('click', e => {
+    // Check if the clicked element is an input element
+    // If so, find the selected list and task and toggle the task's completion status
     if (e.target.tagName.toLowerCase() === 'input') {
         const selectedList = lists.find(list => list.id === selectedListId);
         const selectedTask = selectedList.tasks.find(
@@ -62,12 +66,14 @@ tasksContainer.addEventListener('click', e => {
     }
 });
 
+// Adds an event listener to clear all completed tasks from the selected list
 clearCompleteTasksButton.addEventListener('click', e => {
     const selectedList = lists.find(list => list.id === selectedListId);
     selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
     saveAndRender();
 });
 
+// Adds an event listener for submitting a new list
 deleteListButton.addEventListener('click', e => {
     // Give me all the lists that are not the selected list
     lists = lists.filter(list => list.id !== selectedListId);
@@ -88,6 +94,7 @@ newListForm.addEventListener('submit', e => {
     saveAndRender();
 });
 
+// Adds an event listener for submitting a new task
 newTaskForm.addEventListener('submit', e => {
     e.preventDefault(); // Prevent the default form submission
     const taskName = newTaskInput.value; // Get the value of the input field
@@ -109,7 +116,9 @@ function createList(name) {
     };
 }
 
+// Function to create a new task
 function createTask(name) {
+    // Add task to model / array in the selected list
     return {
         id: Date.now().toString(),
         name: name,
@@ -128,22 +137,33 @@ function save() {
     localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId);
 }
 
-// Function to render the lists
+// Function to render the current state
 function render() {
-    clearElement(listsContainer); // Clear the lists container before rendering
+    // Clear the lists container before rendering the lists
+    clearElement(listsContainer);
+    // Render the lists
     renderLists();
+    // Find the selected list by its id
     const selectedList = lists.find(list => list.id === selectedListId);
+    // Check if the selected list is null
     if (selectedListId == null) {
+        // If the selected list is null, hide the list display container
         listDisplayContainer.style.display = 'none';
     } else {
+        // If the selected list is not null, show the list display container
         listDisplayContainer.style.display = '';
+        // Set the text of the list title to the name of the selected list
         listTitle.innerText = selectedList.name;
+        // Call the renderTaskCount function to render the task count
         renderTaskCount(selectedList);
+        // Clear the tasks container before rendering the tasks
         clearElement(tasksContainer);
+        // Call the renderTasks function to render the tasks for the selected list
         renderTasks(selectedList);
     }
 }
 
+// Function to render tasks for the selected list
 function renderTasks(selectedList) {
     selectedList.tasks.forEach(task => {
         // Clone the task template content
@@ -161,16 +181,7 @@ function renderTasks(selectedList) {
     });
 }
 
-// function taskTemplate(task) {
-//     return `
-//     <li class="task">
-//         <input id="1" type="checkbox" class="task-checkbox">
-//         <label for="1" class="task-label
-//         ">Test Task 1</label>
-//     </li>
-//     `;
-// }
-
+// Function to update the task count display
 function renderTaskCount(selectedList) {
     const incompleteTaskCount = selectedList.tasks.filter(
         task => !task.complete
@@ -179,6 +190,7 @@ function renderTaskCount(selectedList) {
     listCount.innerText = `${incompleteTaskCount} ${taskString} remaining`;
 }
 
+// Function to render all lists
 function renderLists() {
     lists.forEach(list => {
         const listElement = document.createElement('li');
@@ -201,4 +213,5 @@ function clearElement(element) {
     }
 }
 
+// Calls render function to render initial state
 render();
