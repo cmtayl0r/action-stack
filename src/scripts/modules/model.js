@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// MODEL
+// -----------------------------------------------------------------------------
+// Handles the data and state of the application
 export class Model {
     constructor() {
         // task.lists is the key for the lists array in local storage

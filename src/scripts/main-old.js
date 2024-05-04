@@ -41,6 +41,7 @@ const clearCompleteTasksButton = document.querySelector(
 // VIEW [LISTS]
 // -----------------------------------------------------------------------------
 
+// FIXME: view-task.js
 // Adds an event listener for list selection changes
 listsContainer.addEventListener('click', e => {
     // Check if the clicked element is an li element
@@ -83,6 +84,7 @@ deleteListButton.addEventListener('click', e => {
     saveAndRender();
 });
 
+// FIXME: view-task.js
 // Event listener for the form submission to create a new list
 newListForm.addEventListener('submit', e => {
     e.preventDefault();
@@ -106,6 +108,7 @@ newTaskForm.addEventListener('submit', e => {
     saveAndRender();
 });
 
+// FIXME: model.js
 // Function to create a new list
 function createList(name) {
     // Add list to model / array
@@ -116,6 +119,7 @@ function createList(name) {
     };
 }
 
+// FIXME: model.js
 // Function to create a new task
 function createTask(name) {
     // Add task to model / array in the selected list
@@ -131,6 +135,7 @@ function saveAndRender() {
     render();
 }
 
+// FIXME: model.js
 // Function to save list to Model
 function save() {
     localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists));
@@ -190,6 +195,7 @@ function renderTaskCount(selectedList) {
     listCount.innerText = `${incompleteTaskCount} ${taskString} remaining`;
 }
 
+// FIXME: view-task.js
 // Function to render all lists
 function renderLists() {
     lists.forEach(list => {
