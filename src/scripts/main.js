@@ -1,3 +1,5 @@
+// TODO: Understand selectedList
+
 // -----------------------------------------------------------------------------
 // MODEL
 // -----------------------------------------------------------------------------
@@ -26,6 +28,14 @@ const listDisplayContainer = document.querySelector(
 const listTitle = document.querySelector('[data-list-title]');
 const listCount = document.querySelector('[data-list-count]');
 const tasksContainer = document.querySelector('[data-tasks]');
+const taskTemplate = document.getElementById('task-template');
+
+const newTaskForm = document.querySelector('[data-new-task-form]');
+const newTaskInput = document.querySelector('[data-new-task-input]');
+
+const clearCompleteTasksButton = document.querySelector(
+    '[data-clear-complete-tasks-button]'
+);
 
 // -----------------------------------------------------------------------------
 // VIEW [LISTS]
@@ -40,6 +50,24 @@ listsContainer.addEventListener('click', e => {
     }
 });
 
+tasksContainer.addEventListener('click', e => {
+    if (e.target.tagName.toLowerCase() === 'input') {
+        const selectedList = lists.find(list => list.id === selectedListId);
+        const selectedTask = selectedList.tasks.find(
+            task => task.id === e.target.id
+        );
+        selectedTask.complete = e.target.checked;
+        save();
+        renderTaskCount(selectedList);
+    }
+});
+
+clearCompleteTasksButton.addEventListener('click', e => {
+    const selectedList = lists.find(list => list.id === selectedListId);
+    selectedList.tasks = selectedList.tasks.filter(task => !task.complete);
+    saveAndRender();
+});
+
 deleteListButton.addEventListener('click', e => {
     // Give me all the lists that are not the selected list
     lists = lists.filter(list => list.id !== selectedListId);
@@ -51,12 +79,23 @@ deleteListButton.addEventListener('click', e => {
 
 // Event listener for the form submission to create a new list
 newListForm.addEventListener('submit', e => {
-    e.preventDefault(); // Prevent the default form submission
-    const listName = newListInput.value; // Get the value of the input field
-    if (listName === null || listName === '') return; // Don't create empty lists
+    e.preventDefault();
+    const listName = newListInput.value;
+    if (listName == null || listName === '') return;
     const list = createList(listName);
     newListInput.value = null;
     lists.push(list);
+    saveAndRender();
+});
+
+newTaskForm.addEventListener('submit', e => {
+    e.preventDefault(); // Prevent the default form submission
+    const taskName = newTaskInput.value; // Get the value of the input field
+    if (taskName === null || taskName === '') return; // Don't create empty lists
+    const task = createTask(taskName);
+    newTaskInput.value = null;
+    const selectedList = lists.find(list => list.id === selectedListId);
+    selectedList.tasks.push(task);
     saveAndRender();
 });
 
@@ -66,13 +105,15 @@ function createList(name) {
     return {
         id: Date.now().toString(),
         name: name,
-        tasks: [
-            {
-                id: 1,
-                name: 'dsadsapdsapkdas',
-                complete: false,
-            },
-        ],
+        tasks: [],
+    };
+}
+
+function createTask(name) {
+    return {
+        id: Date.now().toString(),
+        name: name,
+        complete: false,
     };
 }
 
@@ -97,11 +138,38 @@ function render() {
     } else {
         listDisplayContainer.style.display = '';
         listTitle.innerText = selectedList.name;
-        // renderTaskCount(selectedList)
-        // clearElement(tasksContainer)
-        // renderTasks(selectedList)
+        renderTaskCount(selectedList);
+        clearElement(tasksContainer);
+        renderTasks(selectedList);
     }
 }
+
+function renderTasks(selectedList) {
+    selectedList.tasks.forEach(task => {
+        // Clone the task template content
+        const taskElement = document.importNode(
+            taskTemplate.content, // Clone the content of the template
+            true // Deep clone the content
+        );
+        const checkbox = taskElement.querySelector('input'); // Get the checkbox input element
+        checkbox.id = task.id; // Set the id of the checkbox to the task id
+        checkbox.checked = task.complete; // Check the checkbox if the task is complete
+        const label = taskElement.querySelector('label'); // Get the label element
+        label.htmlFor = task.id; // Set the htmlFor attribute of the label to the task id
+        label.append(task.name); // Set the text of the label to the task name
+        tasksContainer.appendChild(taskElement); // Append the task element to the tasks container
+    });
+}
+
+// function taskTemplate(task) {
+//     return `
+//     <li class="task">
+//         <input id="1" type="checkbox" class="task-checkbox">
+//         <label for="1" class="task-label
+//         ">Test Task 1</label>
+//     </li>
+//     `;
+// }
 
 function renderTaskCount(selectedList) {
     const incompleteTaskCount = selectedList.tasks.filter(
