@@ -2,6 +2,10 @@
 @import url('base/variables.css');
 @import url('base/global.css');
 @import url('base/reset.css');
+
+/* Layout */
+@import url('views/structure.css');
+
 /* 
 @import 'base/variables';
 @import 'base/reset';

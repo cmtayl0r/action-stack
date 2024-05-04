@@ -1,0 +1,9 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) 3fr;
+}
+.todo-list {
+    border: 2px solid var(--clr-gray-dark);
+    border-radius: 2rem;
+    padding: 2rem;
+}
