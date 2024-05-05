@@ -18,9 +18,8 @@
             ]
         }
     ]
-
     task.selectedListId: '[ID of the currently selected list]'
-    */
+*/
 
 export class Model {
     constructor() {
