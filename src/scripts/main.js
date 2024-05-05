@@ -20,53 +20,75 @@ class Controller {
 
     // Initial setup and render
     init() {
+        // Render the initial view
         this.renderAll();
     }
 
-    // Fetches necessary data for rendering
+    // LISTS
+
+    // 01 - Fetches necessary data for rendering
     getLists() {
+        // Return the lists and the selected list ID from the model
         return {
-            lists: this.model.getLists(),
-            selectedListId: this.model.selectedListId,
+            lists: this.model.getLists(), // Get all lists
+            selectedListId: this.model.selectedListId, // Get the selected list ID
         };
     }
 
-    // Fetches the selected list
+    // 02 - Fetches the selected list
     getSelectedList() {
+        // Return the selected list from the model
+        // Pass the selected list ID to the findListById method
         return this.model.findListById(this.model.selectedListId);
     }
 
-    // Handles user actions to select a list
+    // 03 - Handles user actions to select a list
+    // This is used in the view to handle list selection
     handleListSelection(listId) {
+        // Set the selected list ID in the model
         this.model.setSelectedListId(listId);
+        // Re-render the view
         this.renderAll();
     }
 
-    // Adds a new list through the model and updates the view
+    // 04 - Adds a new list through the model and updates the view
     addList(name) {
+        // Pass the list name to the addList method in the model
         this.model.addList(name);
+        // Re-render the view
         this.renderAll();
     }
 
-    // Deletes the selected list and updates the view
+    // 05 - Deletes the selected list and updates the view
     deleteSelectedList() {
+        // Check if a list is selected
         if (this.model.selectedListId) {
+            // Pass the selected list ID to the deleteList method in the model
             this.model.deleteList(this.model.selectedListId);
+            // Re-render the view
             this.renderAll();
         }
     }
 
-    // Adds a new task to the selected list and updates the view
+    // TASKS
+
+    // 01 - Adds a new task to the selected list and updates the view
+    // Used in the view to add a new task
     addTask(taskName) {
+        // Check if a list is selected
         if (this.model.selectedListId) {
+            // Pass the task name to the addTaskToList method in the model
             this.model.addTaskToList(this.model.selectedListId, taskName);
+            // Re-render the view
             this.renderAll();
         }
     }
 
-    // Toggles the completion status of a task and updates the view
+    // 02 - Toggles the completion status of a task and updates the view
     toggleTaskCompletion(listId, taskId, isComplete) {
+        // Pass the list ID, task ID, and completion status to the toggleTaskComplete method in the model
         this.model.toggleTaskComplete(listId, taskId, isComplete);
+        // Re-render the view
         this.renderAll();
     }
 
@@ -83,6 +105,7 @@ class Controller {
         const { lists, selectedListId } = this.getLists();
         this.listView.renderLists(lists, selectedListId);
         this.taskView.renderTasks(this.getSelectedList());
+        // Add all render methods here
     }
 }
 

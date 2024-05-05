@@ -1,6 +1,4 @@
 export class ViewLists {
-    // TODO: Understand controller in constructor
-
     constructor(controller) {
         this.controller = controller;
         // Lists container
