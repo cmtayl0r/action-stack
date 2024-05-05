@@ -22,6 +22,7 @@ export class ViewTasks {
 
     // Add event listeners
     addEventListeners() {
+        // Event listener on new task form
         this.newTaskForm.addEventListener('submit', event => {
             event.preventDefault();
             const taskName = this.newTaskInput.value.trim();
@@ -30,9 +31,10 @@ export class ViewTasks {
                 this.newTaskInput.value = '';
             }
         });
-
+        // Event listener on tasks container to toggle task completion
         this.tasksContainer.addEventListener('click', event => {
             if (event.target.tagName.toLowerCase() === 'input') {
+                console.log(event.target);
                 this.controller.toggleTaskCompletion(
                     event.target.dataset.listId,
                     event.target.id,
@@ -40,7 +42,7 @@ export class ViewTasks {
                 );
             }
         });
-
+        // Event listener on clear complete tasks button
         this.clearCompleteTasksButton.addEventListener('click', () => {
             this.controller.clearCompletedTasks();
         });
@@ -76,6 +78,10 @@ export class ViewTasks {
                 true
             );
             const checkbox = taskElement.querySelector('input');
+            // Set the list ID as a data attribute on the checkbox
+            // So we can access it later when toggling the task completion status
+            // event listener needs to know the list ID (event.target.dataset.listId)
+            checkbox.dataset.listId = selectedList.id;
             // Set the list ID as a data attribute on the checkbox
             checkbox.id = task.id;
             // Set the checked status of the checkbox based on the task completion status

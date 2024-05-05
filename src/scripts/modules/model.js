@@ -112,6 +112,7 @@ export class Model {
         const task = list.tasks.find(task => task.id === taskId);
         // Set the completion status of the task to the provided value
         task.complete = isComplete;
+        // console.log(listId, taskId, isComplete);
         // Save the updated list data to local storage
         this.save();
     }

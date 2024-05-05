@@ -7,6 +7,7 @@ import { Model } from './modules/model.js';
 import { ViewLists } from './modules/views/view-lists.js';
 import { ViewTasks } from './modules/views/view-task.js';
 // Component imports
+import { Toast } from './modules/components/toast.js';
 
 // -----------------------------------------------------------------------------
 // CONTROLLER
@@ -18,6 +19,7 @@ class Controller {
         this.model = new Model();
         this.listView = new ViewLists(this);
         this.taskView = new ViewTasks(this);
+        this.toast = new Toast(this);
         this.init();
     }
 
@@ -69,6 +71,8 @@ class Controller {
         this.model.addList(name);
         // Re-render the view
         this.renderAll();
+        // Display a toast message
+        this.displayToast(`👍 List created`);
     }
 
     // 05 - Deletes the selected list and updates the view
@@ -79,6 +83,8 @@ class Controller {
             this.model.deleteList(this.model.selectedListId);
             // Re-render the view
             this.renderAll();
+            // Display a toast message
+            this.displayToast(`🗑️ List deleted`);
         }
     }
 
@@ -93,6 +99,8 @@ class Controller {
             this.model.addTaskToList(this.model.selectedListId, taskName);
             // Re-render the view
             this.renderAll();
+            // Display a toast message
+            this.displayToast(`👍 Task added`);
         }
     }
 
@@ -113,6 +121,11 @@ class Controller {
             // Re-render the view
             this.renderAll();
         }
+    }
+
+    // Toasts
+    displayToast(message) {
+        this.toast.show(message);
     }
 }
 
