@@ -1,9 +1,12 @@
 // -----------------------------------------------------------------------------
 // IMPORTS
 // -----------------------------------------------------------------------------
+// Model
 import { Model } from './modules/model.js';
+// View imports
 import { ViewLists } from './modules/views/view-lists.js';
 import { ViewTasks } from './modules/views/view-task.js';
+// Component imports
 
 // -----------------------------------------------------------------------------
 // CONTROLLER

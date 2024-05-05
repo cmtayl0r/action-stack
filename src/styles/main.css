@@ -6,6 +6,9 @@
 /* Layout */
 @import url('views/structure.css');
 
+/* Components */
+@import url('components/toast.css');
+
 /* 
 @import 'base/variables';
 @import 'base/reset';
