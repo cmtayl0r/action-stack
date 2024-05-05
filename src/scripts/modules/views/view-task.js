@@ -1,67 +1,73 @@
 export class ViewTasks {
+    // TODO: Understand controller in constructor
+
     constructor(controller) {
         this.controller = controller;
-        // Lists container
-        this.listsContainer = document.querySelector('[data-lists]');
-        // New list form
-        this.newListForm = document.querySelector('[data-new-list-form]');
-        this.newListInput = document.querySelector('[data-new-list-input]');
-        // Todo list container
-        this.listDisplayContainer = document.querySelector(
-            '[data-list-display-container]'
-        );
-        this.listTitle = document.querySelector('[data-list-title]');
-        this.listCount = document.querySelector('[data-list-count]');
+
         this.tasksContainer = document.querySelector('[data-tasks]');
         this.taskTemplate = document.getElementById('task-template');
-        // New task form
-        // this.newTaskForm = document.querySelector('[data-new-task-form]');
-        // this.newTaskInput = document.querySelector('[data-new-task-input]');
-
-        this.newListForm.addEventListener(
-            'submit',
-            this.handleAddList.bind(this)
+        this.listTitle = document.querySelector('[data-list-title]');
+        this.listCount = document.querySelector('[data-list-count]');
+        this.newTaskForm = document.querySelector('[data-new-task-form]');
+        this.newTaskInput = document.querySelector('[data-new-task-input]');
+        this.clearCompleteTasksButton = document.querySelector(
+            '[data-clear-complete-tasks-button]'
         );
-        this.listsContainer.addEventListener(
-            'click',
-            this.handleListClick.bind(this)
-        );
+
+        this.addEventListeners();
     }
 
-    handleAddList(event) {
-        event.preventDefault();
-        const listName = this.newListInput.value.trim();
-        if (listName == null || listName === '') return;
-        this.controller.addList(listName);
-        this.newListInput.value = null;
-    }
-
-    handleListClick(event) {
-        if (event.target.tagName.toLowerCase() === 'li') {
-            const selectedListId = event.target.dataset.listId;
-            this.controller.selectList(selectedListId);
-        }
-    }
-
-    renderLists(lists, selectedListId) {
-        this.listsContainer.innerHTML = '';
-        lists.forEach(list => {
-            const listElement = document.createElement('li');
-            listElement.dataset.listId = list.id;
-            listElement.classList.add('list-name');
-            listElement.innerText = list.name;
-            if (list.id === selectedListId) {
-                listElement.classList.add('active-list');
+    addEventListeners() {
+        this.newTaskForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const taskName = this.newTaskInput.value.trim();
+            if (taskName) {
+                this.controller.addTask(taskName);
+                this.newTaskInput.value = '';
             }
-            this.listsContainer.appendChild(listElement);
         });
 
-        // Optionally, handle empty states
-        if (lists.length === 0) {
-            const emptyMessage = document.createElement('p');
-            emptyMessage.textContent =
-                'No lists available. Create a new list to get started!';
-            this.listsContainer.appendChild(emptyMessage);
+        this.tasksContainer.addEventListener('click', event => {
+            if (event.target.tagName.toLowerCase() === 'input') {
+                this.controller.toggleTaskCompletion(
+                    event.target.dataset.listId,
+                    event.target.id,
+                    event.target.checked
+                );
+            }
+        });
+
+        this.clearCompleteTasksButton.addEventListener('click', () => {
+            this.controller.clearCompletedTasks();
+        });
+    }
+
+    renderTasks(selectedList) {
+        if (!selectedList) {
+            this.tasksContainer.innerHTML = '<p>No list selected</p>';
+            this.listTitle.textContent = '';
+            this.listCount.textContent = '';
+            return;
         }
+
+        this.listTitle.textContent = selectedList.name;
+        this.listCount.textContent = `${
+            selectedList.tasks.filter(task => !task.complete).length
+        } tasks remaining`;
+
+        this.tasksContainer.innerHTML = '';
+        selectedList.tasks.forEach(task => {
+            const taskElement = document.importNode(
+                this.taskTemplate.content,
+                true
+            );
+            const checkbox = taskElement.querySelector('input');
+            checkbox.id = task.id;
+            checkbox.checked = task.complete;
+            const label = taskElement.querySelector('label');
+            label.htmlFor = task.id;
+            label.append(task.name);
+            this.tasksContainer.appendChild(taskElement);
+        });
     }
 }

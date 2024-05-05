@@ -13,29 +13,76 @@ import { ViewTasks } from './modules/views/view-task.js';
 class Controller {
     constructor() {
         this.model = new Model();
-        this.viewTask = new ViewTask(this);
+        this.listView = new ViewLists(this);
+        this.taskView = new ViewTasks(this);
+        this.init();
     }
 
-    addList(name) {
-        const list = { id: Date.now().toString(), name, tasks: [] };
-        this.model.addList(list);
-        this.viewTask.renderLists();
-    }
-
-    selectList(listId) {
-        this.model.selectedListId = listId;
-        this.model.save();
-        this.viewTask.renderLists(
-            this.model.getLists(),
-            this.model.selectedListId
-        );
-    }
-
+    // Initial setup and render
     init() {
-        this.viewTask.renderLists(
-            this.model.getLists(),
-            this.model.selectedListId
-        );
+        this.renderAll();
+    }
+
+    // Fetches necessary data for rendering
+    getLists() {
+        return {
+            lists: this.model.getLists(),
+            selectedListId: this.model.selectedListId,
+        };
+    }
+
+    // Fetches the selected list
+    getSelectedList() {
+        return this.model.findListById(this.model.selectedListId);
+    }
+
+    // Handles user actions to select a list
+    handleListSelection(listId) {
+        this.model.setSelectedListId(listId);
+        this.renderAll();
+    }
+
+    // Adds a new list through the model and updates the view
+    addList(name) {
+        this.model.addList(name);
+        this.renderAll();
+    }
+
+    // Deletes the selected list and updates the view
+    deleteSelectedList() {
+        if (this.model.selectedListId) {
+            this.model.deleteList(this.model.selectedListId);
+            this.renderAll();
+        }
+    }
+
+    // Adds a new task to the selected list and updates the view
+    addTask(taskName) {
+        if (this.model.selectedListId) {
+            this.model.addTaskToList(this.model.selectedListId, taskName);
+            this.renderAll();
+        }
+    }
+
+    // Toggles the completion status of a task and updates the view
+    toggleTaskCompletion(listId, taskId, isComplete) {
+        this.model.toggleTaskComplete(listId, taskId, isComplete);
+        this.renderAll();
+    }
+
+    // Clears all completed tasks from the selected list and updates the view
+    clearCompletedTasks() {
+        if (this.model.selectedListId) {
+            this.model.clearCompletedTasks(this.model.selectedListId);
+            this.renderAll();
+        }
+    }
+
+    // Re-renders both the list and task views
+    renderAll() {
+        const { lists, selectedListId } = this.getLists();
+        this.listView.renderLists(lists, selectedListId);
+        this.taskView.renderTasks(this.getSelectedList());
     }
 }
 

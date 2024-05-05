@@ -4,9 +4,7 @@
 // Handles the data and state of the application
 export class Model {
     constructor() {
-        // task.lists is the key for the lists array in local storage
         this.LOCAL_STORAGE_LIST_KEY = 'task.lists';
-        // task.selectedListId is the key for the selected list id in local storage
         this.LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId';
         this.lists =
             JSON.parse(localStorage.getItem(this.LOCAL_STORAGE_LIST_KEY)) || [];
@@ -15,46 +13,76 @@ export class Model {
         );
     }
 
-    // 1 - Get list from model
+    // 01 - Fetches all lists
+    // Used in the controller to get all lists
     getLists() {
-        // Return the lists array
+        // return all lists from the model
         return this.lists;
     }
 
-    // 2 - Find list from model
-    findList(listId) {
-        // Find the list by its id and return it
+    // 02 - Finds a specific list by ID
+    // Used in the controller to get a specific list
+    findListById(listId) {
         return this.lists.find(list => list.id === listId);
     }
 
-    // 3 - Add list to model
-    addList(list) {
-        // Add the list to the lists array
-        this.lists.push(list);
-        // Save and render the lists
+    // Updates the currently selected list ID
+    setSelectedListId(listId) {
+        this.selectedListId = listId;
         this.save();
     }
 
-    // 4 - Add task to a list, in the model
-    addTask(listId, task) {
-        // Find the list by its id
-        const list = this.findList(listId);
-        // If the list doesn't exist, return
-        if (!list) return;
-        // Add the task to the list tasks array
-        list.tasks.push(task);
-        // Save and render the lists
+    // Adds a new list to the array and saves to localStorage
+    addList(name) {
+        const newList = {
+            id: Date.now().toString(),
+            name: name,
+            tasks: [],
+        };
+        this.lists.push(newList);
         this.save();
     }
 
-    // 5 - Update list in the model
+    // Removes a list by ID
+    deleteList(listId) {
+        this.lists = this.lists.filter(list => list.id !== listId);
+        this.selectedListId = null;
+        this.save();
+    }
+
+    // Adds a task to a list
+    addTaskToList(listId, taskName) {
+        const list = this.findListById(listId);
+        const newTask = {
+            id: Date.now().toString(),
+            name: taskName,
+            complete: false,
+        };
+        list.tasks.push(newTask);
+        this.save();
+    }
+
+    // Toggles the completion status of a task
+    toggleTaskComplete(listId, taskId, isComplete) {
+        const list = this.findListById(listId);
+        const task = list.tasks.find(task => task.id === taskId);
+        task.complete = isComplete;
+        this.save();
+    }
+
+    // Clears all completed tasks from a list
+    clearCompletedTasks(listId) {
+        const list = this.findListById(listId);
+        list.tasks = list.tasks.filter(task => !task.complete);
+        this.save();
+    }
+
+    // Saves all data to localStorage
     save() {
-        // Save the lists array to local storage
         localStorage.setItem(
             this.LOCAL_STORAGE_LIST_KEY,
             JSON.stringify(this.lists)
         );
-        // Save the selected list id to local storage
         localStorage.setItem(
             this.LOCAL_STORAGE_SELECTED_LIST_ID_KEY,
             this.selectedListId
