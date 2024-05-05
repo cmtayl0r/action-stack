@@ -24,11 +24,20 @@ class Controller {
         this.renderAll();
     }
 
+    // Re-renders both the list and task views
+    renderAll() {
+        // use getLists() to get the lists and selectedListId
+        const { lists, selectedListId } = this.getLists();
+        this.listView.renderLists(lists, selectedListId);
+        this.taskView.renderTasks(this.getSelectedList());
+        // Add all render methods here
+    }
+
     // LISTS
 
     // 01 - Fetches necessary data for rendering
     getLists() {
-        // Return the lists and the selected list ID from the model
+        // Return the lists and the selected list ID from the model as an object
         return {
             lists: this.model.getLists(), // Get all lists
             selectedListId: this.model.selectedListId, // Get the selected list ID
@@ -92,20 +101,15 @@ class Controller {
         this.renderAll();
     }
 
-    // Clears all completed tasks from the selected list and updates the view
+    // 03 - Clears all completed tasks from the selected list and updates the view
     clearCompletedTasks() {
+        // Check if a list is selected
         if (this.model.selectedListId) {
+            // Pass the selected list ID to the clearCompletedTasks method in the model
             this.model.clearCompletedTasks(this.model.selectedListId);
+            // Re-render the view
             this.renderAll();
         }
-    }
-
-    // Re-renders both the list and task views
-    renderAll() {
-        const { lists, selectedListId } = this.getLists();
-        this.listView.renderLists(lists, selectedListId);
-        this.taskView.renderTasks(this.getSelectedList());
-        // Add all render methods here
     }
 }
 
