@@ -10,7 +10,8 @@ export class ViewTasks {
         // New task form
         this.newTaskForm = document.querySelector('[data-new-task-form]');
         this.newTaskInput = document.querySelector('[data-new-task-input]');
-        // Clear complete tasks button
+        // Auxillary action buttons
+        this.actionsContainer = document.querySelector('[data-tasks-actions]');
         this.clearCompleteTasksButton = document.querySelector(
             '[data-clear-complete-tasks-button]'
         );
