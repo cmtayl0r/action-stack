@@ -4,24 +4,9 @@ import {
   useMemo,
   useCallback,
   useContext,
-  lazy,
 } from "react";
 import { modalReducer, initialModalState } from "./modalReducer";
 import * as actions from "./modalActions";
-
-// -----------------------------------------------------------------------------
-// Modals management
-// -----------------------------------------------------------------------------
-
-// Create lazy-loaded components
-const AddActionModal = lazy(() => import("../features/AddActionModal"));
-const AddStackModal = lazy(() => import("../features/AddStackModal"));
-
-// Mapping of modal names to components
-const MODAL_COMPONENTS = {
-  "add-action": AddActionModal,
-  "add-stack": AddStackModal,
-};
 
 // -----------------------------------------------------------------------------
 // 1️⃣ Context for sharing context
