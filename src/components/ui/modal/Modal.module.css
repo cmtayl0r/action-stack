@@ -1,0 +1,138 @@
+.modal {
+  background-color: var(--color-gray-dark);
+  border-radius: 24px;
+  border: none;
+  /* max-height: 85vh;
+  overflow: auto; */
+
+  /* Center the modal */
+  /* position: fixed;
+  top: 50%;
+  left: 50%; */
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+
+  /* Initial state for closed dialog */
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease,
+    overlay 0.3s ease allow-discrete, display 0.3s ease allow-discrete;
+}
+
+.modal__wrapper {
+  position: relative;
+  width: 100%;
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.modal__content {
+  padding: 2.4rem;
+}
+
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.6rem;
+  padding: 2.4rem;
+}
+
+.modal__close-button {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* 
+--------------------------------------------------------------------------------
+Animation of dialog element using @starting-style
+--------------------------------------------------------------------------------
+*/
+
+/* Open state of dialog */
+.modal[open] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Before open state - initial animation start point */
+@starting-style {
+  .modal[open] {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+}
+
+
+/* Backdrop styling - initial state */
+.modal::backdrop {
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease,
+    display 0.3s ease allow-discrete, overlay 0.3s ease allow-discrete;
+}
+
+/* Backdrop open state */
+.modal[open]::backdrop {
+  background-color: var(--color-scrim);
+  backdrop-filter: blur(4px);
+}
+
+/* Backdrop starting style */
+@starting-style {
+  .modal[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* 
+--------------------------------------------------------------------------------
+Modal Hero
+--------------------------------------------------------------------------------
+*/
+
+.modal__hero {
+  aspect-ratio: 16/9;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal__hero img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* 
+--------------------------------------------------------------------------------
+Modal size variants 
+--------------------------------------------------------------------------------
+*/
+
+.modal--small {
+  width: min(100% - 4.8rem, 40rem);
+}
+
+.modal--medium {
+  /* 
+    width is 100% of the viewport width minus 4.8rem (2.4rem padding on each side)
+    or 40rem, whichever is smaller
+  */
+  width: min(100% - 4.8rem, 56rem);
+}
+
+.modal--large {
+  width: min(100% - 4.8rem, 72rem);
+}
+
+.modal--fullscreen {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+}

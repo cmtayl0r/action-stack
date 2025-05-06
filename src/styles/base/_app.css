@@ -1,0 +1,10 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.stack-view {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}

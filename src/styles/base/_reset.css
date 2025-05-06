@@ -1,0 +1,104 @@
+/* 
+--------------------------------------------------------------------------------
+RESET
+--------------------------------------------------------------------------------
+*/
+
+:root {
+  /* Prevent font size inflation */
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+
+  /* Improve font rendering */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Default scroll behavior */
+  scroll-behavior: smooth;
+}
+
+/* Define base rem scale */
+html {
+  font-size: 100%;
+  /* 1rem = 16px, scalable */
+  /* Disregarded if using fluid font size system */
+}
+
+/* Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Improve media defaults */
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  /* Prevent overflow */
+  vertical-align: middle;
+  /* Correct alignment issue */
+  height: auto;
+  /* Maintain aspect ratio of image */
+  font-style: italic;
+  /* Fallback for alt text if broken img */
+}
+
+/* Inherit fonts for form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Avoid text overflows */
+p,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Help prevent overflow of long words/names/URLs */
+  overflow-wrap: break-word;
+}
+
+/* Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+/* Remove unwanted tap highlights */
+a,
+button,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,77 @@
+import {
+  createContext,
+  useReducer,
+  useMemo,
+  useCallback,
+  useContext,
+  lazy,
+} from "react";
+import { modalReducer, initialModalState } from "./modalReducer";
+import * as actions from "./modalActions";
+
+// -----------------------------------------------------------------------------
+// Modals management
+// -----------------------------------------------------------------------------
+
+// Create lazy-loaded components
+const AddActionModal = lazy(() => import("../features/AddActionModal"));
+const AddStackModal = lazy(() => import("../features/AddStackModal"));
+
+// Mapping of modal names to components
+const MODAL_COMPONENTS = {
+  "add-action": AddActionModal,
+  "add-stack": AddStackModal,
+};
+
+// -----------------------------------------------------------------------------
+// 1️⃣ Context for sharing context
+// -----------------------------------------------------------------------------
+
+const ModalContext = createContext();
+
+// -----------------------------------------------------------------------------
+// 2️⃣ Create a provider component
+// -----------------------------------------------------------------------------
+
+export const ModalProvider = ({ children }) => {
+  // 2A: 🧠 useReducer handles state logic
+  const [state, dispatch] = useReducer(modalReducer, initialModalState);
+
+  // 2B: 🧠 Memoized helper methods
+  const openModal = useCallback((name, props) => {
+    dispatch(actions.openModal(name, props));
+  }, []);
+
+  const closeModal = useCallback(() => {
+    dispatch(actions.closeModal());
+  }, []);
+
+  // 2C: ♻️ Memoize the context value
+  const contextValue = useMemo(
+    () => ({
+      current: state.current,
+      props: state.props,
+      openModal,
+      closeModal,
+    }),
+    [state, openModal, closeModal]
+  );
+
+  return (
+    <ModalContext.Provider value={contextValue}>
+      {children}
+    </ModalContext.Provider>
+  );
+};
+
+// -----------------------------------------------------------------------------
+// 3️⃣  Create a custom hook to use the ModalContext
+// -----------------------------------------------------------------------------
+
+export const useModalContext = () => {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error("useModalContext must be used within a ModalProvider");
+  }
+  return context;
+};

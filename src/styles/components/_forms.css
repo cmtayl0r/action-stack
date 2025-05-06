@@ -1,0 +1,122 @@
+/* 
+--------------------------------------------------------------------------------
+FORM VARIABLES
+--------------------------------------------------------------------------------
+*/
+
+:root {
+  /* Typography */
+  --form-text-size-sm: var(--fs-sm);
+  --form-text-size-base: var(--fs-base);
+  --form-text-size-lg: var(--fs-md);
+  --form-title-size: var(--fs-lg);
+  --form-line-height-base: var(--lh-tight);
+
+  /* Borders & Spacing */
+  --form-border-style: solid;
+  --form-border-width: 2px;
+  --form-border-radius: 0.25rem;
+  --form-padding-sm: 0.375em;
+  --form-padding-md: 0.75rem;
+  --form-padding-lg: 0.618em;
+
+  /* Colors */
+  --form-border-color: var(--color-gray);
+  --form-bg-color: var(--color-black);
+  --form-text-color: var(--color-white);
+  --form-focus-color: var(--color-blue);
+  --form-disabled-bg: #666666;
+  --form-error-color: var(--color-red);
+  --form-success-color: var(--color-green);
+}
+
+/* 
+--------------------------------------------------------------------------------
+FORM STRUCTURE
+--------------------------------------------------------------------------------
+*/
+
+form {
+  font-family: var(--ff-default);
+  font-size: var(--form-text-size-base);
+}
+
+fieldset {
+  padding: var(--form-padding-lg);
+  background-color: transparent;
+  border: var(--form-border-width) var(--form-border-style) var(--form-border-color);
+  border-radius: var(--form-border-radius);
+  margin: var(--form-padding-lg);
+}
+
+fieldset:disabled {
+  border-color: var(--form-disabled-bg);
+  background-color: rgba(220, 220, 220, 0.3);
+}
+
+legend {
+  display: block;
+  color: var(--form-text-color);
+  font-family: var(--form-title-font-family);
+  font-size: var(--form-title-size);
+  font-weight: bold;
+  line-height: var(--form-line-height-base);
+  padding: 0.35em var(--form-padding-md);
+  border: var(--form-border-width) var(--form-border-style) var(--form-border-color);
+  border-radius: calc(var(--form-border-radius) / 2);
+  background-color: transparent;
+}
+
+label {
+  color: var(--form-text-color);
+  font-size: var(--form-text-size-base);
+}
+
+
+/* 
+--------------------------------------------------------------------------------
+FORM ELEMENTS
+--------------------------------------------------------------------------------
+*/
+
+input,
+button,
+select,
+textarea {
+  color: var(--form-text-color);
+  font-size: var(--form-text-size-base);
+  padding: var(--form-padding-sm) var(--form-padding-md);
+  border: var(--form-border-width) var(--form-border-style) var(--form-border-color);
+  border-radius: var(--form-border-radius);
+  background-color: var(--form-bg-color);
+  transition: all 0.3s ease-in-out;
+  outline: none;
+}
+
+input:hover,
+input:focus,
+button:hover,
+button:focus,
+select:hover,
+select:focus,
+textarea:hover,
+textarea:focus {
+  border-color: var(--form-focus-color);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 2px;
+}
+
+input:active,
+button:active,
+select:active,
+textarea:active {
+  border-color: var(--form-text-color);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: #888;
+  background-color: var(--form-disabled-bg);
+  border-color: var(--form-disabled-bg);
+}
