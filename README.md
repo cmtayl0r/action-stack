@@ -6,31 +6,31 @@
 
 ### MVP
 
-[x] Responsive sidebar housing key app-wide navigation and controls
-[x] Render Inbox list as default list view
-[x] Add multiple stacks (action lists)
-[ ] Add correct loading states (in views)
-[ ] Add action to a stack (inline within list)
-[x] Add action to a stack (Global action)
-[ ] Edit Action inline (on click, reveal text input)
-[x] Mark action as done
-[ ] Dropdown on each action to reveal contextual actions
-[ ] Dropdown option: Delete action
-[ ] Dropdown option: Edit action name
-[ ] Dropdown option: Set priority
-[ ] Global search modal with debounce (Search all todos by name)
-[ ] Stack options: Filter todos by completed and not completed
-[ ] Stack options: Sort todos by date created
-[x] Global add stack modal
-[x] Display all stacks in sidebar
-[ ] Review and separate UI "Display" Components
-[ ] Address Modals open performance delay/lag on first usage
+- [x] Responsive sidebar housing key app-wide navigation and controls
+- [x] Render Inbox list as default list view
+- [x] Add multiple stacks (action lists)
+- [ ] Add correct loading states (in views)
+- [ ] Add action to a stack (inline within list)
+- [x] Add action to a stack (Global action)
+- [ ] Edit Action inline (on click, reveal text input)
+- [x] Mark action as done
+- [ ] Dropdown on each action to reveal contextual actions
+- [ ] Dropdown option: Delete action
+- [ ] Dropdown option: Edit action name
+- [ ] Dropdown option: Set priority
+- [ ] Global search modal with debounce (Search all todos by name)
+- [ ] Stack options: Filter todos by completed and not completed
+- [ ] Stack options: Sort todos by date created
+- [x] Global add stack modal
+- [x] Display all stacks in sidebar
+- [ ] Review and separate UI "Display" Components
+- [ ] Address Modals open performance delay/lag on first usage
 
 ### Later ...
 
-[ ] Using Framer Motion throughout
-[ ] Add tags to todos
-[ ] Add due date to actions
+- [ ] Using Framer Motion throughout
+- [ ] Add tags to todos
+- [ ] Add due date to actions
 
 [Back to top](#top)
 
