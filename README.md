@@ -24,7 +24,7 @@
 - [x] Global add stack modal
 - [x] Display all stacks in sidebar
 - [ ] Review and separate UI "Display" Components
-- [ ] Address Modals open performance delay/lag on first usage
+- [x] Address Modals open performance delay/lag on first usage
 
 ### Later ...
 
@@ -57,16 +57,30 @@
 
 ### Modal System logic
 
-- When a user clicks a button (i.e. in the Sidebar), it calls openModal("modal-name", {props}) in order to open a modal.
-- ModalContext manages updating state by the reducer, tracks which modal is currently active, tracks any props needed to pass to the modal.
-- ModalContext then conditionally renders the specific Modal based on name given by a prop
-- When a user interacts with the Modal:
-  - Each modal utilises the "callback props" pattern
-  - When opening a modal you provide a callback function, this is evident in the sidebar (add action, add stack etc)
-  - This callback gets passed to the modal as a prop, along with a name of the modal
-  - When the modal completes its action (does something, submit etc), it calls this callback with the new data define in a handler function
-  - This allows the component that opened the modal (i.e. Sidebar) to receive and use the data that was created in the modal.
-  - closeModal function is given to the x and "cancel" buttons defined in the pattern
+##### Registry pattern
+
+- UI components (e.g. Sidebar) call openModal("modal-name", props) to open a specific modal.
+- The modal system uses a registry pattern:
+  - All modals are registered centrally in a modalRegistry.js file.
+  - Each modal is mapped by a unique id to its React component.
+  - This avoids switch statements and makes the system easy to extend.
+- ModalContext manages:
+  - The active modal (modalId)
+  - Props to pass to the modal (modalProps)
+  - State updates via a reducer
+- ModalHost renders the correct modal based on the modalId from context.
+- 🤔 Removing a lazy load registry in "ModalHost.jsx" removed the first time usage lag, but I wasn't keen on using the useEffect in the ModalContext provider. Feels hacky.
+
+##### 💬 Modal Interaction Pattern
+
+- Modals receive callback functions (e.g. onSubmit) via modalProps.
+- The component that opens the modal (like Sidebar) passes a handler to receive data created or updated in the modal.
+- When the modal action completes (e.g. on form submit), it:
+  - Calls the provided callback with result data
+  - Calls closeModal() to dismiss itself
+- The close action is also triggered by:
+  - Clicking the ❌ close button
+  - Clicking a cancel button (which calls closeModal())
 
 [Back to top](#top)
 
@@ -74,6 +88,6 @@
 
 ### Version 1 (April 2025)
 
-- Using localStorage as data structure as temporary measure
+- Using localStorage as data structure as temporary measure.
 
 [Back to top](#top)
