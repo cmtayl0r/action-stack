@@ -57,9 +57,9 @@ function useStacks() {
   };
 
   // DEBUG: useEffect to log whenever stacks change
-  useEffect(() => {
-    console.log("Stacks state in hook updated:", stacks);
-  }, [stacks]);
+  // useEffect(() => {
+  //   console.log("Stacks state in hook updated:", stacks);
+  // }, [stacks]);
 
   return {
     stacks,
