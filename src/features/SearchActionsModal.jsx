@@ -6,7 +6,7 @@ function SearchActionsModal({ closeModal }) {
   const { actions } = useActionsContext();
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal title="Search Actions" onClose={closeModal}>
       <Modal.Dialog>
         <Modal.Content>
           <input type="text" name="" id="" placeholder="Search all actions" />

@@ -7,6 +7,7 @@ import {
 } from "react";
 import { modalReducer, initialModalState } from "./modalReducer";
 import * as actions from "./modalActions";
+import { modalRegistry } from "../utils/modalRegistry";
 
 // -----------------------------------------------------------------------------
 // 1️⃣ Context for sharing context
@@ -35,15 +36,21 @@ export const ModalProvider = ({ children }) => {
     dispatch(actions.registerModal(id, component));
   }, []);
 
+  // ✅ Register all modals once at app start
+  useMemo(() => {
+    modalRegistry.forEach(({ id, component }) => {
+      registerModal(id, component);
+    });
+  }, [registerModal]);
+
   // 2C: ♻️ Memoize the context value
   const contextValue = useMemo(
     () => ({
       ...state,
       openModal,
       closeModal,
-      registerModal,
     }),
-    [state, openModal, closeModal, registerModal]
+    [state, openModal, closeModal]
   );
 
   return (

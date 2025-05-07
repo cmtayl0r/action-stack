@@ -32,7 +32,7 @@ function AddStackModal({ closeModal }) {
   };
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal title="Add Stack" onClose={closeModal}>
       <Modal.Dialog>
         <Modal.Heading>Add New Stack</Modal.Heading>
         <form onSubmit={handleSubmit}>

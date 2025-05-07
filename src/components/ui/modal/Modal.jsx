@@ -5,6 +5,7 @@ import React, {
   cloneElement,
   useCallback,
   useEffect,
+  useId,
 } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
@@ -22,12 +23,12 @@ const ModalContext = createContext();
 
 function Modal({
   children,
-  onClose = () => {}, // Optional prop to handle close event
-  id = "modal", // For accessibility and targeting
+  onClose, // Optional prop to handle close event
 }) {
   // 🔖 Refs for DOM elements
   const dialogRef = useRef(null); // Ref to the modal dialog element
   const triggerRef = useRef(null); // Ref to the trigger element (button or link that opens the modal)
+  const headingId = useId(); // Unique ID for the modal heading
 
   // 🛠️ Helper Methods
 
@@ -49,7 +50,7 @@ function Modal({
     close,
     dialogRef,
     triggerRef,
-    id,
+    id: headingId,
   };
 
   return (
@@ -127,9 +128,9 @@ const ModalDialog = ({
       className={`${styles.modal} ${styles[`modal--${size}`]}`}
       ref={dialogRef}
       onClick={handleBackdropClick}
-      id={id}
+      id={`modal-${id}`}
       aria-modal="true"
-      aria-labelledby={`${id}-heading`}
+      aria-labelledby={`modal-${id}-heading`}
       {...props} // Spread any other props
     >
       <div className={styles["modal__wrapper"]}>
@@ -154,7 +155,11 @@ const ModalHeading = ({ children, ...props }) => {
   const { id } = useContext(ModalContext);
 
   return (
-    <h2 id={`${id}-heading`} className={styles["modal__heading"]} {...props}>
+    <h2
+      id={`modal-${id}-heading`}
+      className={styles["modal__heading"]}
+      {...props}
+    >
       {children}
     </h2>
   );

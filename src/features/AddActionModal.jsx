@@ -15,7 +15,7 @@ function AddActionModal({ closeModal }) {
   const { success } = useToastContext(); // Get toast context for notifications
   const [title, setTitle] = useState(""); // Track action title
   const [priority, setPriority] = useState("medium"); // Track selected priority
-  const [stackId, setStackId] = useState("inbox"); // Track selected stack
+  const [stackId, setStackId] = useState(); // Track selected stack
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -42,7 +42,7 @@ function AddActionModal({ closeModal }) {
   };
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal title="Add Action" onClose={closeModal}>
       <Modal.Dialog>
         <Modal.Heading>Add New Action</Modal.Heading>
         <form onSubmit={handleSubmit}>

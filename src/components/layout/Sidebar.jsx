@@ -21,29 +21,20 @@ function Sidebar() {
   // Show all stacks except "inbox"
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
 
-  const handleAddAction = () => {
-    openModal("add-action", {
-      stackId,
-      // onActionAdded: addAction,
-    });
-  };
-
-  const handleAddStack = () => {
-    openModal("add-stack");
-  };
-
-  const handleSearchActions = () => {
-    openModal("search-actions");
+  const modalHandlers = {
+    addAction: () => openModal("add-action", { stackId }),
+    addStack: () => openModal("add-stack"),
+    search: () => openModal("search-actions"),
   };
 
   return (
     <aside className={styles["sidebar"]} aria-label="Sidebar">
       <nav>
-        <button aria-label="Open search" onClick={handleSearchActions}>
+        <button aria-label="Open search" onClick={modalHandlers.search}>
           <LucideSearch size={16} /> Search
         </button>
 
-        <button aria-label="Add new action" onClick={handleAddAction}>
+        <button aria-label="Add new action" onClick={modalHandlers.addAction}>
           <LucidePlus size={16} /> Add Action
         </button>
 
@@ -66,7 +57,7 @@ function Sidebar() {
             </li>
           ))}
         </ul>
-        <button aria-label="Add new stack" onClick={handleAddStack}>
+        <button aria-label="Add new stack" onClick={modalHandlers.addStack}>
           <Layers2 size={16} /> Add Stack
         </button>
       </nav>

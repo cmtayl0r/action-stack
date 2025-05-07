@@ -2,26 +2,17 @@ import { createPortal } from "react-dom";
 import { useModalContext } from "../../../context/ModalContext";
 
 // -----------------------------------------------------------------------------
-// Modals management
-// -----------------------------------------------------------------------------
-
-// // Create lazy-loaded components
-// const AddActionModal = lazy(() => import("../../../features/AddActionModal"));
-// const AddStackModal = lazy(() => import("../../../features/AddStackModal"));
-// const SearchActionsModal = lazy(() =>
-//   import("../../../features/SearchActionsModal")
-// );
-
-// // Mapping of modal names to components
-// const MODAL_COMPONENTS = {
-//   "add-action": AddActionModal,
-//   "add-stack": AddStackModal,
-//   "search-actions": SearchActionsModal,
-// };
-
-// -----------------------------------------------------------------------------
 // Modal Host
 // -----------------------------------------------------------------------------
+
+/*
+ * ModalHost component is responsible for rendering the modal component.
+ * It uses the useModalContext to get the current modalId and modalProps.
+ * It retrieves the modal component from a registry and renders it.
+ * This allows for lazy loading of several modals in the app.
+ * based on the modalId and modalProps provided by the ModalContext.
+ * It uses createPortal to render the modal in a different part of the DOM.
+ */
 
 function ModalHost() {
   const { modalId, modalProps, registry, closeModal } = useModalContext();
