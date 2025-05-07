@@ -1,14 +1,14 @@
 // ⛹️‍♀️ Action creator functions (optional but clean and scalable)
 // pure functions returning objects that have no side effects or expensive logic
 
-export const openModal = (name, props = {}) => ({
+export const openModal = (id, props = {}) => ({
   type: "OPEN_MODAL",
-  payload: { name, props },
+  payload: { id, props },
 });
 
 export const closeModal = () => ({ type: "CLOSE_MODAL" });
 
-export const registerModal = (name, component) => ({
+export const registerModal = (id, component) => ({
   type: "REGISTER_MODAL",
-  payload: { name, component },
+  payload: { id, component },
 });

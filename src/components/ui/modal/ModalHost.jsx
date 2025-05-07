@@ -1,4 +1,3 @@
-import { lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { useModalContext } from "../../../context/ModalContext";
 
@@ -6,35 +5,36 @@ import { useModalContext } from "../../../context/ModalContext";
 // Modals management
 // -----------------------------------------------------------------------------
 
-// Create lazy-loaded components
-const AddActionModal = lazy(() => import("../../../features/AddActionModal"));
-const AddStackModal = lazy(() => import("../../../features/AddStackModal"));
-const SearchActionsModal = lazy(() =>
-  import("../../../features/SearchActionsModal")
-);
+// // Create lazy-loaded components
+// const AddActionModal = lazy(() => import("../../../features/AddActionModal"));
+// const AddStackModal = lazy(() => import("../../../features/AddStackModal"));
+// const SearchActionsModal = lazy(() =>
+//   import("../../../features/SearchActionsModal")
+// );
 
-// Mapping of modal names to components
-const MODAL_COMPONENTS = {
-  "add-action": AddActionModal,
-  "add-stack": AddStackModal,
-  "search-actions": SearchActionsModal,
-};
+// // Mapping of modal names to components
+// const MODAL_COMPONENTS = {
+//   "add-action": AddActionModal,
+//   "add-stack": AddStackModal,
+//   "search-actions": SearchActionsModal,
+// };
 
 // -----------------------------------------------------------------------------
 // Modal Host
 // -----------------------------------------------------------------------------
 
 function ModalHost() {
-  const { current, props, closeModal } = useModalContext();
+  const { modalId, modalProps, registry, closeModal } = useModalContext();
 
-  if (!current) return null;
-  const ModalComponent = MODAL_COMPONENTS[current];
+  // If no modal is open, return null
+  if (!modalId) return null;
+  // Get the component from the registry
+  const ModalComponent = registry[modalId];
+  // If the component is not registered, return null
   if (!ModalComponent) return null;
 
   return createPortal(
-    <Suspense fallback={null}>
-      <ModalComponent {...props} closeModal={closeModal} />
-    </Suspense>,
+    <ModalComponent {...modalProps} closeModal={closeModal} />,
     document.getElementById("modal-root")
   );
 }
