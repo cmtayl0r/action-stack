@@ -1,6 +1,7 @@
 export const initialModalState = {
-  current: null, // The name of the current modal
-  props: {}, // The props to pass to the modal
+  modalId: null, // The name of the current modal
+  modalProps: {}, // The props to pass to the modal
+  registry: {}, // Registry of modals for lazy loading
 };
 
 export const modalReducer = (state, action) => {
@@ -8,15 +9,24 @@ export const modalReducer = (state, action) => {
     case "OPEN_MODAL":
       return {
         ...state,
-        current: action.payload.name,
-        props: action.payload.props || {},
+        modalId: action.payload.id,
+        modalProps: action.payload.props,
       };
 
     case "CLOSE_MODAL":
       return {
         ...state,
-        current: null, // Reset the current modal
-        props: {}, // Reset the props
+        modalId: null, // Reset the current modal
+        modalProps: {}, // Reset the props
+      };
+
+    case "REGISTER_MODAL":
+      return {
+        ...state,
+        registry: {
+          ...state.registry,
+          [action.payload.id]: action.payload.component,
+        },
       };
 
     default:

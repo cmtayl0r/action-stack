@@ -23,25 +23,27 @@ export const ModalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(modalReducer, initialModalState);
 
   // 2B: 🧠 Memoized helper methods
-  const openModal = useCallback((name, props) => {
-    dispatch(actions.openModal(name, props));
+  const openModal = useCallback((id, props) => {
+    dispatch(actions.openModal(id, props));
   }, []);
 
   const closeModal = useCallback(() => {
     dispatch(actions.closeModal());
   }, []);
 
-  // Register modal
+  const registerModal = useCallback((id, component) => {
+    dispatch(actions.registerModal(id, component));
+  }, []);
 
   // 2C: ♻️ Memoize the context value
   const contextValue = useMemo(
     () => ({
-      current: state.current,
-      props: state.props,
+      ...state,
       openModal,
       closeModal,
+      registerModal,
     }),
-    [state, openModal, closeModal]
+    [state, openModal, closeModal, registerModal]
   );
 
   return (

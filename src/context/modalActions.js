@@ -7,3 +7,8 @@ export const openModal = (name, props = {}) => ({
 });
 
 export const closeModal = () => ({ type: "CLOSE_MODAL" });
+
+export const registerModal = (name, component) => ({
+  type: "REGISTER_MODAL",
+  payload: { name, component },
+});
