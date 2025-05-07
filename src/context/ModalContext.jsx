@@ -31,6 +31,8 @@ export const ModalProvider = ({ children }) => {
     dispatch(actions.closeModal());
   }, []);
 
+  // Register modal
+
   // 2C: ♻️ Memoize the context value
   const contextValue = useMemo(
     () => ({
