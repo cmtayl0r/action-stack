@@ -1,6 +1,6 @@
 import styles from "./ActionsList.module.css";
 import ActionListItem from "./ActionListItem";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 
 function ActionsList({ stackId, actions }) {
   useEffect(() => {
