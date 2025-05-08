@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Context
@@ -9,13 +9,13 @@ import { useActionsContext } from "../context/ActionsContext";
 // Components
 import Modal from "../components/ui/modal/Modal";
 
-function AddActionModal({ closeModal }) {
+function AddActionModal({ closeModal, stackId: initialStackId = "inbox" }) {
   const { stacks } = useStacksContext(); // Get available stacks
   const { addAction, reload } = useActionsContext(); // Get action management functions
   const { success } = useToastContext(); // Get toast context for notifications
   const [title, setTitle] = useState(""); // Track action title
   const [priority, setPriority] = useState("medium"); // Track selected priority
-  const [stackId, setStackId] = useState("inbox"); // Track selected stack
+  const [stackId, setStackId] = useState(initialStackId); // Track selected stack
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -40,10 +40,6 @@ function AddActionModal({ closeModal }) {
     // 7. Close the modal
     closeModal();
   };
-
-  // useEffect(() => {
-  //   console.log("Selected stack ID:", stackId);
-  // }, [stackId]);
 
   return (
     <Modal title="Add Action" onClose={closeModal}>

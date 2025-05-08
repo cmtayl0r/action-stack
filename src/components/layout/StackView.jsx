@@ -13,8 +13,7 @@ function StackView() {
   // 1️⃣ Initial load from router loader
   const { stack } = useLoaderData();
   // 🔄 live action state updates from context
-  const { actions, addAction, removeAction, toggleComplete } =
-    useActionsContext();
+  const { actions } = useActionsContext();
 
   // Filter actions for this stack
   const stackActions = actions.filter((action) => action.stackId === stack.id);
