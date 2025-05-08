@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Context
@@ -15,7 +15,7 @@ function AddActionModal({ closeModal }) {
   const { success } = useToastContext(); // Get toast context for notifications
   const [title, setTitle] = useState(""); // Track action title
   const [priority, setPriority] = useState("medium"); // Track selected priority
-  const [stackId, setStackId] = useState(); // Track selected stack
+  const [stackId, setStackId] = useState("inbox"); // Track selected stack
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,6 +31,9 @@ function AddActionModal({ closeModal }) {
     };
     // 3. Add the action to the database
     await addAction(newAction);
+
+    console.log("New action added:", newAction);
+    console.log("Action added to stack:", stackId);
     // 4. Navigate to the stack page
     navigate(`/stack/${newAction.stackId}`);
     // 5. Force a reload of actions data
@@ -40,6 +43,10 @@ function AddActionModal({ closeModal }) {
     // 7. Close the modal
     closeModal();
   };
+
+  useEffect(() => {
+    console.log("Selected stack ID:", stackId);
+  }, [stackId]);
 
   return (
     <Modal title="Add Action" onClose={closeModal}>
