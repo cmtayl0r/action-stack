@@ -10,26 +10,29 @@
 - [x] Render Inbox list as default list view
 - [x] Add multiple stacks (action lists)
 - [ ] Add correct loading states (in views)
-- [ ] Add action to a stack (inline within list)
+- [ ] Add action to a stack, global absolute button
 - [x] Add action to a stack (Global action)
-- [ ] Edit Action inline (on click, reveal text input)
+- [x] Edit Action inline (on click, reveal text input)
 - [x] Mark action as done
-- [ ] Dropdown on each action to reveal contextual actions
-- [ ] Dropdown option: Delete action
-- [ ] Dropdown option: Edit action name
-- [ ] Dropdown option: Set priority
-- [ ] Global search modal with debounce (Search all todos by name)
-- [ ] Stack options: Filter todos by completed and not completed
-- [ ] Stack options: Sort todos by date created
+- [ ] Dropdown for each stack
+  - [ ] Delete stack
+  - [ ] Rename stack
+- [ ] Global search modal with debounce (Search all actions by name)
+- [x] Stack filters: Filter actions by completed and not completed
+- [ ] Stack filters: Sort actions by date created
+- [ ] Stack filters: Sort actions by priority
+- [ ] Separate List components (UI Display components/consumers)
+- [ ] Full action page (or modal?) in React router with editing
+  - [ ] Delete action
+  - [ ] Update options (priority etc)
 - [x] Global add stack modal
 - [x] Display all stacks in sidebar
-- [ ] Review and separate UI "Display" Components
 - [x] Address Modals open performance delay/lag on first usage
 
 ### Later ...
 
 - [ ] Using Framer Motion throughout
-- [ ] Add tags to todos
+- [ ] Add tags to actions
 - [ ] Add due date to actions
 
 [Back to top](#top)
