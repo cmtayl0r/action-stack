@@ -36,8 +36,7 @@ export const ModalProvider = ({ children }) => {
     dispatch(actions.registerModal(id, component));
   }, []);
 
-  // ✅ Register all modals in the registry when the component mounts
-  // This is a one-time operation, so we can use useMemo to avoid re-registering
+  // ✅ Register all modals once at app start
   useMemo(() => {
     modalRegistry.forEach(({ id, component }) => {
       registerModal(id, component);
@@ -47,7 +46,7 @@ export const ModalProvider = ({ children }) => {
   // 2C: ♻️ Memoize the context value
   const contextValue = useMemo(
     () => ({
-      ...state, // Send all state values (modalId, modalProps, registry)
+      ...state,
       openModal,
       closeModal,
     }),

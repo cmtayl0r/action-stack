@@ -20,24 +20,24 @@ function AddActionModal({ closeModal }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent form submission
-
+    // 1. Validate the form
     // TODO: Replace with actual error handling
-    // Create the new task object
-    // * Only send user-entered values here
+    // 2. Create the new task object
+    // Only send user-entered values here
     const newAction = {
       title: title.trim(),
       priority,
       stackId,
     };
-    // 1. Add the action
+    // 3. Add the action to the database
     await addAction(newAction);
-    // 2. Navigate to the stack
+    // 4. Navigate to the stack page
     navigate(`/stack/${newAction.stackId}`);
-    // 3. Force a reload of actions data
+    // 5. Force a reload of actions data
     await reload();
-    // 4. Show success and close modal
-    success(`${newAction.title} saved successfully!`); // Show success message
-    // 5. Close the modal
+    // 6. Show success toast
+    success(`${newAction.title} saved successfully!`);
+    // 7. Close the modal
     closeModal();
   };
 
