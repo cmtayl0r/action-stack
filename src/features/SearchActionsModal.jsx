@@ -15,7 +15,7 @@ function SearchActionsModal({ closeModal }) {
 
   return (
     <Modal title="Search Actions" onClose={closeModal}>
-      <Modal.Dialog>
+      <Modal.Dialog showCloseButton={false}>
         <Modal.Content>
           <input
             type="text"
