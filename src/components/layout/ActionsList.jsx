@@ -1,10 +1,10 @@
 import styles from "./ActionsList.module.css";
 import { useActionsContext } from "../../context/ActionsContext";
 import { useState } from "react";
+import ActionListItem from "./ActionListItem";
 
 function ActionsList({ stackId, actions }) {
-  const { addAction, removeAction, updateAction, toggleComplete } =
-    useActionsContext(); // Get action management functions
+  const { addAction } = useActionsContext(); // Get action management functions
 
   const [filterName, setFilterName] = useState(""); // Track action title
   const [filterCompleted, setFilterCompleted] = useState(false); // Track hide completed state
@@ -45,15 +45,12 @@ function ActionsList({ stackId, actions }) {
       <hr />
       <ul>
         {filteredActions.map((action) => (
-          <li key={action.id}>
-            <input
-              type="checkbox"
-              checked={action.completed}
-              onChange={() => toggleComplete(action.id)}
-            />
-            {action.title}
-            <button onClick={() => removeAction(action.id)}>🗑</button>
-          </li>
+          <ActionListItem
+            key={action.id}
+            id={action.id}
+            title={action.title}
+            completed={action.completed}
+          />
         ))}
       </ul>
       <small>{stackId}</small>
