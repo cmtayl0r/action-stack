@@ -1,31 +1,48 @@
 import styles from "./ActionsList.module.css";
 
-function ActionsFilter({
-  filterName,
-  setFilterName,
-  filterCompleted,
-  setFilterCompleted,
-}) {
+function ActionsFilter({ filter, onFilterChange }) {
   return (
     <div className={styles["actions-filter"]}>
-      <div>
-        <label htmlFor="name">Name</label>
+      <div className={styles["actions-filter__group"]}>
+        <label htmlFor="title">Search by</label>
         <input
           type="text"
-          name="name"
-          id="name"
-          value={filterName}
-          onChange={(e) => setFilterName(e.target.value)}
+          id="title"
+          value={filter.title}
+          onChange={(e) => onFilterChange("title", e.target.value)}
         />
       </div>
-      <label>
-        <input
-          type="checkbox"
-          onChange={(e) => setFilterCompleted(e.target.checked)}
-          checked={filterCompleted}
-        />
-        Hide completed
-      </label>
+
+      <div className={styles["actions-filter__group"]}>
+        <label htmlFor="sort">Sort by</label>
+        <select
+          id="sort"
+          value={filter.sort}
+          onChange={(e) => onFilterChange("priority", e.target.value)}
+        >
+          <option value="priority">Priority</option>
+          <option value="dateCreated">Date created</option>
+        </select>
+        <label htmlFor="sort-direction">Direction</label>
+        <select
+          id="sort-direction"
+          value={filter.sortDirection}
+          onChange={(e) => onFilterChange("sortDirection", e.target.value)}
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <div className={styles["actions-filter__group"]}>
+        <label>
+          <input
+            type="checkbox"
+            onChange={(e) => onFilterChange("completed", e.target.checked)}
+            checked={filter.completed}
+          />
+          Hide completed
+        </label>
+      </div>
     </div>
   );
 }
