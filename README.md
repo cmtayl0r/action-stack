@@ -89,6 +89,28 @@
   - Clicking the ❌ close button
   - Clicking a cancel button (which calls closeModal())
 
+### Component Architecture & Filtering
+
+- Adopted Hook → Container → Presentation pattern for clean separation of concerns:
+  - useActionsContext handles shared state and CRUD logic (Hook layer)
+  - StackView manages app state, filters, and orchestrates component flow (Container layer)
+  - ActionsFilter, ActionsList, and ActionListItem are fully controlled, dumb UI components (Presentation layer)
+- Centralized filter state in StackView:
+  - Filters include name, completed, priority, and sortDirection
+  - All logic for filtering and sorting is colocated with the stack context
+- Created a single handleFilterChange(key, value) function:
+  - Enables consistent and scalable updates to filter state
+  - Cleanly passed to presentational components like ActionsFilter
+- Refactored ActionsFilter into a reusable presentational component:
+  - Receives a filter object and a single onFilterChange handler
+  - No internal state — pure UI, easy to test and extend
+- Used useMemo() in StackView for performant filtered + sorted actions list:
+  - Keeps render fast even as the action list grows
+  - Encapsulates filter/sort logic in a declarative, readable way
+- Improved prop naming and consistency across components:
+  - Clear, meaningful prop names (filter, onFilterChange, filteredActions, etc.)
+  - Aligned prop shape with component responsibility
+
 [Back to top](#top)
 
 ## Versions
