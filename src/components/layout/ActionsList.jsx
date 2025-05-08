@@ -1,12 +1,10 @@
 import styles from "./ActionsList.module.css";
+import { useActionsContext } from "../../context/ActionsContext";
 
-function ActionsList({
-  stackId,
-  actions,
-  onAddAction,
-  onRemoveAction,
-  onToggleComplete,
-}) {
+function ActionsList({ stackId, actions }) {
+  const { addAction, removeAction, updateAction, toggleComplete } =
+    useActionsContext(); // Get action management functions
+
   // use your action hook here if needed (addAction, updateAction, etc.)
   return (
     <div className={styles["actions-list"]}>
@@ -16,10 +14,10 @@ function ActionsList({
             <input
               type="checkbox"
               checked={action.completed}
-              onChange={() => onToggleComplete(action.id)}
+              onChange={() => toggleComplete(action.id)}
             />
             {action.title}
-            <button onClick={() => onRemoveAction(action.id)}>🗑</button>
+            <button onClick={() => removeAction(action.id)}>🗑</button>
           </li>
         ))}
       </ul>

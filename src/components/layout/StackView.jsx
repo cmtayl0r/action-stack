@@ -26,13 +26,7 @@ function StackView() {
         stackName={stack.name}
         toggleSidebar={toggleSidebar}
       />
-      <ActionsList
-        stackId={stack.id}
-        actions={stackActions}
-        onAddAction={addAction}
-        onRemoveAction={removeAction}
-        onToggleComplete={toggleComplete}
-      />
+      <ActionsList stackId={stack.id} actions={stackActions} />
     </main>
   );
 }
