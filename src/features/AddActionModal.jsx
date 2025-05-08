@@ -31,9 +31,6 @@ function AddActionModal({ closeModal }) {
     };
     // 3. Add the action to the database
     await addAction(newAction);
-
-    console.log("New action added:", newAction);
-    console.log("Action added to stack:", stackId);
     // 4. Navigate to the stack page
     navigate(`/stack/${newAction.stackId}`);
     // 5. Force a reload of actions data
@@ -44,9 +41,9 @@ function AddActionModal({ closeModal }) {
     closeModal();
   };
 
-  useEffect(() => {
-    console.log("Selected stack ID:", stackId);
-  }, [stackId]);
+  // useEffect(() => {
+  //   console.log("Selected stack ID:", stackId);
+  // }, [stackId]);
 
   return (
     <Modal title="Add Action" onClose={closeModal}>
