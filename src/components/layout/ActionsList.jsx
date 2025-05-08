@@ -17,6 +17,7 @@ function ActionsList({ stackId, actions }) {
             title={action.title}
             completed={action.completed}
             priority={action.priority}
+            createdAt={action.createdAt}
           />
         ))}
       </ul>

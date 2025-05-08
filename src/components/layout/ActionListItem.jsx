@@ -3,7 +3,7 @@ import { useActionsContext } from "../../context/ActionsContext";
 import { Flag, Pencil, Save, Trash2 } from "lucide-react";
 import styles from "./ActionsList.module.css";
 
-function ActionListItem({ id, title, completed, priority }) {
+function ActionListItem({ id, title, completed, priority, createdAt }) {
   const [isEditing, setIsEditing] = useState(false); // Track edit mode
   const { removeAction, updateAction, toggleComplete } = useActionsContext(); // Get e
   const nameRef = useRef(); // Create a ref for the input field
@@ -15,6 +15,12 @@ function ActionListItem({ id, title, completed, priority }) {
     updateAction(id, nameRef.current.value); // Update action title
     setIsEditing(false); // Exit edit mode
   };
+
+  const date = new Date(createdAt);
+  const formatted = date.toLocaleDateString("en-US", {
+    month: "short", // Jan, Feb, etc.
+    day: "numeric", // 1, 2, ..., 31
+  });
 
   return (
     <li key={id} className={styles["action-list__item"]}>
@@ -38,6 +44,7 @@ function ActionListItem({ id, title, completed, priority }) {
             onChange={() => toggleComplete(id)}
           />
           <span className={styles["action-list__title"]}>{title}</span>
+          <small>{formatted}</small>
           <Flag className={styles[`label-priority--${priority}`]} />
           <button onClick={() => removeAction(id)}>
             <Trash2 />

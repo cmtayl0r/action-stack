@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import { useLoaderData } from "react-router-dom";
 
@@ -8,7 +9,6 @@ import { useActionsContext } from "../../context/ActionsContext";
 import Header from "./Header";
 import ActionsFilter from "./ActionsFilter";
 import ActionsList from "./ActionsList";
-import { useMemo, useState } from "react";
 
 function StackView() {
   const { state, toggleSidebar } = useAppContext();
@@ -33,17 +33,28 @@ function StackView() {
   };
 
   const filterActions = useMemo(() => {
+    const priorityOrder = {
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
     return actions
       .filter((a) => a.stackId === stack.id)
       .filter((a) => (filter.completed ? !a.completed : true))
       .filter((a) => a.title.toLowerCase().includes(filter.title.toLowerCase()))
       .sort((a, b) => {
-        const field =
-          filter.priority === "priority" ? "priority" : "dateCreated";
-        const valA = a[field];
-        const valB = b[field];
         const direction = filter.sortDirection === "asc" ? 1 : -1;
-        return valA > valB ? direction : valA < valB ? -direction : 0;
+        if (filter.priority === "priority") {
+          // 🔢 Custom numeric priority sort
+          const valA = priorityOrder[a.priority] || 0;
+          const valB = priorityOrder[b.priority] || 0;
+          return (valA - valB) * direction;
+        } else {
+          // 🕒 Fallback: sort by dateCreated
+          const dateA = new Date(a.dateCreated);
+          const dateB = new Date(b.dateCreated);
+          return (dateA - dateB) * direction;
+        }
       });
   }, [actions, filter, stack.id]);
 
