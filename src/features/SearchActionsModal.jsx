@@ -1,19 +1,36 @@
 import { useActionsContext } from "../context/ActionsContext";
 // Components
 import Modal from "../components/ui/modal/Modal";
+import { useMemo, useState } from "react";
 
 function SearchActionsModal({ closeModal }) {
   const { actions } = useActionsContext();
+  const [query, setQuery] = useState("");
+
+  const filteredActions = useMemo(() => {
+    return actions.filter((action) =>
+      action.title.toLowerCase().includes(query.toLowerCase())
+    );
+  }, [actions, query]);
 
   return (
     <Modal title="Search Actions" onClose={closeModal}>
       <Modal.Dialog>
         <Modal.Content>
-          <input type="text" name="" id="" placeholder="Search all actions" />
+          <input
+            type="text"
+            placeholder="Search all actions"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
           <ul>
-            {actions.map((action) => (
-              <li key={action.id}>{action.title}</li>
-            ))}
+            {filteredActions.length > 0 ? (
+              filteredActions.map((action) => (
+                <li key={action.id}>{action.title}</li>
+              ))
+            ) : (
+              <li>No matching actions found.</li>
+            )}
           </ul>
         </Modal.Content>
       </Modal.Dialog>
