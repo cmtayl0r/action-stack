@@ -1,8 +1,9 @@
 import { useRef, useState } from "react";
 import { useActionsContext } from "../../context/ActionsContext";
-import { Pencil, Save, Trash2 } from "lucide-react";
+import { Flag, Pencil, Save, Trash2 } from "lucide-react";
+import styles from "./ActionsList.module.css";
 
-function ActionListItem({ id, title, completed }) {
+function ActionListItem({ id, title, completed, priority }) {
   const [isEditing, setIsEditing] = useState(false); // Track edit mode
   const { removeAction, updateAction, toggleComplete } = useActionsContext(); // Get e
   const nameRef = useRef(); // Create a ref for the input field
@@ -16,7 +17,7 @@ function ActionListItem({ id, title, completed }) {
   };
 
   return (
-    <li key={id}>
+    <li key={id} className={styles["action-list__item"]}>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
           <input
@@ -36,7 +37,8 @@ function ActionListItem({ id, title, completed }) {
             checked={completed}
             onChange={() => toggleComplete(id)}
           />
-          <span>{title}</span>
+          <span className={styles["action-list__title"]}>{title}</span>
+          <Flag className={styles[`label-priority--${priority}`]} />
           <button onClick={() => removeAction(id)}>
             <Trash2 />
           </button>

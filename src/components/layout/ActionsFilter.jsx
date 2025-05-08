@@ -4,7 +4,7 @@ function ActionsFilter({ filter, onFilterChange }) {
   return (
     <div className={styles["actions-filter"]}>
       <div className={styles["actions-filter__group"]}>
-        <label htmlFor="title">Search by</label>
+        <label htmlFor="title">Search actions</label>
         <input
           type="text"
           id="title"

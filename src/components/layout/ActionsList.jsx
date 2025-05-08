@@ -1,7 +1,12 @@
 import styles from "./ActionsList.module.css";
 import ActionListItem from "./ActionListItem";
+import { use, useEffect } from "react";
 
 function ActionsList({ stackId, actions }) {
+  useEffect(() => {
+    console.log(actions);
+  }, [actions]);
+
   return (
     <div className={styles["actions-list"]}>
       <ul>
@@ -11,6 +16,7 @@ function ActionsList({ stackId, actions }) {
             id={action.id}
             title={action.title}
             completed={action.completed}
+            priority={action.priority}
           />
         ))}
       </ul>

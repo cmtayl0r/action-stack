@@ -18,3 +18,34 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.label-priority--low {
+  color: var(--color-blue);
+}
+
+.label-priority--medium {
+  color: var(--color-orange);
+}
+
+.label-priority--high {
+  color: var(--color-red);
+}
+
+.actions-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.action-list__item {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  gap: 0.5rem;
+  padding: 0.5rem;
+  /* border-bottom: 1px solid var(--color-gray-light); */
+}
+
+.action-list__title {
+  flex-grow: 1;
+}
