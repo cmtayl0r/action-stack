@@ -2,6 +2,7 @@ import styles from "./ActionsList.module.css";
 import { useActionsContext } from "../../context/ActionsContext";
 import { useState } from "react";
 import ActionListItem from "./ActionListItem";
+import ActionsFilter from "./ActionsFilter";
 
 function ActionsList({ stackId, actions }) {
   const { addAction } = useActionsContext(); // Get action management functions
@@ -19,30 +20,14 @@ function ActionsList({ stackId, actions }) {
     return action.title.toLowerCase().includes(filterName.toLowerCase());
   });
 
-  // use your action hook here if needed (addAction, updateAction, etc.)
   return (
     <div className={styles["actions-list"]}>
-      <div className={styles["actions-filter"]}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
-          />
-        </div>
-        <label>
-          <input
-            type="checkbox"
-            onChange={(e) => setFilterCompleted(e.target.checked)}
-            checked={filterCompleted}
-          />
-          Hide completed
-        </label>
-      </div>
-      <hr />
+      <ActionsFilter
+        filterName={filterName}
+        setFilterName={setFilterName}
+        filterCompleted={filterCompleted}
+        setFilterCompleted={setFilterCompleted}
+      />
       <ul>
         {filteredActions.map((action) => (
           <ActionListItem

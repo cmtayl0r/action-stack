@@ -54,11 +54,6 @@ function useActions() {
   // 5️⃣ Update an action
   const updateAction = useCallback(
     async (actionId, updatedData) => {
-      // Ensure the title is a string if it exists in updatedData
-      if (updatedData.title && typeof updatedData.title !== "string") {
-        updatedData.title = String(updatedData.title);
-      }
-
       const updated = await actionAPI.update(actionId, updatedData);
       // Update the state with the modified action
       setActions((prev) => prev.map((a) => (a.id === actionId ? updated : a)));

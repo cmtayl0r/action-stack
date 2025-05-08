@@ -2,6 +2,8 @@
 
 # Action Stack
 
+"Todo list" style web app where a user can create several lists ("Stacks") and populate them with "actions" that have several criteria applied to them.
+
 ## Build plan
 
 ### MVP
@@ -28,9 +30,11 @@
 - [x] Global add stack modal
 - [x] Display all stacks in sidebar
 - [x] Address Modals open performance delay/lag on first usage
+- [ ] Implement theme switching via context
 
 ### Later ...
 
+- [ ] Implement Hazel UI components (Buttons, dropdowns, inputs etc)
 - [ ] Using Framer Motion throughout
 - [ ] Add tags to actions
 - [ ] Add due date to actions

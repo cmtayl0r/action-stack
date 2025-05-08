@@ -5,14 +5,13 @@ import { Pencil, Save, Trash2 } from "lucide-react";
 function ActionListItem({ id, title, completed }) {
   const [isEditing, setIsEditing] = useState(false); // Track edit mode
   const { removeAction, updateAction, toggleComplete } = useActionsContext(); // Get e
-  const titleRef = useRef(); // Create a ref for the input field
+  const nameRef = useRef(); // Create a ref for the input field
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent form submission
-    const newTitle = titleRef.current.value.trim(); // Ensure the value is trimmed and a string
-    if (newTitle === "") return; // Don't allow empty titles
-    console.log("Updating action:", id, newTitle);
-    updateAction(id, { title: newTitle }); // Update action title
+    if (nameRef.current.value.trim() === "") return; // Don't allow empty titles
+    console.log("Updating action:", id, nameRef.current.value);
+    updateAction(id, nameRef.current.value); // Update action title
     setIsEditing(false); // Exit edit mode
   };
 
@@ -23,7 +22,7 @@ function ActionListItem({ id, title, completed }) {
           <input
             type="text"
             defaultValue={title}
-            ref={titleRef} // Ref allows us to focus the input field
+            ref={nameRef} // Ref allows us to focus the input field
             autoFocus
           />
           <button>
