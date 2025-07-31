@@ -2,121 +2,160 @@
 
 # Action Stack
 
-"Todo list" style web app where a user can create several lists ("Stacks") and populate them with "actions" that have several criteria applied to them.
+[![Accessibility](https://img.shields.io/badge/WCAG-2.2%20AA-green.svg)](https://www.w3.org/WAI/WCAG22/quickref/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-💪-blue.svg)](https://www.typescriptlang.org/)
+[![AI Powered](https://img.shields.io/badge/AI-Thoughtfully%20Integrated-purple.svg)](#ai-features)
+[![Built with Love](https://img.shields.io/badge/Built%20with-❤️%20and%20☕-red.svg)](#)
 
-## Build plan
+> _Enjoying building things to be inclusive for everyone, one learning moment at a time._
 
-### MVP
+---
 
-- [x] Responsive sidebar housing key app-wide navigation and controls
-- [x] Render Inbox list as default list view
-- [x] Add multiple stacks (action lists)
-- [ ] Add correct loading states (in views)
-- [ ] Add action to a stack, global absolute button
-- [x] Add action to a stack (Global action)
-- [x] Edit Action inline (on click, reveal text input)
-- [x] Mark action as done
-- [ ] Dropdown for each stack
-  - [ ] Delete stack
-  - [ ] Rename stack
-- [ ] Global search modal with debounce (Search all actions by name)
-- [x] Stack filters: Filter actions by completed and not completed
-- [ ] Stack filters: Sort actions by date created
-- [ ] Stack filters: Sort actions by priority
-- [ ] Separate List components (UI Display components/consumers)
-- [ ] Full action page (or modal?) in React router with editing
-  - [ ] Delete action
-  - [ ] Update options (priority etc)
-- [x] Global add stack modal
-- [x] Display all stacks in sidebar
-- [x] Address Modals open performance delay/lag on first usage
-- [ ] Implement theme switching via context
+## 🎯 **What This Does**
 
-### Later ...
+- **THE PROBLEM:** [Brief, relatable problem statement]
+- **THE SOLUTION:** [Your app's approach in one compelling sentence]
+- **THE MAGIC:** [What makes this special - AI + accessibility focus]
 
-- [ ] Implement Hazel UI components (Buttons, dropdowns, inputs etc)
-- [ ] Using Framer Motion throughout
-- [ ] Add tags to actions
-- [ ] Add due date to actions
+### 👨‍🔧 My objective
 
-[Back to top](#top)
+Explore advance React Patterns that are built with Accessibility as a focus in the process and Learning journey.
 
-## Learning
+### 🌟 **Key Features**
 
-### Dealing with global UI components
+- ♿ **Accessibility First** - Works with screen readers, keyboard navigation, and assistive tech
+- 🤖 **AI Enhancements** - AI used thoughtfully, that actually make sense and help users
+- 🎨 **Thoughtful Design** - Every interaction designed for positive UX and usability
+- 📱 **Responsive** - Consideration for phone, tablet, or desktop
+- 🚀 **Performant** - Built with modern tech to help performance
 
-- Utilise "Flux Architecture Pattern" for Global UI (Modals and Toasts)
-- Separate actions, reducer and context to provide state and dispatches to components in a scalable manner
-- Data flows in one direction (dispatch action → reducer → state update → UI)
-- ModalContext.jsx works as a 'Modal Manager"
-- Serve particular modal component based on name via Context provider to the App. Those modals lazy loaded into the context.
-- Use 'Compound Component Pattern' to build flexible Toasts and Modals
-- Toast context has "convenience methods" in order to directly access "success" or "error" styled Toasts easily via its context throughout the app.
+<!-- ---
 
-### API Layer vs Hooks
+## 🧠 **The AI Philosophy**
 
-- API layer (localStorageAPI.js) 🧱 Low-level data handling (CRUD), raw operations on localStorage
-  - I made these generic CRUD operations that the hook wrapped around
-- Context provider (ActionsContext, StacksContext) 🌎 provide data slices (via the hooks) that can be supplied globably across the app
-  - This helped me with with some annoying React Router loader issues, where component refreshes was not happening
-- Hook layer (useStacks, useActions) ⚛️ React logic: manages state, subscriptions, batching, UI triggers
-- Component 📦 UI logic (form, input, render data, call hooks)
+> *"AI should make you smarter, not lazier. Technology should include everyone, not just some."*
 
-### Modal System logic
+This project aims to demonstrate:
+- 🎭 **Human-Centered AI** - AI features enhance human capability rather than replace it
+- 🔍 **Transparent Decisions** - You always know what the AI is thinking and why
+- 🎛️ **User Control** - Easy to modify, override, or disable AI features
+- ♿ **Inclusive by Design** - AI that works with assistive technology from day one -->
 
-##### Registry pattern
+---
 
-- UI components (e.g. Sidebar) call openModal("modal-name", props) to open a specific modal.
-- The modal system uses a registry pattern:
-  - All modals are registered centrally in a modalRegistry.js file.
-  - Each modal is mapped by a unique id to its React component.
-  - This avoids switch statements and makes the system easy to extend.
-- ModalContext manages:
-  - The active modal (modalId)
-  - Props to pass to the modal (modalProps)
-  - State updates via a reducer
-- ModalHost renders the correct modal based on the modalId from context.
-- 🤔 Removing a lazy load registry in "ModalHost.jsx" removed the first time usage lag, but I wasn't keen on using the useEffect in the ModalContext provider. Feels hacky.
+## 🛠️ **Tech Stack**
 
-##### 💬 Modal Interaction Pattern
+Built with the good stuff:
 
-- Modals receive callback functions (e.g. onSubmit) via modalProps.
-- The component that opens the modal (like Sidebar) passes a handler to receive data created or updated in the modal.
-- When the modal action completes (e.g. on form submit), it:
-  - Calls the provided callback with result data
-  - Calls closeModal() to dismiss itself
-- The close action is also triggered by:
-  - Clicking the ❌ close button
-  - Clicking a cancel button (which calls closeModal())
+| Layer          | Technology            | Why I Chose It                      |
+| -------------- | --------------------- | ----------------------------------- |
+| **Frontend**   | React 18 + TypeScript | Type safety + modern patterns       |
+| **Styling**    | Vanilla CSS           | Scalable Learning-focused approach  |
+| **Backend**    | Supabase              | Simple → AI-optimized progression   |
+| **Testing**    | Vitest + axe-core     | Essential testing without overwhelm |
+| **Deployment** | Vercel                | Zero-config, maximum performance    |
 
-### Component Architecture & Filtering
+---
 
-- Adopted Hook → Container → Presentation pattern for clean separation of concerns:
-  - useActionsContext handles shared state and CRUD logic (Hook layer)
-  - StackView manages app state, filters, and orchestrates component flow (Container layer)
-  - ActionsFilter, ActionsList, and ActionListItem are fully controlled, dumb UI components (Presentation layer)
-- Centralized filter state in StackView:
-  - Filters include name, completed, priority, and sortDirection
-  - All logic for filtering and sorting is colocated with the stack context
-- Created a single handleFilterChange(key, value) function:
-  - Enables consistent and scalable updates to filter state
-  - Cleanly passed to presentational components like ActionsFilter
-- Refactored ActionsFilter into a reusable presentational component:
-  - Receives a filter object and a single onFilterChange handler
-  - No internal state — pure UI, easy to test and extend
-- Used useMemo() in StackView for performant filtered + sorted actions list:
-  - Keeps render fast even as the action list grows
-  - Encapsulates filter/sort logic in a declarative, readable way
-- Improved prop naming and consistency across components:
-  - Clear, meaningful prop names (filter, onFilterChange, filteredActions, etc.)
-  - Aligned prop shape with component responsibility
+## ♿ **Accessibility Features**
 
-[Back to top](#top)
+Inclusion baked into the process:
 
-## Versions
+- **🔍 Screen Reader Tested** - Tested with VoiceOver on iOS and MacOS
+- **⌨️ Keyboard Navigation** - Every feature accessible without a mouse
+- **🎨 High Contrast Support** - Respects user display preferences
+- **📱 Touch Friendly** - 44px+ touch targets for motor accessibility
+- **🧠 Cognitive Support** - Clear language, predictable interactions
+- **🎵 Motion Aware** - Respects `prefers-reduced-motion` settings
+- **🌈 Foundation assets** - Design Tokens structured to consider visual impairments
 
-### Version 1 (April 2025)
+<!-- ---
 
-- Using localStorage as data structure as temporary measure.
+## 🚀 **Quick Start**
+
+```bash
+# Clone and get running in 30 seconds
+git clone https://github.com/username/PROJECT_NAME.git
+cd PROJECT_NAME
+npm install
+npm run dev
+
+# Open http://localhost:5173 and start exploring! 🎉
+```
+
+---
+
+## 🧪 Development Commands
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run test         # Run tests
+npm run test:a11y    # Run accessibility tests
+npm run lint         # Check code quality
+``` -->
+
+---
+
+## 🕟 Significant Versions
+
+### v1.0 MVP
+
+- Work in Progress
+
+### v0.1 (April 2025)
+
+- Experiment to test patterns and structure ideas
+- Using localStorage as data structure and low-level CRUD as temporary measure (API Layer).
+- Compound Component Pattern utilised for Modal and Toast components.
+- Flux Architecture Pattern used for Modal and Toast, with context for each used to "manage" multiple instances.
+- Context provider (AppProvider) to give global theme change and sidebar controls.
+- Context provider (ActionsContext, StacksContext) 🌎 provide data slices (via the hooks) that can be supplied globally across the app.
+- Context State used for Modals and Toast to allow any component, in various scenarios, to trigger them.
+- Used Registry pattern to "register" all modal variations in a registry which is used lazy loading and centralised management of a reusable component. Modal variations connected from registry to context via an passed value for an id prop.
+- Multiple toasts for real-time feedback, with auto-dismiss and manual close.
+- Toast component uses direct rendering (no registry), but caters for multiple toasts simultaneously. Not just one at a time.
+- Basic Vanilla CSS Modules put in place.
+- React Router used for routing, and Loader functions for the router responsible for fetching data before rendering the component.
+- Responsive sidebar for navigation and stack management.
+- Global modals for adding stacks and actions, with lazy loading for performance.
+- Inline editing and completion toggling for actions.
+- Stack filters for completed and active actions.
+- Framer Motion used for smooth UI animations.
+- Theme switching support via context (planned).
+- Modular file structure with separation of features, UI, and context logic.
+
+---
+
+## 🤝 **Contributing**
+
+Want to make this better? Amazing!
+
+1. **🍴 Fork** the repository
+2. **🌱 Create** a feature branch (`git checkout -b feature/amazing-improvement`)
+3. **♿ Ensure** accessibility compliance
+4. **🧪 Add** tests for new features
+5. **📝 Commit** with clear messages
+6. **🚀 Push** and create a Pull Request
+
+---
+
+## 📄 **License**
+
+MIT License - build amazing things! 🚀
+
+---
+
+## 👋 **Connect**
+
+Built by Chris Taylor - Design Engineer specializing in accessible AI
+
+- 💼 LinkedIn: [Chris Taylor](https://www.linkedin.com/in/uxchristophertaylor/)
+<!-- - 🌐 Portfolio: [apathofbravery.com](http://www.apathofbravery.com) -->
+- 📧 Email: [chris@pathtobravery.dev](mailto:chris@pathtobravery.dev)
+
+---
+
+_"Making technology that works for everyone isn't just good practice—it's better business, better design, and better for humanity."_
 
 [Back to top](#top)
