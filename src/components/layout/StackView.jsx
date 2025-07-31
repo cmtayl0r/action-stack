@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../context/app/AppContext";
 import { useLoaderData } from "react-router-dom";
 
 // Context
-import { useActionsContext } from "../../context/ActionsContext";
+import { useActionsContext } from "../../context/actions/ActionsContext";
 
 //  Components
 import Header from "./Header";

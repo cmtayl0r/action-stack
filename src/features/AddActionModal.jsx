@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Context
-import { useToastContext } from "../context/ToastContext";
-import { useStacksContext } from "../context/StacksContext";
-import { useActionsContext } from "../context/ActionsContext";
+import { useToastContext } from "../context/toasts/ToastContext";
+import { useStacksContext } from "../context/stacks/StacksContext";
+import { useActionsContext } from "../context/actions/ActionsContext";
 
 // Components
 import Modal from "../components/ui/modal/Modal";

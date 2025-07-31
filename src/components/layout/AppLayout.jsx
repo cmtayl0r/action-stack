@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../context/app/AppContext";
 import Sidebar from "./Sidebar";
 import ModalHost from "../ui/modal/ModalHost";
 import ToastHost from "../ui/toast/ToastHost";

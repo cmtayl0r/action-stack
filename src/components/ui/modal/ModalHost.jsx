@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useModalContext } from "../../../context/ModalContext";
+import { useModalContext } from "../../../context/modals/ModalContext";
 
 // -----------------------------------------------------------------------------
 // Modal Host

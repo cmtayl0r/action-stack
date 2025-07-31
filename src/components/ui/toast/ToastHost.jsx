@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useToastContext } from "../../../context/ToastContext";
+import { useToastContext } from "../../../context/toasts/ToastContext";
 import { ToastContainer } from "./Toast"; // assumes UI component
 
 function ToastHost() {

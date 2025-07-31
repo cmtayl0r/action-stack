@@ -7,7 +7,7 @@ import {
 } from "react";
 import { modalReducer, initialModalState } from "./modalReducer";
 import * as actions from "./modalActions";
-import { modalRegistry } from "../utils/modalRegistry";
+import { modalRegistry } from "../../utils/modalRegistry";
 
 // -----------------------------------------------------------------------------
 // 1️⃣ Context for sharing context
