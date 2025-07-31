@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Toast.module.css";
 import { BadgeInfo, CircleCheck, TriangleAlert, X } from "lucide-react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
 
 /*
   Toast Component
@@ -19,14 +18,21 @@ import { AnimatePresence, motion } from "framer-motion";
 // -----------------------------------------------------------------------------
 
 export function Toast({ id, message, type, duration, onClose }) {
+  const [isExiting, setIsExiting] = useState(false);
   // Debug
   // console.log("Toast rendered:", { id, message, type });
 
   // Clear toast after duration
   useEffect(() => {
     const timer = setTimeout(() => {
-      onClose(id);
+      setIsExiting(true); // Triggers exit animation via CSS class
+
+      // Remove after animation completes
+      setTimeout(() => {
+        onClose(id);
+      }, duration); // Using duration here will delay removal by the same duration as the initial display
     }, duration);
+
     // Clean up the timer when the component unmounts or when toast changes
     return () => clearTimeout(timer);
   }, [id, duration, onClose]);
@@ -48,20 +54,14 @@ export function Toast({ id, message, type, duration, onClose }) {
   };
 
   return (
-    <motion.div
+    <div
+      data-toast-id={id}
       className={`
-          ${styles.toast} 
+          ${styles.toast}
           ${type ? styles[`toast--${type}`] : ""}
+          ${isExiting ? styles["toast--exiting"] : ""}
         `}
       aria-live="polite"
-      initial={{ opacity: 0, y: 30, x: 0 }}
-      animate={{ opacity: 1, y: 0, x: 0 }}
-      exit={{ opacity: 0, y: 30 }}
-      transition={{
-        type: "spring",
-        damping: 20,
-        stiffness: 300,
-      }}
     >
       <span className={styles["toast__icon"]}>{getIcon()}</span>
       <div className={styles["toast__message"]}>{message}</div>
@@ -72,7 +72,7 @@ export function Toast({ id, message, type, duration, onClose }) {
       >
         <X size={20} />
       </button>
-    </motion.div>
+    </div>
   );
 }
 
@@ -83,18 +83,16 @@ export function Toast({ id, message, type, duration, onClose }) {
 export function ToastContainer({ toasts, onClose }) {
   return createPortal(
     <div className={styles["toast-container"]}>
-      <AnimatePresence>
-        {toasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            id={toast.id}
-            message={toast.message}
-            type={toast.type}
-            duration={toast.duration}
-            onClose={onClose}
-          />
-        ))}
-      </AnimatePresence>
+      {toasts.map((toast) => (
+        <Toast
+          key={toast.id}
+          id={toast.id}
+          message={toast.message}
+          type={toast.type}
+          duration={toast.duration}
+          onClose={onClose}
+        />
+      ))}
     </div>,
     document.body
   );
