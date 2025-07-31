@@ -207,7 +207,7 @@ const ModalCloseButton = ({ children, ...props }) => {
 };
 
 // -----------------------------------------------------------------------------
-// 4 - Export
+// 4 - Compound Pattern Assignment
 // -----------------------------------------------------------------------------
 
 Modal.Trigger = ModalTrigger;
@@ -217,4 +217,11 @@ Modal.Content = ModalContent;
 Modal.Footer = ModalFooter;
 Modal.CloseButton = ModalCloseButton;
 
+// -----------------------------------------------------------------------------
+// 5 - Export
+// -----------------------------------------------------------------------------
+
+export { Modal };
 export default Modal;
+
+// export types if using TypeScript

@@ -14,7 +14,7 @@ import { useModalContext } from "../../../context/modals/ModalContext";
  * It uses createPortal to render the modal in a different part of the DOM.
  */
 
-function ModalHost() {
+export const ModalHost = () => {
   const { modalId, modalProps, registry, closeModal } = useModalContext();
 
   // If no modal is open, return null
@@ -28,6 +28,4 @@ function ModalHost() {
     <ModalComponent {...modalProps} closeModal={closeModal} />,
     document.getElementById("modal-root")
   );
-}
-
-export default ModalHost;
+};

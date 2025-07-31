@@ -17,7 +17,7 @@ import { createPortal } from "react-dom";
 // 1️⃣ Individual Toast Component
 // -----------------------------------------------------------------------------
 
-export function Toast({ id, message, type, duration, onClose }) {
+export const Toast = ({ id, message, type, duration, onClose }) => {
   const [isExiting, setIsExiting] = useState(false);
   // Debug
   // console.log("Toast rendered:", { id, message, type });
@@ -74,13 +74,13 @@ export function Toast({ id, message, type, duration, onClose }) {
       </button>
     </div>
   );
-}
+};
 
 // -----------------------------------------------------------------------------
 // 2️⃣ ToastContainer Component
 // -----------------------------------------------------------------------------
 
-export function ToastContainer({ toasts, onClose }) {
+export const ToastContainer = ({ toasts, onClose }) => {
   return createPortal(
     <div className={styles["toast-container"]}>
       {toasts.map((toast) => (
@@ -96,4 +96,4 @@ export function ToastContainer({ toasts, onClose }) {
     </div>,
     document.body
   );
-}
+};

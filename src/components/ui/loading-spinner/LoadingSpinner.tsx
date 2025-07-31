@@ -1,6 +1,11 @@
+import { useCallback } from "react";
 import styles from "./LoadingSpinner.module.css";
 
-function LoadingSpinner({ size = "lg", label = "Loading...", className = "" }) {
+export const LoadingSpinner = ({
+  size = "lg",
+  label = "Loading...",
+  className = "",
+}) => {
   return (
     <div
       className={`${styles["loading-spinner"]} ${className}`}
@@ -12,6 +17,4 @@ function LoadingSpinner({ size = "lg", label = "Loading...", className = "" }) {
       <span className={styles["visually-hidden"]}>{label}</span>
     </div>
   );
-}
-
-export default LoadingSpinner;
+};
