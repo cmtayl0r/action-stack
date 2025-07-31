@@ -8,24 +8,35 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx,js,jsx",
+    "lint:fix": "eslint . --ext ts,tsx,js,jsx --fix",
+    "validate:components": "eslint src/components/ --ext tsx",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:a11y": "vitest run --reporter=verbose src/**/*.test.tsx",
     "test:watch": "vitest watch",
-    "lint": "eslint . --ext ts,tsx,js,jsx",
-    "lint:fix": "eslint . --ext ts,tsx,js,jsx --fix"
+    "test:a11y": "vitest run --reporter=verbose src/**/*.test.tsx",
+    "test:a11y-ci": "vitest run --reporter=junit --outputFile=a11y-results.xml src/**/*.test.tsx",
+    "audit:lighthouse": "lighthouse http://localhost:5173 --output json --output-path ./lighthouse-results.json --chrome-flags='--headless'",
+    "audit:a11y": "axe-core-cli ./dist --save ./axe-results.json",
+    "check:contrast": "pa11y-ci",
+    "check:vitals": "echo 'Run this after starting dev server: web-vitals http://localhost:5173'",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "lucide-react": "^0.534.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.3"
   },
   "devDependencies": {
+    "@a11y/focus-trap": "^1.0.5",
+    "@axe-core/cli": "^4.10.2",
     "@axe-core/react": "^4.10.2",
     "@eslint/js": "^9.22.0",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -36,6 +47,8 @@
     "@typescript-eslint/parser": "^8.38.0",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/ui": "^3.2.4",
+    "aria-query": "^5.3.2",
+    "color-contrast-checker": "^2.1.0",
     "eslint": "^9.22.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -43,8 +56,12 @@
     "globals": "^16.0.0",
     "jest-axe": "^9.0.0",
     "jsdom": "^26.1.0",
+    "lighthouse": "^12.8.0",
+    "pa11y-ci": "^4.0.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.6",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wcag-color": "^1.1.1",
+    "web-vitals": "^5.0.3"
   }
 }
