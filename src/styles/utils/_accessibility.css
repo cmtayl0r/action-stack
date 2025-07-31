@@ -1,4 +1,4 @@
-/* 
+/*
 --------------------------------------------------------------------------------
 ACCESSIBILITY
 --------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ ACCESSIBILITY
   outline: none;
 }
 
-/* 
+/*
   Fix to display focus ring on checkboxes and radio buttons when using focus() in js
   because, element.focus(); // programmatic focus → ❌ no :focus-visible
 */
