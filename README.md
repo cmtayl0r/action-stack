@@ -13,21 +13,35 @@
 
 ## 🎯 **What This Does**
 
-- **THE PROBLEM:** [Brief, relatable problem statement]
-- **THE SOLUTION:** [Your app's approach in one compelling sentence]
-- **THE MAGIC:** [What makes this special - AI + accessibility focus]
+### 1️⃣ **The Problem**
 
-### 👨‍🔧 My objective
+[Brief, relatable problem statement]
+
+### 2️⃣ **The Solution**
+
+[Your app's approach in one compelling sentence]
+
+### 3️⃣ **The Magic**
+
+[What makes this special - AI + accessibility focus]
+
+### 🌟 **Key Features**
+
+- TBD
+
+### 👨‍🔧 **My objective**
 
 Explore advance React Patterns that are built with Accessibility as a focus in the process and Learning journey.
 
-### 🌟 **Key Features**
+### 🛣️ **Project standards**
+
+The learning journey is to always try and attain:
 
 - ♿ **Accessibility First** - Works with screen readers, keyboard navigation, and assistive tech
 - 🤖 **AI Enhancements** - AI used thoughtfully, that actually make sense and help users
 - 🎨 **Thoughtful Design** - Every interaction designed for positive UX and usability
-- 📱 **Responsive** - Consideration for phone, tablet, or desktop
-- 🚀 **Performant** - Built with modern tech to help performance
+- 📱 **Responsiveness** - Consideration for phone, tablet, or desktop
+- 🚀 **Performance** - Built with modern tech to help performance
 
 <!-- ---
 
@@ -151,8 +165,8 @@ MIT License - build amazing things! 🚀
 Built by Chris Taylor - Design Engineer specializing in accessible AI
 
 - 💼 LinkedIn: [Chris Taylor](https://www.linkedin.com/in/uxchristophertaylor/)
-<!-- - 🌐 Portfolio: [apathofbravery.com](http://www.apathofbravery.com) -->
 - 📧 Email: [chris@pathtobravery.dev](mailto:chris@pathtobravery.dev)
+<!-- - 🌐 Portfolio: [apathofbravery.com](http://www.apathofbravery.com) -->
 
 ---
 
