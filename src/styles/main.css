@@ -1,7 +1,7 @@
 /* 1️⃣ Import Abstracts (Design Tokens, Variables) */
-@import "./abstracts/_color.css";
-@import "./abstracts/_typography.css";
-/* @import "./abstracts/_themes.css"; */
+@import "./tokens/_color.css";
+@import "./tokens/_typography.css";
+/* @import "./tokens/_themes.css"; */
 
 /* 2️⃣ Import Base Styles */
 @import "./base/_reset.css";
