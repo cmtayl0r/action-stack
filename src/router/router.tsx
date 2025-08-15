@@ -2,15 +2,15 @@ import { createBrowserRouter } from "react-router-dom";
 import { Suspense } from "react";
 
 // LAYOUTS
-import AppLayout from "../components/layout/AppLayout";
-import ErrorView from "../components/layout/ErrorView";
-import StackView from "../components/features/StackView";
+import AppLayout from "@/components/layout/AppLayout";
+import ErrorView from "@/components/layout/ErrorView";
+import StackView from "@/components/features/stacks/StackView";
 
 // LOADERS
 import { stackLoader, indexLoader } from "./loaders";
 
 // COMPONENTS
-import { LoadingSpinner } from "../components";
+import { LoadingSpinner } from "@/components";
 
 export const router = createBrowserRouter([
   {

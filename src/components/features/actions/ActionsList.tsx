@@ -1,7 +1,7 @@
 import styles from "./ActionsList.module.css";
 import ActionListItem from "./ActionListItem";
 import { useEffect } from "react";
-import { Action } from "../../types";
+import { Action } from "@/types";
 
 type ActionsListProps = {
   stackId: string;

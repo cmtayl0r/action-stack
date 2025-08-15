@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import { useAppContext } from "../../context/app/AppContext";
 import { useLoaderData } from "react-router-dom";
-import { useActionsContext } from "../../context/actions/ActionsContext";
-import Header from "../layout/Header";
-import ActionsFilter from "./ActionsFilter";
-import ActionsList from "./ActionsList";
-import { Action, Stack } from "../../types";
+import { useAppContext } from "@/context/app/AppContext";
+import { useActionsContext } from "@/context/actions/ActionsContext";
+import Header from "@/components/layout/header/Header";
+import ActionsFilter from "../actions/ActionsFilter";
+import ActionsList from "../actions/ActionsList";
+import { Action, Stack } from "@/types";
 
 function StackView() {
   const { state, toggleSidebar } = useAppContext();

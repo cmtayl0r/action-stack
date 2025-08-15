@@ -1,5 +1,5 @@
-import { useActionsContext } from "../../context/actions/ActionsContext";
-import { Modal } from "../ui/modal";
+import { useActionsContext } from "@/context/actions/ActionsContext";
+import { Modal } from "@/components";
 import { useMemo, useState } from "react";
 
 type SearchActionsModalProps = {

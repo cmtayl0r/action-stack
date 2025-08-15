@@ -1,7 +1,7 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useModalContext } from "../../context/modals/ModalContext";
-import { useStacksContext } from "../../context/stacks/StacksContext";
-import { useAppContext } from "../../context/app/AppContext";
+import { useModalContext } from "@/context/modals/ModalContext";
+import { useStacksContext } from "@/context/stacks/StacksContext";
+import { useAppContext } from "@/context/app/AppContext";
 import {
   LucidePlus,
   LucideSearch,

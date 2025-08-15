@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToastContext } from "../../context/toasts/ToastContext";
-import { useStacksContext } from "../../context/stacks/StacksContext";
-import { Modal } from "../ui/modal";
+import { useToastContext } from "@/context/toasts/ToastContext";
+import { useStacksContext } from "@/context/stacks/StacksContext";
+import { Modal } from "@/components/ui";
 
 type AddStackModalProps = {
   closeModal: () => void;

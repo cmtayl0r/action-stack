@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { makeStorageAPI } from "../api/localStorageAPI";
-import { Action } from "../types";
+import { makeStorageAPI } from "@/api/localStorageAPI";
+import { Action } from "@/types";
 
 const actionAPI = makeStorageAPI("todoApp:actions");
 
