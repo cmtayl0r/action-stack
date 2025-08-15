@@ -221,7 +221,6 @@ Modal.CloseButton = ModalCloseButton;
 // 5 - Export
 // -----------------------------------------------------------------------------
 
-export { Modal };
 export default Modal;
 
 // export types if using TypeScript

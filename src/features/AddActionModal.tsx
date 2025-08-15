@@ -7,7 +7,7 @@ import { useStacksContext } from "../context/stacks/StacksContext";
 import { useActionsContext } from "../context/actions/ActionsContext";
 
 // Components
-import Modal from "../components/ui/modal/Modal";
+import { Modal } from "@/components";
 
 function AddActionModal({ closeModal, stackId: initialStackId = "inbox" }) {
   const { stacks } = useStacksContext(); // Get available stacks

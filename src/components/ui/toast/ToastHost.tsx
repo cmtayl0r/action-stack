@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import { useToastContext } from "../../../context/toasts/ToastContext";
 import { ToastContainer } from "./Toast"; // assumes UI component
 
-export const ToastHost = () => {
+const ToastHost = () => {
   const { state, hideToast } = useToastContext();
 
   // Don't render anything if there are no toasts
@@ -13,3 +13,5 @@ export const ToastHost = () => {
     document.getElementById("toast-root")
   );
 };
+
+export default ToastHost;

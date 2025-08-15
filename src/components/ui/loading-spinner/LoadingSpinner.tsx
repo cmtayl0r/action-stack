@@ -1,7 +1,6 @@
-import { useCallback } from "react";
 import styles from "./LoadingSpinner.module.css";
 
-export const LoadingSpinner = ({
+const LoadingSpinner = ({
   size = "lg",
   label = "Loading...",
   className = "",
@@ -18,3 +17,5 @@ export const LoadingSpinner = ({
     </div>
   );
 };
+
+export default LoadingSpinner;

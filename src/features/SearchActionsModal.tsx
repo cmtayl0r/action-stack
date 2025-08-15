@@ -1,6 +1,6 @@
 import { useActionsContext } from "../context/actions/ActionsContext";
 // Components
-import Modal from "../components/ui/modal/Modal";
+import { Modal } from "@/components";
 import { useMemo, useState } from "react";
 
 function SearchActionsModal({ closeModal }) {

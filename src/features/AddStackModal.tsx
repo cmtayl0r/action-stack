@@ -6,7 +6,7 @@ import { useToastContext } from "../context/toasts/ToastContext";
 import { useStacksContext } from "../context/stacks/StacksContext";
 
 // Components
-import Modal from "../components/ui/modal/Modal";
+import { Modal } from "@/components";
 
 function AddStackModal({ closeModal }) {
   const [name, setName] = useState("");

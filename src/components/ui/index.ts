@@ -10,3 +10,5 @@ export { Modal, ModalHost } from "./modal";
 // export type { ModalProps, ModalHostProps } from "./modal";
 
 // Loading Spinner components
+export { LoadingSpinner } from "./loading-spinner";
+// export type { LoadingSpinnerProps } from "./loading-spinner";

@@ -10,7 +10,7 @@ import StackView from "../components/layout/StackView";
 import { stackLoader, indexLoader } from "./loaders";
 
 // COMPONENTS
-import LoadingSpinner from "../components/ui/loading-spinner/LoadingSpinner";
+import { LoadingSpinner } from "../components";
 
 export const router = createBrowserRouter([
   {
