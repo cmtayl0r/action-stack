@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import useStacks from "../../hooks/useStacks";
+import useStacks from "../../hooks/data/useStacks";
 import { StacksContextType } from "../../types";
 
 // Acts as a shared Data slice for the app

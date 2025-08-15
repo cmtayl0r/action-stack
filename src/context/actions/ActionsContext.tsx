@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import useActions from "../../hooks/useActions";
+import useActions from "../../hooks/data/useActions";
 import { ActionsContextType } from "../../types";
 
 // Acts as a shared Data slice for the app
