@@ -1,8 +1,14 @@
 import styles from "./ActionsList.module.css";
 import ActionListItem from "./ActionListItem";
 import { useEffect } from "react";
+import { Action } from "../../types";
 
-function ActionsList({ stackId, actions }) {
+type ActionsListProps = {
+  stackId: string;
+  actions: Action[];
+};
+
+function ActionsList({ stackId, actions }: ActionsListProps) {
   useEffect(() => {
     console.log(actions);
   }, [actions]);
@@ -11,14 +17,7 @@ function ActionsList({ stackId, actions }) {
     <div className={styles["actions-list"]}>
       <ul>
         {actions.map((action) => (
-          <ActionListItem
-            key={action.id}
-            id={action.id}
-            title={action.title}
-            completed={action.completed}
-            priority={action.priority}
-            createdAt={action.createdAt}
-          />
+          <ActionListItem key={action.id} action={action} />
         ))}
       </ul>
       <small>{stackId}</small>

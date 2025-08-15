@@ -1,43 +1,36 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToastContext } from "../../context/toasts/ToastContext";
+import { useStacksContext } from "../../context/stacks/StacksContext";
+import { useActionsContext } from "../../context/actions/ActionsContext";
+import { Modal } from "../ui/modal";
+import { Action } from "../../types";
 
-// Context
-import { useToastContext } from "../context/toasts/ToastContext";
-import { useStacksContext } from "../context/stacks/StacksContext";
-import { useActionsContext } from "../context/actions/ActionsContext";
+type AddActionModalProps = {
+  closeModal: () => void;
+  stackId?: string;
+};
 
-// Components
-import { Modal } from "@/components";
-
-function AddActionModal({ closeModal, stackId: initialStackId = "inbox" }) {
-  const { stacks } = useStacksContext(); // Get available stacks
-  const { addAction, reload } = useActionsContext(); // Get action management functions
-  const { success } = useToastContext(); // Get toast context for notifications
-  const [title, setTitle] = useState(""); // Track action title
-  const [priority, setPriority] = useState("medium"); // Track selected priority
-  const [stackId, setStackId] = useState(initialStackId); // Track selected stack
+function AddActionModal({
+  closeModal,
+  stackId: initialStackId = "inbox",
+}: AddActionModalProps) {
+  const { stacks } = useStacksContext();
+  const { addAction } = useActionsContext();
+  const { success } = useToastContext();
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState<Action["priority"]>("medium");
+  const [stackId, setStackId] = useState(initialStackId);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form submission
-    // 1. Validate the form
-    // TODO: Replace with actual error handling
-    // 2. Create the new task object
-    // Only send user-entered values here
-    const newAction = {
-      title: title.trim(),
-      priority,
-      stackId,
-    };
-    // 3. Add the action to the database
-    await addAction(newAction);
-    // 4. Navigate to the stack page
-    navigate(`/stack/${newAction.stackId}`);
-    // 5. Force a reload of actions data
-    await reload();
-    // 6. Show success toast
-    success(`${newAction.title} saved successfully!`);
-    // 7. Close the modal
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return;
+
+    await addAction(trimmedTitle, priority, stackId);
+    navigate(`/stack/${stackId}`);
+    success(`${trimmedTitle} saved successfully!`);
     closeModal();
   };
 
@@ -62,7 +55,9 @@ function AddActionModal({ closeModal, stackId: initialStackId = "inbox" }) {
             <select
               id="priority"
               value={priority}
-              onChange={(e) => setPriority(e.target.value)}
+              onChange={(e) =>
+                setPriority(e.target.value as Action["priority"])
+              }
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>

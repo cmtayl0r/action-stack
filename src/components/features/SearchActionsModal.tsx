@@ -1,9 +1,12 @@
-import { useActionsContext } from "../context/actions/ActionsContext";
-// Components
-import { Modal } from "@/components";
+import { useActionsContext } from "../../context/actions/ActionsContext";
+import { Modal } from "../ui/modal";
 import { useMemo, useState } from "react";
 
-function SearchActionsModal({ closeModal }) {
+type SearchActionsModalProps = {
+  closeModal: () => void;
+};
+
+function SearchActionsModal({ closeModal }: SearchActionsModalProps) {
   const { actions } = useActionsContext();
   const [query, setQuery] = useState("");
 

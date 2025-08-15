@@ -1,18 +1,12 @@
-/*
-  ROLE: React-focused logic that manages component state, side effects, handles reactivity
-  Abstract over the API layer to perform CRUD operations on stacks.
-*/
-
 import { useState, useEffect, useCallback } from "react";
 import { makeStorageAPI } from "../api/localStorageAPI";
+import { Stack } from "../types";
 
-// Pass key name to the API to manipulate it in localStorage
 const stackAPI = makeStorageAPI("todoApp:stacks");
 
 function useStacks() {
-  const [stacks, setStacks] = useState([]);
+  const [stacks, setStacks] = useState<Stack[]>([]);
 
-  // 1️⃣ Load all stacks
   const loadStacks = useCallback(async () => {
     const stacks = await stackAPI.getAll();
     setStacks(stacks);
@@ -22,44 +16,28 @@ function useStacks() {
     loadStacks();
   }, [loadStacks]);
 
-  // 2️⃣ Add a new stack
-  const addStack = useCallback(async (stackData) => {
-    // Create a new stack object
+  const addStack = useCallback(async (stackData: Partial<Stack>) => {
     const newStack = await stackAPI.create(stackData);
-    // Update the state with the new stack
     setStacks((prev) => [...prev, newStack]);
     return newStack;
   }, []);
 
-  // 3️⃣ Remove a stack
-  const removeStack = useCallback(
-    async (stackId) => {
-      await stackAPI.remove(stackId);
-      // Update the state by filtering out the removed stack
-      setStacks((prev) => prev.filter((s) => s.id !== stackId));
-    },
-    [setStacks]
-  );
+  const removeStack = useCallback(async (stackId: string) => {
+    await stackAPI.remove(stackId);
+    setStacks((prev) => prev.filter((s) => s.id !== stackId));
+  }, []);
 
-  // 4️⃣ Update a stack
-  const updateStack = async (id, updates) => {
+  const updateStack = async (id: string, updates: Partial<Stack>) => {
     const updated = await stackAPI.update(id, updates);
     setStacks((prev) => prev.map((s) => (s.id === id ? updated : s)));
   };
 
-  // 5️⃣ Get a stack by ID
-  const getStackById = async (id) => stackAPI.getById(id);
+  const getStackById = async (id: string) => stackAPI.getById(id);
 
-  // 6️⃣ Rename a stack
-  const renameStack = async (id, newName) => {
+  const renameStack = async (id: string, newName: string) => {
     const updated = await stackAPI.update(id, { name: newName });
     setStacks((prev) => prev.map((s) => (s.id === id ? updated : s)));
   };
-
-  // DEBUG: useEffect to log whenever stacks change
-  // useEffect(() => {
-  //   console.log("Stacks state in hook updated:", stacks);
-  // }, [stacks]);
 
   return {
     stacks,

@@ -1,6 +1,6 @@
-import AddActionModal from "../features/AddActionModal";
-import AddStackModal from "../features/AddStackModal";
-import SearchActionsModal from "../features/SearchActionsModal";
+import AddActionModal from "../components/features/AddActionModal";
+import AddStackModal from "../components/features/AddStackModal";
+import SearchActionsModal from "../components/features/SearchActionsModal";
 
 // ✅ Export as a flat list for easy mapping
 export const modalRegistry = [

@@ -2,37 +2,37 @@ import { useRef, useState } from "react";
 import { useActionsContext } from "../../context/actions/ActionsContext";
 import { Flag, Pencil, Save, Trash2 } from "lucide-react";
 import styles from "./ActionsList.module.css";
+import { Action } from "../../types";
 
-function ActionListItem({ id, title, completed, priority, createdAt }) {
-  const [isEditing, setIsEditing] = useState(false); // Track edit mode
-  const { removeAction, updateAction, toggleComplete } = useActionsContext(); // Get e
-  const nameRef = useRef(); // Create a ref for the input field
+type ActionListItemProps = {
+  action: Action;
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent form submission
-    if (nameRef.current.value.trim() === "") return; // Don't allow empty titles
-    console.log("Updating action:", id, nameRef.current.value);
-    updateAction(id, nameRef.current.value); // Update action title
-    setIsEditing(false); // Exit edit mode
+function ActionListItem({ action }: ActionListItemProps) {
+  const { id, title, completed, priority, createdAt } = action;
+  const [isEditing, setIsEditing] = useState(false);
+  const { removeAction, updateAction, toggleComplete } = useActionsContext();
+  const nameRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!nameRef.current || nameRef.current.value.trim() === "") return;
+    updateAction(id, { title: nameRef.current.value });
+    setIsEditing(false);
   };
 
   const date = new Date(createdAt);
   const formatted = date.toLocaleDateString("en-US", {
-    month: "short", // Jan, Feb, etc.
-    day: "numeric", // 1, 2, ..., 31
+    month: "short",
+    day: "numeric",
   });
 
   return (
     <li key={id} className={styles["action-list__item"]}>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            defaultValue={title}
-            ref={nameRef} // Ref allows us to focus the input field
-            autoFocus
-          />
-          <button>
+          <input type="text" defaultValue={title} ref={nameRef} autoFocus />
+          <button type="submit">
             <Save />
           </button>
         </form>

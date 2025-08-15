@@ -4,7 +4,7 @@ import { Suspense } from "react";
 // LAYOUTS
 import AppLayout from "../components/layout/AppLayout";
 import ErrorView from "../components/layout/ErrorView";
-import StackView from "../components/layout/StackView";
+import StackView from "../components/features/StackView";
 
 // LOADERS
 import { stackLoader, indexLoader } from "./loaders";

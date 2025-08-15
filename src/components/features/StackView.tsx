@@ -1,31 +1,25 @@
 import { useMemo, useState } from "react";
 import { useAppContext } from "../../context/app/AppContext";
 import { useLoaderData } from "react-router-dom";
-
-// Context
 import { useActionsContext } from "../../context/actions/ActionsContext";
-
-//  Components
-import Header from "./Header";
+import Header from "../layout/Header";
 import ActionsFilter from "./ActionsFilter";
 import ActionsList from "./ActionsList";
+import { Action, Stack } from "../../types";
 
 function StackView() {
   const { state, toggleSidebar } = useAppContext();
-  // 1️⃣ Initial load from router loader
-  const { stack } = useLoaderData();
-  // 🔄 live action state updates from context
+  const { stack } = useLoaderData() as { stack: Stack };
   const { actions } = useActionsContext();
 
   const [filter, setFilter] = useState({
     title: "",
     completed: false,
     priority: "priority",
-    dateCreated: "date",
     sortDirection: "asc",
   });
 
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = (key: string, value: string | boolean) => {
     setFilter((prev) => ({
       ...prev,
       [key]: value,
@@ -33,7 +27,7 @@ function StackView() {
   };
 
   const filterActions = useMemo(() => {
-    const priorityOrder = {
+    const priorityOrder: Record<Action["priority"], number> = {
       high: 3,
       medium: 2,
       low: 1,
@@ -45,15 +39,13 @@ function StackView() {
       .sort((a, b) => {
         const direction = filter.sortDirection === "asc" ? 1 : -1;
         if (filter.priority === "priority") {
-          // 🔢 Custom numeric priority sort
           const valA = priorityOrder[a.priority] || 0;
           const valB = priorityOrder[b.priority] || 0;
           return (valA - valB) * direction;
         } else {
-          // 🕒 Fallback: sort by dateCreated
-          const dateA = new Date(a.dateCreated);
-          const dateB = new Date(b.dateCreated);
-          return (dateA - dateB) * direction;
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return (dateA.getTime() - dateB.getTime()) * direction;
         }
       });
   }, [actions, filter, stack.id]);

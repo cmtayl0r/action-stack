@@ -1,31 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToastContext } from "../../context/toasts/ToastContext";
+import { useStacksContext } from "../../context/stacks/StacksContext";
+import { Modal } from "../ui/modal";
 
-// Context
-import { useToastContext } from "../context/toasts/ToastContext";
-import { useStacksContext } from "../context/stacks/StacksContext";
+type AddStackModalProps = {
+  closeModal: () => void;
+};
 
-// Components
-import { Modal } from "@/components";
-
-function AddStackModal({ closeModal }) {
+function AddStackModal({ closeModal }: AddStackModalProps) {
   const [name, setName] = useState("");
   const { addStack } = useStacksContext();
   const { success } = useToastContext();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    // TODO: Replace with actual error handling
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
-    // * Only send user-entered values here
-    const newStack = {
-      name: trimmedName,
-    };
-    const savedStack = await addStack(newStack);
+    const savedStack = await addStack({ name: trimmedName });
     success(`${savedStack.name} saved successfully!`);
     navigate(`/stack/${savedStack.id}`);
     closeModal();
