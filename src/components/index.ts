@@ -1,8 +1,20 @@
 // Top-level components barrel
-// Re-export category-level barrels for simpler imports across the app.
-// Keep this minimal to avoid exporting directories that don't yet have their own barrels.
-export * from "./ui";
+// Follow root index rules:
+// - Named exports only (no `export *`)
+// - Re-export specific items from category barrels (ui, layout, features) to keep imports clean
 
-// When you add category-level barrels for layout or features, enable them here:
-// export * from "./layout";
-// export * from "./features";
+/*
+================================================================================
+UI
+================================================================================
+*/
+
+export { Modal, ModalHost, Toast, ToastHost, LoadingSpinner } from "./ui";
+
+/*
+================================================================================
+LAYOUT (add when layout index exists)
+================================================================================
+*/
+
+// export { Sidebar, AppLayout } from './layout';
