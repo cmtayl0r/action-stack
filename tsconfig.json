@@ -13,9 +13,21 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": true,
+    "strict": true, // Enable all strict checks
+    "noUnusedLocals": true, // Warn about unused variables
+    "noUnusedParameters": true, // Warn about unused parameters
+    "noFallthroughCasesInSwitch": true, // Catch switch statement bugs
 
-    "paths": { "@/*": ["./src/*"] }
+    /* Custom Path Mapping */
+    "baseUrl": ".", // Base for relative imports
+    "paths": {
+      "@/*": ["src/*"], // @/components/Button
+      "@/components/*": ["src/components/*"], // Direct component imports
+      "@/types": ["src/types"],
+      "@/types/*": ["src/types/*"],
+      "@/hooks/*": ["src/hooks/*"], // Custom hooks
+      "@/utils/*": ["src/utils/*"] // Utility functions
+    }
   },
   "include": [
     "src",

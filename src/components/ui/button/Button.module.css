@@ -1,0 +1,134 @@
+/*
+- 2px solid focus ring
+- aria-label for icon buttons only
+- aria-expanded for buttons that control disclosure
+- aria-pressed for toggle buttons
+- aria-disabled="true" for disabled state
+- aria-busy="true" during loading
+*/
+
+:root {
+  --btn-size-xs: 24px;
+  --btn-size-sm: 32px;
+  --btn-size-md: 44px;
+  --btn-size-lg: 56px;
+}
+
+/*
+================================================================================
+CORE STRUCTURE
+================================================================================
+*/
+
+.btn {
+  display: inline-flex;
+  gap: var(--space-xs);
+  /* 8px */
+  align-items: center;
+  justify-content: center;
+  border: transparent;
+  user-select: none;
+  cursor: pointer;
+
+  /* Ensure minimum touch target (44px) */
+  min-height: var(--btn-size-md);
+  min-width: var(--btn-size-md);
+}
+
+.btn__label {}
+
+.btn--full-width {
+  width: 100%;
+}
+
+/*
+================================================================================
+VARIANTS
+================================================================================
+*/
+
+.btn--primary {
+  background-color: blue;
+}
+
+.btn--ghost {
+  background-color: transparent;
+  border: none;
+}
+
+.btn--outline {
+  background-color: transparent;
+  border: 2px solid blue;
+  color: blue;
+}
+
+.btn--destructive {
+  background-color: red;
+  color: white;
+}
+
+/*
+================================================================================
+STATES
+================================================================================
+*/
+
+.btn--loading {
+  pointer-events: none;
+}
+
+.btn--disabled {
+  cursor: not-allowed
+}
+
+/*
+================================================================================
+SIZES
+================================================================================
+*/
+
+.btn--xs {
+  padding: 0 var(--space-xs);
+  min-height: var(--btn-size-xs);
+  min-width: var(--btn-size-xs);
+}
+
+.btn--sm {
+  padding: 0 var(--space-sm);
+  min-height: var(--btn-size-sm);
+  min-width: var(--btn-size-sm);
+}
+
+.btn--md {
+  padding: 0 var(--space-md);
+  min-height: var(--btn-size-md);
+  min-width: var(--btn-size-md);
+}
+
+.btn--lg {
+  padding: 0 var(--space-lg);
+  min-height: var(--btn-size-lg);
+  min-width: var(--btn-size-lg);
+}
+
+/*
+================================================================================
+ICON SYSTEM
+================================================================================
+*/
+
+.btn__icon {}
+
+.btn__icon--left {}
+
+.btn__icon--right {}
+
+.btn__icon--sm {}
+
+.btn__icon--md {}
+
+.btn__icon--lg {}
+
+.btn__icon-only {
+  aspect-ratio: 1;
+}

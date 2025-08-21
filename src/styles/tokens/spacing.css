@@ -1,0 +1,98 @@
+/*
+================================================================================
+SPACING TOKENS - LEAN HIGH CONTRAST
+================================================================================
+Essential spacing scale for accessibility-first design.
+Reduced from 25+ values to 7 core sizes + fluid options.
+Based on 8px grid for crisp pixel alignment.
+*/
+
+:root {
+
+  /* ===== STATIC SPACING ===== */
+  /* Consistent 4px base scale for precise control */
+  --space-1: 0.25rem;
+  /* 4px */
+  --space-2: 0.5rem;
+  /* 8px */
+  --space-3: 0.75rem;
+  /* 12px */
+  --space-4: 1rem;
+  /* 16px */
+  --space-5: 1.25rem;
+  /* 20px */
+  --space-6: 1.5rem;
+  /* 24px */
+  --space-7: 1.75rem;
+  /* 28px */
+  --space-8: 2rem;
+  /* 32px */
+  --space-9: 2.25rem;
+  /* 36px */
+  --space-10: 2.5rem;
+  /* 40px */
+  --space-11: 2.75rem;
+  /* 44px */
+  --space-12: 3rem;
+  /* 48px */
+  --space-14: 3.5rem;
+  /* 56px */
+  --space-16: 4rem;
+  /* 64px */
+  --space-18: 4.5rem;
+  /* 72px */
+  --space-20: 5rem;
+  /* 80px */
+  --space-24: 6rem;
+  /* 96px */
+
+  /* ===== CORE SPACING SCALE (8px base) ===== */
+  --space-none: 0;
+  /* 0px - No spacing */
+  --space-2xs: var(--space-1);
+  /* 4px - Extra tight spacing */
+  --space-xs: var(--space-2);
+  /* 8px - Tight spacing */
+  --space-sm: var(--space-3);
+  /* 12px - small spacing */
+  --space-md: var(--space-4);
+  /* 16px - Default spacing */
+  --space-lg: var(--space-5);
+  /* 20px - Comfortable spacing */
+  --space-xl: var(--space-6);
+  /* 24px - Comfortable spacing */
+  --space-2xl: var(--space-8);
+  /* 32px - Generous spacing */
+  --space-3xl: var(--space-12);
+  /* 48px - Section spacing */
+  --space-4xl: var(--space-16);
+  /* 64px - Large section spacing */
+
+  /* ===== SEMANTIC SPACING ALIASES ===== */
+  --space-tight: var(--space-xs);
+  /* Component internal spacing */
+  --space-default: var(--space-sm);
+  /* Standard component spacing */
+  --space-comfortable: var(--space-md);
+  /* Readable content spacing */
+  --space-generous: var(--space-lg);
+  /* Between major elements */
+  --space-section: var(--space-xl);
+  /* Between content sections */
+  --space-layout: var(--space-2xl);
+  /* Major layout divisions */
+
+  /* ===== FLUID SPACING (Responsive) ===== */
+  /* Scales between mobile and desktop for natural responsive design */
+  --space-fluid-xs: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  /* 8-12px */
+  --space-fluid-sm: clamp(1rem, 0.8rem + 0.75vw, 1.25rem);
+  /* 16-20px */
+  --space-fluid-md: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  /* 24-32px */
+  --space-fluid-lg: clamp(2rem, 1.5rem + 1.5vw, 2.5rem);
+  /* 32-40px */
+  --space-fluid-xl: clamp(3rem, 2rem + 2vw, 4rem);
+  /* 48-64px */
+
+}

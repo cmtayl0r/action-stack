@@ -9,7 +9,14 @@ UI
 ================================================================================
 */
 
-export { Modal, ModalHost, Toast, ToastHost, LoadingSpinner } from "./ui";
+export {
+  Modal,
+  ModalHost,
+  Toast,
+  ToastHost,
+  LoadingSpinner,
+  Button,
+} from "./ui";
 
 /*
 ================================================================================

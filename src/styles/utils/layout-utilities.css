@@ -1,0 +1,62 @@
+/*
+- 👋 The Layout Container / Basic responsive container for layout
+- ✅ The Stack / Vertical rhythm of items in a box
+- ✅ The Box / Basic box padding
+- ✅ The Cluster / Groups of similar elements
+- 👋 The Sandwich / Vertical layout container
+- 👨‍🔧 The Sidebar / Flex based responsive sidebar
+- 👨‍🔧 The Switcher / Easy switch between horizontal and vertical layouts
+- ✅ The Cover / Hero area layout
+- ✅ The Grid / Simple layout of grid items
+- ✅ The Frame / Image aspect ratio control
+- ✅ The Reel / Overflow containers for horizontal scrolling
+- ✅ The Imposter / Absolute positioned element
+- ✅ The Icon / Icon container
+*/
+
+/*
+================================================================================
+THE STACK
+================================================================================
+*/
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.stack>*+* {
+  margin-block-start: var(--stack-space, var(--space-md, 1rem));
+}
+
+/* Semantic spacing variants */
+.stack--tight {
+  --stack-space: var(--space-sm);
+}
+
+.stack--loose {
+  --stack-space: var(--space-lg, 2rem);
+}
+
+.stack--xl {
+  --stack-space: var(--space-xl, 3rem);
+}
+
+/* flexbox allows to separate items vertically (i.e. Card) */
+/*
+.stack > :nth-child(2) {
+    margin-block-end: auto;
+}
+*/
+/* exception above and below */
+/* or just above*/
+.stack__exception,
+.stack__exception>* {
+  margin-block-start: var(--space-xl, 3rem) !important;
+}
+
+.stack:only-child {
+  /* ↓ `height` in horizontal-tb writing mode */
+  block-size: 100%;
+}

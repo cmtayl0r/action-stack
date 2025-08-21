@@ -1,4 +1,4 @@
-/* 
+/*
 --------------------------------------------------------------------------------
 FORM VARIABLES
 --------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ FORM VARIABLES
   --form-success-color: var(--color-green);
 }
 
-/* 
+/*
 --------------------------------------------------------------------------------
 FORM STRUCTURE
 --------------------------------------------------------------------------------
@@ -73,14 +73,13 @@ label {
 }
 
 
-/* 
+/*
 --------------------------------------------------------------------------------
 FORM ELEMENTS
 --------------------------------------------------------------------------------
 */
 
 input,
-button,
 select,
 textarea {
   color: var(--form-text-color);
@@ -95,8 +94,6 @@ textarea {
 
 input:hover,
 input:focus,
-button:hover,
-button:focus,
 select:hover,
 select:focus,
 textarea:hover,
@@ -107,7 +104,6 @@ textarea:focus {
 }
 
 input:active,
-button:active,
 select:active,
 textarea:active {
   border-color: var(--form-text-color);

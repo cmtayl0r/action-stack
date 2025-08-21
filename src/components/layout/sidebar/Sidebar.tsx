@@ -10,6 +10,7 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
+import { Button } from "@/components/ui";
 import styles from "./Sidebar.module.css";
 
 function Sidebar() {
@@ -60,6 +61,13 @@ function Sidebar() {
         <button aria-label="Add new stack" onClick={modalHandlers.addStack}>
           <Layers2 size={16} /> Add Stack
         </button>
+
+        <hr />
+        <Button>Primary</Button>
+        <Button fullWidth={true}>Full width</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="destructive">Destructive</Button>
+        <Button variant="ghost">Ghost</Button>
       </nav>
 
       {/* Theme switch */}
