@@ -12,7 +12,7 @@ interface ButtonProps extends BaseButtonProps {
   // Visual variants
   variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive";
   size?: "xs" | "sm" | "md" | "lg";
-  fullWidth?: boolean;
+  isFullWidth?: boolean;
 
   // Custom functionality (not in HTML)
   announceAction?: boolean; // Custom screen reader behavior
@@ -34,7 +34,7 @@ const Button = ({
   // Custom Props
   variant = "primary",
   size = "md",
-  fullWidth = false,
+  isFullWidth = false,
   announceAction = false,
   isLoading = false,
   icon,
@@ -95,7 +95,7 @@ const Button = ({
     styles[`btn--${variant}`],
     styles[`btn--${size}`],
     // Conditional Classes using && syntax
-    fullWidth && styles["btn--full-width"],
+    isFullWidth && styles["btn--full-width"],
     iconOnly && styles["btn__icon-only"],
     isLoading && styles["btn--loading"],
     disabled && styles["btn--disabled"],
