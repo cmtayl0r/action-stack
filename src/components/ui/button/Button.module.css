@@ -1,84 +1,41 @@
 /*
-- 2px solid focus ring
-- aria-label for icon buttons only
-- aria-expanded for buttons that control disclosure
-- aria-pressed for toggle buttons
-- aria-disabled="true" for disabled state
-- aria-busy="true" during loading
-*/
-
-:root {
-  --btn-size-xs: 24px;
-  --btn-size-sm: 32px;
-  --btn-size-md: 44px;
-  --btn-size-lg: 56px;
-}
-
-/*
 ================================================================================
 CORE STRUCTURE
 ================================================================================
 */
-
 .btn {
+  /* Layout */
   display: inline-flex;
-  gap: var(--space-xs);
-  /* 8px */
   align-items: center;
   justify-content: center;
-  border: transparent;
-  user-select: none;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+
+  /* Typography */
+  font-family: inherit;
+  font-weight: var(--fw-semiBold);
+  line-height: 1;
+  /* Vertically center text */
+  white-space: nowrap;
+  text-decoration: none;
+
+  /* Appearance */
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-button);
   cursor: pointer;
+  user-select: none;
+  appearance: none;
 
-  /* Ensure minimum touch target (44px) */
-  min-height: var(--btn-size-md);
-  min-width: var(--btn-size-md);
+  /* Sizing - Ensure minimum touch target */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 var(--space-md);
+
 }
 
-.btn__label {}
-
-.btn--full-width {
-  width: 100%;
-}
-
-/*
-================================================================================
-VARIANTS
-================================================================================
-*/
-
-.btn--primary {
-  background-color: blue;
-}
-
-.btn--ghost {
-  background-color: transparent;
-  border: none;
-}
-
-.btn--outline {
-  background-color: transparent;
-  border: 2px solid blue;
-  color: blue;
-}
-
-.btn--destructive {
-  background-color: red;
-  color: white;
-}
-
-/*
-================================================================================
-STATES
-================================================================================
-*/
-
-.btn--loading {
+.loading {
+  cursor: wait;
   pointer-events: none;
-}
-
-.btn--disabled {
-  cursor: not-allowed
 }
 
 /*
@@ -86,29 +43,63 @@ STATES
 SIZES
 ================================================================================
 */
-
-.btn--xs {
+.xs {
+  min-height: 24px;
+  min-width: 24px;
   padding: 0 var(--space-xs);
-  min-height: var(--btn-size-xs);
-  min-width: var(--btn-size-xs);
+  font-size: var(--fs-sm);
+  gap: var(--space-xs);
 }
 
-.btn--sm {
+.sm {
+  min-height: 32px;
+  min-width: 32px;
   padding: 0 var(--space-sm);
-  min-height: var(--btn-size-sm);
-  min-width: var(--btn-size-sm);
+  font-size: var(--fs-sm);
+  gap: var(--space-xs);
 }
 
-.btn--md {
-  padding: 0 var(--space-md);
-  min-height: var(--btn-size-md);
-  min-width: var(--btn-size-md);
+.md {
+  /* Base styles already cover md */
 }
 
-.btn--lg {
+.lg {
+  min-height: 56px;
+  min-width: 56px;
   padding: 0 var(--space-lg);
-  min-height: var(--btn-size-lg);
-  min-width: var(--btn-size-lg);
+  font-size: var(--fs-base);
+  gap: var(--space-sm);
+}
+
+/*
+================================================================================
+BUTTON LAYOUT VARIANTS
+================================================================================
+*/
+
+.fullWidth {
+  width: 100%;
+}
+
+.iconOnly {
+  aspect-ratio: 1;
+  padding: 0;
+}
+
+.xs.iconOnly {
+  border-radius: var(--border-radius-lg);
+}
+
+.sm.iconOnly {
+  border-radius: var(--border-radius-lg);
+}
+
+.md.iconOnly {
+  border-radius: var(--border-radius-xl);
+}
+
+.lg.iconOnly {
+  border-radius: var(--border-radius-xl);
 }
 
 /*
@@ -116,19 +107,60 @@ SIZES
 ICON SYSTEM
 ================================================================================
 */
+.btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
 
-.btn__icon {}
+.icon {
+  width: 1em;
+  /* Scales with font-size */
+  height: 1em;
+  flex-shrink: 0;
+}
 
-.btn__icon--left {}
+/* Size-specific icon adjustments if needed */
+.xs .icon {
+  width: 0.875em;
+  height: 0.875em;
+}
 
-.btn__icon--right {}
+.sm .icon {
+  width: 0.9em;
+  height: 0.9em;
+}
 
-.btn__icon--sm {}
+.lg .icon {
+  width: 1.1em;
+  height: 1.1em;
+}
 
-.btn__icon--md {}
+/* Ensure icons don't affect button height */
+.btn__icon svg {
+  display: block;
+}
 
-.btn__icon--lg {}
+/*
+================================================================================
+BUTTON SPECIFIC OVERRIDES
+================================================================================
+*/
+/* Only add button-specific behavior that differs from .interactive */
 
-.btn__icon-only {
-  aspect-ratio: 1;
+/* Subtle scale on active for better button feedback */
+/* Universal Button animation for all variants */
+button:active:not(:disabled) {
+  transform: scale(0.98) translateY(0.1rem);
+}
+
+/* Button-specific focus (if different from .interactive) */
+.btn:focus-visible {
+  /* Inherits from .interactive, override only if needed */
+}
+
+/* Button-specific disabled styling (if different from .interactive) */
+.btn:disabled {
+  /* Inherits from .interactive--disabled, override only if needed */
 }

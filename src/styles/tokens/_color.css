@@ -5,16 +5,6 @@ PRIMITIVES
 */
 
 :root {
-  /* Primitives */
-  --color-black: oklch(26.03% 0 0);
-  --color-white: oklch(100% 0 0 / 87%);
-  --color-gray-light: oklch(75.72% 0 0);
-  --color-gray: oklch(62.68% 0 0);
-  --color-gray-dark: oklch(34.85% 0 0);
-  --color-orange: oklch(0.7 0.2516 60);
-  --color-green: oklch(0.7 0.2886 148);
-  --color-blue: oklch(0.6 0.216559 258);
-  --color-red: oklch(0.6 0.2886 30);
 
   /* Semantics - Light Mode */
   --base: var(--color-white);
@@ -24,9 +14,6 @@ PRIMITIVES
 
   /* Accessibility */
   --focus-ring: yellow;
-
-  /* Transitions */
-  --theme-transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /*

@@ -6,7 +6,7 @@ ACCESSIBILITY
 
 /* Focus ring for keyboard navigation */
 *:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--border-focus);
   outline-offset: 3px;
 }
 
@@ -22,7 +22,7 @@ ACCESSIBILITY
 input[type="checkbox"]:focus,
 input[type="radio"]:focus,
 input[role="switch"]:focus {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--border-focus);
   outline-offset: 3px;
 }
 

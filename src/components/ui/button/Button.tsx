@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import type { BaseButtonProps } from "@/types";
 import styles from "./Button.module.css";
 import clsx from "clsx";
+import LoadingSpinner from "@/components/ui/loading-spinner/LoadingSpinner";
 
 // =============================================================================
 // INTERFACE
@@ -10,20 +12,24 @@ import clsx from "clsx";
 // Extends HTML button attributes for native DOM support
 interface ButtonProps extends BaseButtonProps {
   // Visual variants
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "outline"
+    | "ghost"
+    | "success"
+    | "error";
   size?: "xs" | "sm" | "md" | "lg";
   isFullWidth?: boolean;
 
   // Custom functionality (not in HTML)
-  announceAction?: boolean; // Custom screen reader behavior
   isLoading?: boolean; // Custom loading state
 
   // Icon System
-  icon?: ReactNode;
+  icon?: LucideIcon;
   iconPosition?: "left" | "right";
   iconOnly?: boolean;
-  iconSize?: "sm" | "md" | "lg";
-  // ? Add Lucide Icon as prop?
 }
 
 // =============================================================================
@@ -35,97 +41,76 @@ const Button = ({
   variant = "primary",
   size = "md",
   isFullWidth = false,
-  announceAction = false,
   isLoading = false,
-  icon,
+  icon: Icon,
   iconPosition = "left",
   iconOnly = false,
-  iconSize = "md",
 
   // HTML Props from BaseButtonProps
   children,
-  disabled,
-  onClick,
-  onKeyDown,
-  type,
   className,
-
-  // Spread remaining props
+  disabled,
   ...props
 }: ButtonProps) => {
-  // TODO: Async actions
-  // TODO: Screen reader announcement helper
-  // TODO: Get button label for screen readers
+  // Dev warning for icon-only buttons
+  if (iconOnly && !props["aria-label"] && typeof children !== "string") {
+    console.warn(
+      `Warning: An icon-only button should have an accessible name.
+      Provide an 'aria-label' prop or a string child.`
+    );
+  }
+
+  // This will be used as the accessible name for the button
+  // If the button has children, use them as the accessible name
+  const accessibleName =
+    typeof children === "string" ? children : props["aria-label"];
 
   // Render Icon
   const renderIcon = () => {
-    // Guard against missing icon or loading state
-    if (!icon || isLoading) return null;
-
+    if (!Icon || isLoading) return null;
     return (
-      <span
-        className={`
-        btn__icon btn__icon--${iconSize} btn__icon--${iconPosition}
-        `}
-        aria-hidden="true"
-        data-position={iconPosition}
-        data-size={iconSize}
-      >
-        {icon}
+      <span className={clsx(styles.btn__icon)} aria-hidden="true">
+        <Icon className={styles.icon} />
       </span>
     );
   };
 
-  // Render loading (and other) states
-  const renderState = () => {
-    if (isLoading) {
-      return (
-        <span className={styles.loader} aria-hidden="true">
-          {/* Replace with loading spinner */}
-          <span className={styles["visually-hidden"]}>Loading...</span>
-        </span>
-      );
-    }
-  };
-
   // Build CSS Classes
   const buttonClasses = clsx(
-    // Base Classes
+    // Button-specific styles
     styles.btn,
-    styles[`btn--${variant}`],
-    styles[`btn--${size}`],
-    // Conditional Classes using && syntax
-    isFullWidth && styles["btn--full-width"],
-    iconOnly && styles["btn__icon-only"],
-    isLoading && styles["btn--loading"],
-    disabled && styles["btn--disabled"],
-
-    // Custom classname for props
+    styles[size],
+    // Interactive base class (from global CSS)
+    "interactive",
+    `interactive--${variant}`,
+    // Button layout modifiers
+    { [styles.fullWidth]: isFullWidth },
+    { [styles.iconOnly]: iconOnly },
+    // Loading state handling
+    { [styles.loading]: isLoading },
+    // Interactive state modifiers (from global CSS)
+    { "interactive--disabled": disabled },
+    // Custom class names
     className
   );
 
-  // Build conditional props
-  const conditionalProps = {
-    ...(isLoading && { "aria-busy": true }),
-    ...(disabled && { "aria-disabled": true }),
-  };
-
   return (
     <button
-      type={type}
-      disabled={disabled || isLoading}
       className={buttonClasses}
-      onClick={onClick}
-      {...conditionalProps}
+      disabled={disabled || isLoading}
+      aria-label={iconOnly ? accessibleName : undefined}
+      aria-busy={isLoading} // ! ONLY show if loading. Fix this.
       {...props}
     >
-      {/* Render icon on left */}
-      {iconPosition === "left" && renderIcon()}
-      {/* Render loading state */}
-      {renderState()}
-      {!iconOnly && <span className={styles.btn__label}>{children}</span>}
-      {/* Render icon on right */}
-      {iconPosition === "right" && renderIcon()}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {iconPosition === "left" && renderIcon()}
+          {!iconOnly && children}
+          {iconPosition === "right" && renderIcon()}
+        </>
+      )}
     </button>
   );
 };

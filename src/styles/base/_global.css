@@ -1,4 +1,4 @@
-/* 
+/*
 --------------------------------------------------------------------------------
 FOUNDATIONS
 --------------------------------------------------------------------------------
@@ -12,13 +12,13 @@ FOUNDATIONS
   font-weight: var(--fw-regular);
 
   /* Colors (default to dark theme) */
-  color: var(--color-white);
-  background-color: var(--color-black);
+  color: var(--content-base);
+  background-color: var(--surface-page);
 
   /* Color theme transition */
   transition: var(--theme-transition);
 
-  /* 
+  /*
     When clicking an anchor link (#section)
     the browser scrolls too far up
     Adding scroll-padding-top prevents content from being cut off.
@@ -37,17 +37,4 @@ body {
   min-height: 100vh;
   /* Prevent horizontal scroll due to full-width elements */
   overflow-x: hidden;
-}
-
-/* 
---------------------------------------------------------------------------------
-THEME OVERRIDES
---------------------------------------------------------------------------------
-*/
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: var(--color-black);
-    background-color: var(--color-white);
-  }
 }

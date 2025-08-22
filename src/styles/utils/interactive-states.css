@@ -1,0 +1,311 @@
+/*
+================================================================================
+COMPLETE INTERACTIVE STATES SYSTEM
+================================================================================
+*/
+
+/* ===== BASE INTERACTIVE BEHAVIOR ===== */
+.interactive {
+  transition:
+    background-color 0.15s ease-out,
+    border-color 0.15s ease-out,
+    color 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    transform 0.1s ease-out;
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01ms;
+  }
+}
+
+/*
+================================================================================
+DEFAULT STATE
+================================================================================
+*/
+
+.interactive--primary {
+  background-color: var(--surface-primary);
+  color: var(--content-fixed-light);
+}
+
+.interactive--secondary {
+  background-color: var(--surface-secondary);
+  color: var(--content-fixed-light);
+}
+
+.interactive--accent {
+  background-color: var(--surface-accent);
+  color: var(--content-fixed-light);
+}
+
+.interactive--error {
+  background-color: var(--surface-error);
+  color: var(--content-fixed-light);
+}
+
+.interactive--success {
+  background-color: var(--surface-success);
+  color: var(--content-fixed-light);
+}
+
+.interactive--ghost {
+  background-color: transparent;
+  border: var(--border-width-default) solid transparent;
+  color: var(--content-base);
+}
+
+.interactive--outline {
+  background-color: transparent;
+  border: var(--border-width-default) solid var(--border-muted);
+  color: var(--content-base);
+}
+
+/*
+================================================================================
+HOVER STATES (POINTER DEVICES ONLY)
+================================================================================
+*/
+
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    background-color: var(--surface-hover);
+    /* border-color: var(--border-hover); */
+  }
+
+  .interactive--primary:hover {
+    background-color: var(--surface-primary-hover);
+  }
+
+  .interactive--secondary:hover {
+    background-color: var(--surface-secondary-hover);
+  }
+
+  .interactive--accent:hover {
+    background-color: var(--surface-accent-hover);
+  }
+
+  .interactive--error:hover {
+    background-color: var(--surface-error-hover);
+  }
+
+  .interactive--success:hover {
+    background-color: var(--surface-success-hover);
+  }
+
+  .interactive--outline:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-base);
+  }
+
+
+  .interactive--ghost:hover {
+    background-color: var(--surface-hover);
+  }
+
+  /* Card hover elevation */
+  .card.interactive:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 8px 25px rgba(0, 0, 0, 0.12),
+      0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/*
+================================================================================
+ACTIVE/PRESSED STATES
+================================================================================
+*/
+.interactive:active {
+  background-color: var(--surface-active);
+  /* border-color: var(--border-active); */
+}
+
+.interactive--primary:active {
+  background-color: var(--surface-primary-active);
+}
+
+.interactive--secondary:active {
+  background-color: var(--surface-secondary-active);
+}
+
+.interactive--accent:active {
+  background-color: var(--surface-accent-active);
+}
+
+.interactive--error:active {
+  background-color: var(--surface-error-active);
+}
+
+.interactive--success:active {
+  background-color: var(--surface-success-active);
+}
+
+/*
+================================================================================
+SELECTED STATES
+================================================================================
+*/
+.interactive--selected {
+  background-color: var(--surface-selected-muted);
+  border-color: var(--border-primary);
+  color: var(--content-on-primary-muted);
+}
+
+.interactive--selected-strong {
+  background-color: var(--surface-selected-strong);
+  color: var(--content-fixed-light);
+}
+
+/* Selected + hover combination */
+@media (hover: hover) and (pointer: fine) {
+
+  .interactive--selected-strong:hover {
+    background-color: var(--surface-primary-hover);
+  }
+
+  .interactive--selected:hover {
+    /* TODO: get selected muted hover state */
+    background-color: var(--surface-primary-hover);
+  }
+}
+
+/*
+================================================================================
+DISABLED STATES
+================================================================================
+*/
+
+.interactive:disabled,
+.interactive--disabled {
+  background-color: var(--surface-disabled);
+  border-color: var(--border-disabled);
+  color: var(--content-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+
+/*
+================================================================================
+LOADING STATES
+================================================================================
+*/
+
+.interactive--loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+  cursor: wait;
+}
+
+.interactive--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  border: 2px solid var(--border-faint);
+  border-top-color: var(--border-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive--loading::after {
+    animation: none;
+    content: '…';
+    border: none;
+    width: auto;
+    height: auto;
+    margin: 0;
+    position: static;
+    color: var(--content-muted);
+  }
+}
+
+/*
+================================================================================
+DRAG & DROP STATES
+================================================================================
+*/
+.interactive--dragging {
+  opacity: 0.8;
+  transform: rotate(2deg) scale(1.02);
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+.interactive--drag-over {
+  background-color: var(--surface-primary-muted);
+  border-color: var(--border-primary);
+  border-style: dashed;
+  border-width: 2px;
+}
+
+.interactive--drag-source {
+  cursor: grab;
+}
+
+/*
+================================================================================
+TOUCH DEVICE OPTIMIZATIONS
+================================================================================
+*/
+@media (pointer: coarse) {
+  .interactive {
+    min-height: 44px;
+    min-width: 44px;
+    /* padding: 0.75rem 1rem; */
+    transition-duration: 0.1s;
+  }
+
+  /* Remove hover effects on touch */
+  .interactive:hover {
+    background-color: initial;
+    transform: none;
+    box-shadow: initial;
+  }
+
+  /* Enhanced touch feedback */
+  .interactive:active {
+    transform: scale(0.98);
+    transition-duration: 0.05s;
+  }
+}
+
+/*
+================================================================================
+HIGH CONTRAST MODE
+================================================================================
+*/
+@media (prefers-contrast: high) {
+
+  .interactive--selected {
+    border-width: 2px;
+  }
+
+  .interactive:disabled {
+    opacity: 0.6;
+    background: repeating-linear-gradient(45deg,
+        transparent,
+        transparent 2px,
+        var(--border-disabled) 2px,
+        var(--border-disabled) 4px);
+  }
+}

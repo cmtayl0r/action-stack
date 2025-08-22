@@ -11,7 +11,9 @@ import {
   Sun,
 } from "lucide-react";
 import { Button } from "@/components/ui";
+import { LoadingSpinner } from "@/components/ui";
 import styles from "./Sidebar.module.css";
+import { L } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 function Sidebar() {
   const { state, toggleTheme } = useAppContext();
@@ -63,11 +65,34 @@ function Sidebar() {
         </button>
 
         <hr />
-        <Button>Primary</Button>
-        <Button fullWidth={true}>Full width</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="destructive">Destructive</Button>
-        <Button variant="ghost">Ghost</Button>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+          <LoadingSpinner />
+          {/* Basic variants - uses .interactive classes */}
+          <Button variant="primary" icon={Moon}>
+            Primary
+          </Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="accent">Accent</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="outline">Outline</Button>
+
+          {/* Semantic variants */}
+          <Button variant="error">Delete</Button>
+          <Button variant="success">Save</Button>
+
+          {/* Sizes */}
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+
+          {/* States - uses .interactive state classes */}
+          <Button isLoading>Loading...</Button>
+          <Button disabled>Disabled</Button>
+
+          {/* Layout variants */}
+          <Button isFullWidth>Full Width</Button>
+          <Button iconOnly icon={Moon} aria-label="Close" size="lg" />
+        </div>
       </nav>
 
       {/* Theme switch */}
