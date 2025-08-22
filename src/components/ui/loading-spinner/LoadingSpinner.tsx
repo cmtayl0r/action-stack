@@ -27,7 +27,7 @@ const LoadingSpinner = ({
   );
   return (
     <div className={spinnerClasses} role="status" aria-label={label}>
-      <span className="visually-hidden">{label}</span>
+      <span className="sr-only">{label}</span>
     </div>
   );
 };

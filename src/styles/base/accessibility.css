@@ -9,19 +9,22 @@ ACCESSIBILITY
   --touch-target-sm: 36px;
   --touch-target-default: 44px;
   --touch-target-lg: 48px;
-  --touch-target-xl: 56px;
+
+  --focus-width: 4px;
+  --focus-offset: 4px;
+  /* Focus indicators */
 }
 
 /*
 ================================================================================
-FOCUS
+FOCUS MANAGEMENT
 ================================================================================
 */
 
 /* Focus ring for keyboard navigation */
 *:focus-visible {
-  outline: var(--border-width-focus) solid var(--border-focus);
-  outline-offset: var(--border-width-focus);
+  outline: var(--focus-width) solid var(--border-focus);
+  outline-offset: var(--focus-offset);
 }
 
 /* Remove focus outline for mouse users */
@@ -30,14 +33,19 @@ FOCUS
 }
 
 /*
+  Force focus on form inputs (JS focus() support)
   Fix to display focus ring on checkboxes and radio buttons when using focus() in js
   because, element.focus(); // programmatic focus → ❌ no :focus-visible
 */
+
+input:focus,
+textarea:focus,
+select:focus,
 input[type="checkbox"]:focus,
 input[type="radio"]:focus,
 input[role="switch"]:focus {
-  outline: var(--border-width-focus) solid var(--border-focus);
-  outline-offset: var(--border-width-focus);
+  outline: var(--focus-width) solid var(--focus-color);
+  outline-offset: var(--focus-offset);
 }
 
 /*
@@ -55,15 +63,6 @@ TOUCH TARGETS - WCAG 2.2 COMPLIANT
   min-width: var(--touch-target-xs);
 }
 
-/* Standard touch target (44px = iOS/Android standard)
-   WHEN: Any interactive element (buttons, links, form inputs)
-   WHY: WCAG 2.2 Level AA requirement, prevents accidental taps
-   HOW: <button className="touch-target">Click me</button> */
-.touch-target-md {
-  min-height: var(--touch-target-default);
-  min-width: var(--touch-target-default)
-}
-
 /* Small touch target (36px minimum)
    WHEN: Compact UI, table actions, icon buttons in tight spaces
    WHY: Still accessible but allows for denser layouts
@@ -71,6 +70,15 @@ TOUCH TARGETS - WCAG 2.2 COMPLIANT
 .touch-target-sm {
   min-height: var(--touch-target-sm);
   min-width: var(--touch-target-sm);
+}
+
+/* Standard touch target (44px = iOS/Android standard)
+   WHEN: Any interactive element (buttons, links, form inputs)
+   WHY: WCAG 2.2 Level AA requirement, prevents accidental taps
+   HOW: <button className="touch-target">Click me</button> */
+.touch-target-md {
+  min-height: var(--touch-target-default);
+  min-width: var(--touch-target-default)
 }
 
 /* Large touch target (48px)
@@ -82,37 +90,73 @@ TOUCH TARGETS - WCAG 2.2 COMPLIANT
   min-width: var(--touch-target-lg);
 }
 
-/* Extra large touch target (56px)
-   WHEN: Critical actions, high-importance buttons
-   WHY: Maximum comfort for all users
-   HOW: <button className="touch-target-xl">Submit</button> */
-.touch-target-xl {
-  min-height: var(--touch-target-xl);
-  min-width: var(--touch-target-xl);
+/* Coarse pointer optimizations */
+@media (pointer: coarse) {
+  .touch-target-md {
+    min-height: var(--touch-target-lg);
+    min-width: var(--touch-target-lg);
+  }
 }
 
 /*
 ================================================================================
-SCREEN READER
+SCREEN READER UTILITIES
 ================================================================================
 */
 
-
-/* Screen reader-only text, visually hidden but still accessible */
-span[class~="sr-only"] {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
-  height: 1px;
-  width: 1px;
-  position: absolute;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0;
-  margin: -1px;
+/* Hide visually, keep for screen readers */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
-/* Remove all animations and transitions for users who prefer reduced motion */
+/* Show screen reader content on focus
+   WHEN: Skip links, help text that should appear when focused
+   WHY: Provides keyboard users visual feedback while maintaining clean UI
+   HOW: <a className="sr-only-focusable" href="#main">Skip to content</a> */
+.sr-only-focusable:focus,
+.sr-only-focusable:focus-within {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: normal !important;
+  z-index: 999999 !important;
+}
+
+/* Live regions for dynamic content (AI responses, status updates) */
+.sr-live {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* Hide completely from everyone */
+.hidden {
+  display: none !important;
+}
+
+/*
+================================================================================
+MOTION & ANIMATION
+================================================================================
+*/
+
+/* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
 
   *,
@@ -125,23 +169,17 @@ span[class~="sr-only"] {
   }
 }
 
-/* Visually hide elements while keeping them accessible to screen readers */
-.visually-hidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: auto;
-  margin: 0;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  white-space: nowrap;
+/* Animation control classes */
+.motion-safe {
+  animation-duration: var(--animation-duration, 0.3s);
+  transition-duration: var(--transition-duration, 0.2s);
 }
 
-/* Completely hide elements from view and layout */
-.hidden {
-  display: none;
-  visibility: hidden;
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe {
+    animation-duration: 0.01ms;
+    transition-duration: 0.01ms;
+  }
 }
 
 /*
@@ -151,18 +189,18 @@ INTERACTION CONTROL
 */
 
 /* Prevent text selection */
-.no-user-select {
+.no-select {
   user-select: none;
 }
 
 /* Disable pointer interactions */
-.pointer-none {
+.no-pointer {
   pointer-events: none;
 }
 
 /*
 ================================================================================
-MODAL & DIALOG FOCUS MANAGEMENT
+MODAL & FOCUS TRAPPING
 ================================================================================
 */
 
@@ -170,12 +208,8 @@ MODAL & DIALOG FOCUS MANAGEMENT
    WHEN: Modal/dialog opens and background content should be disabled
    WHY: Prevents focus escaping modal, required by WCAG
    HOW: <main className={isModalOpen ? 'inert' : ''}>...</main> */
-:where(.inert) {
-  pointer-events: none;
-  user-select: none;
-}
-
-:where(.inert *) {
+/* Disable interactions when modal is open */
+.inert {
   pointer-events: none;
   user-select: none;
 }
@@ -184,36 +218,39 @@ MODAL & DIALOG FOCUS MANAGEMENT
    WHEN: Modal or dialog is active
    WHY: Creates stacking context for focus containment
    HOW: <dialog className="focus-trap-active">...</dialog> */
-.focus-trap-active {
+/* Focus containment for modals */
+.focus-trap {
   isolation: isolate;
 }
 
 /*
 ================================================================================
-LIVE REGIONS - SCREEN READER ANNOUNCEMENTS
+COMMON PATTERNS
+================================================================================
+
+<!-- Skip navigation -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- Touch-friendly button -->
+<button class="touch-target">Click me</button>
+
+<!-- AI loading state -->
+<div class="ai-loading" aria-live="polite">
+  <span class="sr-only">AI is processing your request</span>
+  Processing...
+</div>
+
+<!-- Screen reader announcements -->
+<div class="sr-live" aria-live="polite" id="status"></div>
+<script>
+  document.getElementById('status').textContent = 'Task completed';
+</script>
+
+<!-- Modal with focus trap -->
+<dialog class="focus-trap" open>
+  <div class="inert" aria-hidden="true">Background content</div>
+  <div>Modal content</div>
+</dialog>
+
 ================================================================================
 */
-
-/* Status updates (polite announcements)
-   WHEN: Form saved, data loaded, non-urgent updates
-   WHY: Announces when convenient, doesn't interrupt
-   HOW: <div className="live-region status-region" aria-live="polite" id="status"></div> */
-.status-region {
-  pointer-events: none;
-}
-
-/* Alert announcements (assertive interruptions)
-   WHEN: Errors, urgent notifications, critical updates
-   WHY: Interrupts current speech to announce immediately
-   HOW: <div className="live-region alert-region" aria-live="assertive" id="errors"></div> */
-.alert-region {
-  pointer-events: none;
-}
-
-/* Loading state announcements
-   WHEN: AI processing, form submission, data fetching
-   WHY: Keeps users informed of loading progress
-   HOW: <div className="live-region loading-region" aria-live="polite" id="loading"></div> */
-.loading-region {
-  pointer-events: none;
-}

@@ -26,9 +26,6 @@ CORE STRUCTURE
   user-select: none;
   appearance: none;
   padding: 0 var(--space-md);
-
-
-
 }
 
 .loading {

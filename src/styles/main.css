@@ -15,7 +15,7 @@
 @import "./utils/layout-utilities.css";
 @import "./utils/typography-utilities.css";
 @import "./utils/interactive-states.css";
-/* @import "./utils/_every-layout.css"; */
+@import "./utils/layout-primitives.css";
 
 /* 4️⃣ Import Component Styles */
 @import "./components/forms.css";

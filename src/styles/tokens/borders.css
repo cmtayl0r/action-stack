@@ -16,8 +16,6 @@ Strong, visible borders for maximum contrast and clarity.
   /* Standard borders */
   --border-width-thick: 4px;
   /* Emphasis borders */
-  --border-width-focus: 4px;
-  /* Focus indicators */
 
   /* ===== BORDER STYLES ===== */
   --border-style-solid: solid;
@@ -65,8 +63,6 @@ HIGH CONTRAST MODE ENHANCEMENTS
     /* Thicker standard borders */
     --border-width-thick: 4px;
     /* Extra thick emphasis */
-    --border-width-focus: 4px;
-    /* Maximum focus visibility */
 
     /* Remove subtle rounding in high contrast */
     --border-radius-sm: 0;

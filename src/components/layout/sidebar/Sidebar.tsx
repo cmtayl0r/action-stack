@@ -10,10 +10,8 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
-import { Button } from "@/components/ui";
-import { LoadingSpinner } from "@/components/ui";
+import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
-import { L } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 function Sidebar() {
   const { state, toggleTheme } = useAppContext();
@@ -32,7 +30,7 @@ function Sidebar() {
 
   return (
     <aside className={styles["sidebar"]} aria-label="Sidebar">
-      <nav className="stack">
+      <div className="stack">
         <Button
           onClick={modalHandlers.search}
           icon={LucideSearch}
@@ -73,7 +71,7 @@ function Sidebar() {
         >
           Add Stack
         </Button>
-      </nav>
+      </div>
 
       {/* Theme switch */}
       <div className="cluster">

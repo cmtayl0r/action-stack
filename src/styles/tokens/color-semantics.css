@@ -103,8 +103,6 @@ LIGHT THEME (DEFAULT)
   --border-active: color-mix(in oklch, var(--border-base) 50%, var(--color-neutral-950));
   --border-focus: var(--color-secondary-600);
   /* Focus ring (solid for accessibility) */
-  --border-focus: var(--color-secondary-600);
-  /* Semantic border colors */
   --border-primary: var(--color-primary-600);
   --border-secondary: var(--color-secondary-600);
   --border-accent: var(--color-accent-600);
