@@ -1,0 +1,65 @@
+/*
+================================================================================
+TYPOGRAPHY
+================================================================================
+Essential typography scale for maximum readability and accessibility.
+WCAG AAA compliance focused with strong contrast and legibility.
+*/
+
+:root {
+  /* ===== ACCESSIBLE FONT FAMILIES ===== */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "JetBrains Mono", "SF Mono", SFMono-Regular, "Roboto Mono", "Ubuntu Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-accessible: "Atkinson Hyperlegible", "OpenDyslexic", system-ui, sans-serif;
+
+  /* ===== FONT WEIGHTS (Accessibility focused) ===== */
+  --font-weight-bold: 700;
+  --font-weight-semiBold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+
+  /* ===== LINE HEIGHT SCALE ===== */
+  --line-height-tight: 1.25;
+  /* Headings, buttons */
+  --line-height-snug: 1.375;
+  /* Subheadings */
+  --line-height-base: 1.5;
+  /* Body text minimum (WCAG) */
+  --line-height-relaxed: 1.6;
+  /* Comfortable reading */
+  --line-height-loose: 1.75;
+  /* Long-form content, Maximum readability */
+
+  /* ===== CORE TYPE SCALE (Mobile-first fluid) ===== */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  /* 12-14px - Extra small text */
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  /* 14-16px - Small UI text */
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  /* 16-18px - Body text minimum (WCAG) */
+  --font-size-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  /* 18-20px - Comfortable reading */
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  /* 20-24px - Large text */
+  --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  /* 24-32px - Small headings */
+  --font-size-3xl: clamp(1.875rem, 1.6rem + 1.375vw, 2.5rem);
+  /* 30-40px - Medium headings */
+  --font-size-4xl: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+  /* 36-48px - Large headings */
+  --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+  /* 48-64px - Extra large headings */
+
+  /* ===== LETTER SPACING ===== */
+  /* Improves readability, especially for accessibility */
+  --letter-spacing-tight: -0.025em;
+  /* Large headings */
+  --letter-spacing-base: 0em;
+  /* Body text */
+  --letter-spacing-wide: 0.025em;
+  /* UI text, small caps */
+  --letter-spacing-wider: 0.05em;
+  /* High emphasis */
+}

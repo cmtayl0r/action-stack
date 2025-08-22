@@ -1,0 +1,48 @@
+/*
+================================================================================
+ELEVATION TOKENS - LEAN HIGH CONTRAST
+================================================================================
+Essential z-index scale for accessibility-first layering.
+Clear, predictable stacking order with strong separation.
+*/
+
+:root {
+  /* ===== CORE Z-INDEX SCALE ===== */
+  --z-index-base: 0;
+  /* Base content layer */
+  --z-index-low: 100;
+  /* Slightly elevated (cards) */
+  --z-index-medium: 500;
+  /* Medium elevation (dropdowns) */
+  --z-index-high: 1000;
+  /* High elevation (modals) */
+  --z-index-critical: 9999;
+  /* Critical UI (skip links, debug) */
+
+  /* ===== SEMANTIC Z-INDEX ALIASES ===== */
+  /* Component-specific elevation levels */
+  --z-index-sticky: var(--z-index-low);
+  /* Sticky headers/navigation */
+  --z-index-dropdown: var(--z-index-medium);
+  /* Dropdown menus */
+  --z-index-popover: var(--z-index-medium);
+  /* Popovers, tooltips */
+  --z-index-modal: var(--z-index-high);
+  /* Modal dialogs */
+  --z-index-toast: var(--z-index-high);
+  /* Toast notifications */
+  --z-index-overlay: var(--z-index-high);
+  /* Full-screen overlays */
+  --z-index-skiplink: var(--z-index-critical);
+  /* Skip navigation links */
+
+  /* ===== LAYOUT LAYERS ===== */
+  --z-index-behind: -1;
+  /* Behind base content */
+  --z-index-sticky: 200;
+  /* Sticky headers/navigation */
+  --z-index-fixed: 300;
+  /* Fixed positioned elements */
+  --z-index-backdrop: 900;
+  /* Modal backdrops */
+}

@@ -1,0 +1,131 @@
+/*
+================================================================================
+LAYOUT TOKENS
+================================================================================
+Essential layout system for responsive, accessible design.
+Simplified breakpoints and container patterns.
+*/
+
+:root {
+  /* ===== MOBILE-FIRST BREAKPOINTS ===== */
+  /* Mobile base: 0px (no breakpoint needed) */
+  --breakpoint-sm: 640px;
+  /* Large mobile / small tablet */
+  --breakpoint-md: 768px;
+  /* Tablet */
+  --breakpoint-lg: 1024px;
+  /* Desktop */
+  --breakpoint-xl: 1280px;
+  /* Large desktop */
+  --breakpoint-2xl: 1536px;
+  /* Extra large desktop */
+
+  /* ===== MAX-WIDTH HELPERS ===== */
+  /* For range targeting and mobile-only styles */
+  --breakpoint-sm-max: 639px;
+  --breakpoint-md-max: 767px;
+  --breakpoint-lg-max: 1023px;
+  --breakpoint-xl-max: 1279px;
+
+  /* ===== CONTAINER WIDTH TOKENS ===== */
+  /* Aligned with breakpoint tokens for consistency */
+  /* Used primarily for layout primitives and flexible container systems */
+  --container-full: 100%;
+  /* Full width - replaces --container-xs duplication */
+  --container-sm: var(--breakpoint-sm);
+  /* 640px - available for small container components */
+  --container-md: var(--breakpoint-md);
+  /* 768px - available for medium container components */
+  --container-lg: var(--breakpoint-lg);
+  /* 1024px - available for large container components */
+  --container-xl: var(--breakpoint-xl);
+  /* 1280px - available for large container components */
+
+  /* ===== CHARACTER-BASED CONTAINERS ===== */
+  /* Optimal reading and content widths */
+  --container-reading: 65ch;
+  /* Optimal reading line length */
+  --container-content: 75ch;
+  /* Long-form article content */
+  --container-chat: 60ch;
+  /* Chat message optimal width */
+  --container-narrow: 45ch;
+  /* Narrow content (forms, etc.) */
+
+  /* ===== RESPONSIVE PADDING ===== */
+  /* Container padding that scales with viewport */
+  --container-padding: clamp(1rem, 4vw, 2rem);
+  /* 16-32px responsive padding */
+  --container-padding-sm: var(--space-sm);
+  /* Small container padding */
+  --container-padding-md: var(--space-md);
+  /* Medium container padding */
+  --container-padding-lg: var(--space-lg);
+  /* Large container padding */
+
+  /* ===== LAYOUT GRID SYSTEM ===== */
+  /* Essential grid patterns */
+  --grid-columns-mobile: 1;
+  /* Single column on mobile */
+  --grid-columns-tablet: 2;
+  /* Two columns on tablet */
+  --grid-columns-desktop: 3;
+  /* Three columns on desktop */
+  --grid-columns-wide: 4;
+  /* Four columns on wide screens */
+
+  /* ===== VIEWPORT UTILITIES ===== */
+  --vh-small: 100vh;
+  /* Small viewport height */
+  --vh-large: 100lvh;
+  /* Large viewport height (when supported) */
+  --vw-full: 100vw;
+  /* Full viewport width */
+
+  /* ===== ASPECT RATIOS ===== */
+  --aspect-square: 1 / 1;
+  /* Square aspect ratio */
+  --aspect-video: 16 / 9;
+  /* Video aspect ratio */
+  --aspect-photo: 4 / 3;
+  /* Photo aspect ratio */
+  --aspect-golden: 1.618 / 1;
+  /* Golden ratio */
+}
+
+
+/*
+================================================================================
+RESPONSIVE LAYOUT PATTERNS
+================================================================================
+*/
+
+/* Small screens (mobile) */
+@media (max-width: 639px) {
+  :root {
+    --container-padding: var(--space-sm);
+    /* Smaller padding on mobile */
+    --grid-columns-default: var(--grid-columns-mobile);
+  }
+}
+
+/* Medium screens (tablet) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    --grid-columns-default: var(--grid-columns-tablet);
+  }
+}
+
+/* Large screens (desktop) */
+@media (min-width: 1024px) {
+  :root {
+    --grid-columns-default: var(--grid-columns-desktop);
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 1280px) {
+  :root {
+    --grid-columns-default: var(--grid-columns-wide);
+  }
+}

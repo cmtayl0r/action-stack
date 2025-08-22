@@ -1,44 +1,127 @@
-/* 
+/*
 --------------------------------------------------------------------------------
 RESET
 --------------------------------------------------------------------------------
 */
 
 :root {
-  /* Prevent font size inflation */
-  -moz-text-size-adjust: none;
-  -webkit-text-size-adjust: none;
-  text-size-adjust: none;
+  /* === BROWSER NORMALIZATION === */
+  /* Prevent font size inflation on some mobile browsers */
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 
-  /* Improve font rendering */
+  /* Improve text rendering */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Default scroll behavior */
+  /* Respect user motion preferences */
   scroll-behavior: smooth;
+
+  /* Scroll anchor offset for fixed headers */
+  scroll-padding-top: var(--space-md);
+
+  /* === DESIGN SYSTEM FOUNDATION === */
+  /* Typography foundation */
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base, 1rem);
+  line-height: var(--line-height-base, 1.5);
+  font-weight: var(--font-weight-text, 400);
+
+  /* Color foundation */
+  color: var(--content-base);
+  background-color: var(--surface-page);
 }
 
-/* Define base rem scale */
+/*
+================================================================================
+DOCUMENT & LAYOUT FOUNDATION
+================================================================================
+*/
+
+/* 1rem = 16px baseline */
 html {
   font-size: 100%;
-  /* 1rem = 16px, scalable */
-  /* Disregarded if using fluid font size system */
+  /* Enables native color-scheme awareness */
+  color-scheme: dark light;
 }
 
-/* Use a more-intuitive box-sizing model */
+/* Modern document setup */
+body {
+  /* Typography inherited from :root */
+  line-height: var(--line-height-base);
+  /* Ensure body fills viewport */
+  min-height: var(--vh-large);
+  min-height: 100svh;
+  /* Safe area support */
+  /* Prevent horizontal scroll due to full-width elements */
+  overflow-x: hidden;
+}
+
+/*
+================================================================================
+UNIVERSAL BOX MODEL
+================================================================================
+*/
+
+/* Box-sizing globally applied for predictable layouts */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Remove default margin */
-* {
+/*
+================================================================================
+ELEMENT SPACING RESET
+================================================================================
+*/
+
+/* Selective reset - preserve semantic spacing but remove browser inconsistencies */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove default spacing for specific elements that benefit from reset */
+ul,
+ol {
   margin: 0;
   padding: 0;
+  list-style: none;
 }
+
+/* Preserve form element spacing but ensure consistency */
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* Horizontal rule improvements */
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+/*
+================================================================================
+MEDIA ELEMENTS
+================================================================================
+*/
 
 /* Improve media defaults */
 picture,
@@ -51,14 +134,24 @@ svg {
 
 img {
   max-width: 100%;
-  /* Prevent overflow */
+  height: auto;
+  /* Maintain aspect ratio */
   vertical-align: middle;
   /* Correct alignment issue */
-  height: auto;
-  /* Maintain aspect ratio of image */
   font-style: italic;
-  /* Fallback for alt text if broken img */
+  /* Fallback for alt text if broken */
 }
+
+/* Modern video defaults */
+video {
+  object-fit: cover;
+}
+
+/*
+================================================================================
+FORM ELEMENTS
+================================================================================
+*/
 
 /* Inherit fonts for form controls */
 input,
@@ -66,9 +159,49 @@ button,
 textarea,
 select {
   font: inherit;
+  color: inherit;
+  background-color: transparent;
+  border: 0;
 }
 
-/* Avoid text overflows */
+/* Modern form control improvements */
+input[type="file"] {
+  font-size: inherit;
+}
+
+/* Ensure buttons maintain semantic meaning */
+button,
+[role="button"] {
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  /* Focus handling managed by component.states.css */
+}
+
+/* Improve textarea behavior */
+textarea {
+  resize: vertical;
+  /* Only allow vertical resize */
+}
+
+/* Details/Summary improvements */
+details {
+  display: block;
+}
+
+summary {
+  display: list-item;
+  cursor: pointer;
+}
+
+/*
+================================================================================
+TYPOGRAPHY & TEXT BEHAVIOR
+================================================================================
+*/
+
+/* Modern text overflow handling */
 p,
 li,
 h1,
@@ -77,13 +210,20 @@ h3,
 h4,
 h5,
 h6 {
-  /* Help prevent overflow of long words/names/URLs */
   overflow-wrap: break-word;
+  /* Help prevent overflow of long words/names/URLs */
+  word-break: break-word;
+  /* Fallback */
+  word-break: auto-phrase;
+  /* Progressive enhancement */
 }
 
-/* Improve line wrapping */
+/* 2025 text wrapping improvements */
 p {
   text-wrap: pretty;
+  /* Better paragraph wrapping */
+  hyphenate-character: "‐";
+  /* Use proper hyphen character */
 }
 
 h1,
@@ -93,7 +233,24 @@ h4,
 h5,
 h6 {
   text-wrap: balance;
+  /* Better headline wrapping */
 }
+
+/* Code and preformatted text */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: 1em;
+  /* Correct font size in all browsers */
+}
+
+/*
+================================================================================
+INTERACTIVE ELEMENTS
+================================================================================
+*/
 
 /* Remove unwanted tap highlights */
 a,
@@ -101,4 +258,33 @@ button,
 input,
 textarea {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Modern link improvements */
+a {
+  color: inherit;
+  text-decoration: none;
+  /* Focus handling managed by component.states.css */
+}
+
+/* Semantic list preservation */
+ul[role="list"],
+ol[role="list"] {
+  list-style: revert;
+  padding: revert;
+  margin: revert;
+}
+
+/*
+================================================================================
+TABLE ELEMENTS
+================================================================================
+*/
+
+/* Modern table improvements */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-indent: 0;
+  /* Remove text indentation from table contents */
 }

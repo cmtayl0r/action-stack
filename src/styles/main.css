@@ -1,23 +1,21 @@
 /* 1️⃣ Import Abstracts (Design Tokens, Variables) */
 @import "./tokens/color-primitives.css";
 @import "./tokens/color-semantics.css";
-@import "./tokens/_typography.css";
+@import "./tokens/typography.css";
 @import "./tokens/spacing.css";
 @import "./tokens/borders.css";
-/* @import "./tokens/_themes.css"; */
+@import "./tokens/effects.css";
 
 /* 2️⃣ Import Base Styles */
 @import "./base/reset.css";
-@import "./base/_global.css";
 @import "./base/accessibility.css";
+@import "./base/app.css";
 
 /* 3️⃣ Import Utilities */
 @import "./utils/layout-utilities.css";
+@import "./utils/typography-utilities.css";
 @import "./utils/interactive-states.css";
 /* @import "./utils/_every-layout.css"; */
 
-/* 4️⃣ Import Layout Styles */
-@import "./base/_app.css";
-
-/* 5️⃣ Import Component Styles */
-@import "./components/_forms.css";
+/* 4️⃣ Import Component Styles */
+@import "./components/forms.css";

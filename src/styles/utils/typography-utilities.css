@@ -1,0 +1,359 @@
+/*
+================================================================================
+TYPOGRAPHY UTILITIES
+================================================================================
+Font size, weight, and typography utilities using design tokens.
+*/
+
+/* ===== SEMANTIC HTML ===== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-display);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+}
+
+h2 {
+  font-size: var(--font-size-4xl);
+}
+
+h3 {
+  font-size: var(--font-size-3xl);
+}
+
+h4 {
+  font-size: var(--font-size-2xl);
+}
+
+h5 {
+  font-size: var(--font-size-xl);
+}
+
+h6 {
+  font-size: var(--font-size-lg);
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-strong);
+}
+
+/*
+================================================================================
+ACCESSIBLE TYPOGRAPHY
+================================================================================
+*/
+
+/* Optimal reading patterns
+   WHEN: Long-form content, articles, documentation
+   WHY: 70ch = optimal reading line length, prevents eye strain
+   HOW: <div className="text-readable">Article content...</div> */
+.text-readable {
+  max-width: 70ch;
+  line-height: var(--line-height-relaxed);
+}
+
+/* Enhanced readability typography
+   WHEN: Important content that needs to be easily readable
+   WHY: Larger text + better spacing improves comprehension
+   HOW: <p className="text-accessible">Important instructions</p> */
+.text-accessible {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-base);
+}
+
+/* Dyslexia-friendly typography
+   WHEN: User preference or specialized content
+   WHY: Specific fonts + spacing help users with dyslexia
+   HOW: <div className="text-dyslexia-friendly">Content for dyslexic users</div> */
+.text-dyslexia-friendly {
+  font-family: "OpenDyslexic", "Comic Sans MS", var(--font-sans);
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+}
+
+/* Large text for low vision users
+   WHEN: User has vision difficulties or preference for larger text
+   WHY: Improves readability for users with visual impairments
+   HOW: <p className="text-large">Large text content</p> */
+.text-large {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-emphasis);
+}
+
+/*
+================================================================================
+CODE AND TECHNICAL TEXT
+================================================================================
+*/
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+/* Inline code with proper distinction */
+code:not(pre code) {
+  font-family: var(--font-mono);
+  background: hsl(210 25% 97%);
+  font-size: 0.875em;
+  /* 14px */
+  font-weight: var(--font-weight-emphasis);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--border-radius-sm);
+  border: var(--border-width-thin) solid var(--border-default);
+}
+
+/* Preformatted code blocks */
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+  background: hsl(210 25% 97%);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-sm);
+  overflow-x: auto;
+}
+
+pre code {
+  font-size: inherit;
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+/* Keyboard shortcuts */
+
+.text__kbd {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-strong);
+  background: hsl(210 25% 97%);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--border-radius-sm);
+  border: var(--border-width-thin) solid var(--border-default);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+/*
+================================================================================
+FONT SIZE UTILITIES
+================================================================================
+*/
+
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-base {
+  font-size: var(--font-size-base);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+}
+
+.text-2xl {
+  font-size: var(--font-size-2xl);
+}
+
+.text-3xl {
+  font-size: var(--font-size-3xl);
+}
+
+.text-4xl {
+  font-size: var(--font-size-4xl);
+}
+
+.text-5xl {
+  font-size: var(--font-size-5xl);
+}
+
+/*
+================================================================================
+FONT STYLE UTILITIES
+================================================================================
+*/
+
+/* ===== FONT FAMILY UTILITIES ===== */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-accessible {
+  font-family: var(--font-accessible);
+}
+
+/* ===== FONT WEIGHT UTILITIES ===== */
+.font-text {
+  font-weight: var(--font-weight-text);
+}
+
+.font-emphasis {
+  font-weight: var(--font-weight-emphasis);
+}
+
+.font-strong {
+  font-weight: var(--font-weight-strong);
+}
+
+.font-display {
+  font-weight: var(--font-weight-display);
+}
+
+/* ===== LINE HEIGHT UTILITIES ===== */
+
+.leading-tight {
+  line-height: var(--line-height-tight);
+}
+
+.leading-base {
+  line-height: var(--line-height-base);
+}
+
+.leading-relaxed {
+  line-height: var(--line-height-relaxed);
+}
+
+.leading-loose {
+  line-height: var(--line-height-loose);
+}
+
+/* ===== LETTER SPACING UTILITIES ===== */
+
+.tracking-tight {
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.tracking-base {
+  letter-spacing: var(--letter-spacing-base);
+}
+
+.tracking-wide {
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.tracking-wider {
+  letter-spacing: var(--letter-spacing-wider);
+}
+
+/* ===== TYPOGRAPHY PATTERNS ===== */
+
+.lead-text {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-snug);
+  font-weight: var(--font-weight-text);
+  max-width: 65ch;
+}
+
+.caps-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-emphasis);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+}
+
+/*
+================================================================================
+LOADING SKELETONS
+================================================================================
+*/
+
+.text__skeleton {
+  background: linear-gradient(to right,
+      hsl(210 25% 97%) 0%,
+      hsl(210 25% 90%) 50%,
+      hsl(210 25% 97%) 100%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite linear;
+  color: transparent;
+  user-select: none;
+  border-radius: var(--border-radius-sm);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+
+}
+
+.text__skeleton--heading {
+  height: 2rem;
+  width: 70%;
+}
+
+.text__skeleton--paragraph {
+  height: 1rem;
+  width: 100%;
+  margin-bottom: var(--space-xs);
+}
+
+.text__skeleton--paragraph:last-child {
+  width: 60;
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text__skeleton {
+    animation: none;
+    background: hsl(210 25% 97%);
+  }
+}
+
+/*
+================================================================================
+UNIVERSAL TEXT SELECTION
+================================================================================
+*/
+
+::selection {
+  background: var(--surface-inverse);
+  color: var(--content-inverse);
+  text-shadow: none;
+  /* Remove text shadows on selection */
+}
+
+/* Firefox compatibility */
+::-moz-selection {
+  background: var(--surface-inverse);
+  color: var(--content-inverse);
+  text-shadow: none;
+  /* Remove text shadows on selection */
+}

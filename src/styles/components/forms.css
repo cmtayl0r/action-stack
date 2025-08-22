@@ -6,11 +6,11 @@ FORM VARIABLES
 
 :root {
   /* Typography */
-  --form-text-size-sm: var(--fs-sm);
-  --form-text-size-base: var(--fs-base);
-  --form-text-size-lg: var(--fs-md);
-  --form-title-size: var(--fs-lg);
-  --form-line-height-base: var(--lh-tight);
+  --form-text-size-sm: var(--font-size-sm);
+  --form-text-size-base: var(--font-size-base);
+  --form-text-size-lg: var(--font-size-md);
+  --form-title-size: var(--font-size-lg);
+  --form-line-height-base: var(--line-height-tight);
 
   /* Borders & Spacing */
   --form-border-style: solid;
@@ -37,7 +37,7 @@ FORM STRUCTURE
 */
 
 form {
-  font-family: var(--ff-default);
+  font-family: var(--font-sans);
   font-size: var(--form-text-size-base);
 }
 

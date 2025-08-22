@@ -81,6 +81,7 @@ const Button = ({
     // Button-specific styles
     styles.btn,
     styles[size],
+    `touch-target-${size}`,
     // Interactive base class (from global CSS)
     "interactive",
     `interactive--${variant}`,

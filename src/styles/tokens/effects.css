@@ -1,0 +1,54 @@
+/*
+================================================================================
+EFFECTS
+================================================================================
+Essential visual effects for accessibility-first design.
+Strong shadows and clear opacity values for maximum contrast.
+*/
+
+:root {
+  /* ===== OPACITY SCALE===== */
+  --opacity-hidden: 0;
+  /* Completely hidden */
+  --opacity-disabled: 0.5;
+  /* Clearly disabled (WCAG minimum) */
+  --opacity-subtle: 0.75;
+  /* Subtle elements */
+  --opacity-visible: 1;
+  /* Fully visible */
+
+  /* ===== BLUR SCALE ===== */
+  --blur-none: 0;
+  --blur-sm: 4px;
+  /* Subtle blur */
+  --blur-md: 8px;
+  /* Standard blur */
+  --blur-lg: 16px;
+  /* Strong blur */
+
+  /* ===== SHADOW SYSTEM - HIGH CONTRAST ===== */
+  /* Stronger shadows for better depth perception */
+  --shadow-none: none;
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  /* Subtle elevation */
+  --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+  /* Card elevation */
+  --shadow-lg: 0 8px 16px 0 rgba(0, 0, 0, 0.35);
+  /* Modal/overlay */
+  --shadow-xl: 0 12px 24px 0 rgba(0, 0, 0, 0.4);
+
+  /* ===== COMPONENT-SPECIFIC SHADOWS ===== */
+  --shadow-card: var(--shadow-md);
+  /* Card depth */
+  --shadow-modal: var(--shadow-lg);
+  /* Modal separation */
+  --shadow-dropdown: var(--shadow-lg);
+  /* Dropdown menus */
+  --shadow-tooltip: var(--shadow-sm);
+  /* Tooltip elevation */
+
+  /* ===== BACKDROP EFFECTS ===== */
+  --backdrop-blur: blur(var(--blur-md));
+  /* Backdrop blur effect */
+
+}
