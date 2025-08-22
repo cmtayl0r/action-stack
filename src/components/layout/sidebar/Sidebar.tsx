@@ -32,14 +32,18 @@ function Sidebar() {
 
   return (
     <aside className={styles["sidebar"]} aria-label="Sidebar">
-      <nav>
-        <button aria-label="Open search" onClick={modalHandlers.search}>
-          <LucideSearch size={16} /> Search
-        </button>
-
-        <button aria-label="Add new action" onClick={modalHandlers.addAction}>
-          <LucidePlus size={16} /> Add Action
-        </button>
+      <nav className="stack">
+        <Button
+          onClick={modalHandlers.search}
+          icon={LucideSearch}
+          variant="outline"
+          isFullWidth
+        >
+          Search
+        </Button>
+        <Button onClick={modalHandlers.addAction} icon={LucidePlus} isFullWidth>
+          Add Action
+        </Button>
 
         <p>Action Stacks</p>
         <ul className={styles["sidebar__stacks"]}>
@@ -60,46 +64,25 @@ function Sidebar() {
             </li>
           ))}
         </ul>
-        <button aria-label="Add new stack" onClick={modalHandlers.addStack}>
-          <Layers2 size={16} /> Add Stack
-        </button>
 
-        <hr />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-          <LoadingSpinner />
-          {/* Basic variants - uses .interactive classes */}
-          <Button variant="primary" icon={Moon}>
-            Primary
-          </Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="accent">Accent</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="outline">Outline</Button>
-
-          {/* Semantic variants */}
-          <Button variant="error">Delete</Button>
-          <Button variant="success">Save</Button>
-
-          {/* Sizes */}
-          <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
-          <Button size="lg">Large</Button>
-
-          {/* States - uses .interactive state classes */}
-          <Button isLoading>Loading...</Button>
-          <Button disabled>Disabled</Button>
-
-          {/* Layout variants */}
-          <Button isFullWidth>Full Width</Button>
-          <Button iconOnly icon={Moon} aria-label="Close" size="lg" />
-        </div>
+        <Button
+          onClick={modalHandlers.addStack}
+          icon={Layers2}
+          variant="outline"
+          isFullWidth
+        >
+          Add Stack
+        </Button>
       </nav>
 
       {/* Theme switch */}
-      <div>
-        <button onClick={toggleTheme}>
-          {state.theme === "dark" ? <Moon /> : <Sun />}
-        </button>
+      <div className="cluster">
+        <Button
+          onClick={toggleTheme}
+          icon={state.theme === "dark" ? Moon : Sun}
+          aria-label="Toggle theme"
+          iconOnly
+        />
         <small>Theme is {state.theme}</small>
       </div>
     </aside>

@@ -1,19 +1,33 @@
 import styles from "./LoadingSpinner.module.css";
+import type { BaseHTMLProps } from "@/types";
+import clsx from "clsx";
+
+// =============================================================================
+// INTERFACE
+// =============================================================================
+
+interface LoadingSpinnerProps extends BaseHTMLProps {
+  size?: "xs" | "sm" | "md" | "lg";
+  label?: string;
+}
+
+// =============================================================================
+// COMPONENT
+// =============================================================================
 
 const LoadingSpinner = ({
-  size = "lg",
-  label = "Loading...",
-  className = "",
-}) => {
+  size = "md",
+  label = "Loading",
+  className,
+}: LoadingSpinnerProps) => {
+  const spinnerClasses = clsx(
+    styles["loading-spinner"],
+    styles[`loading-spinner--${size}`],
+    className
+  );
   return (
-    <div
-      className={`${styles["loading-spinner"]} ${className}`}
-      data-size={size}
-      role="status"
-      aria-live="polite"
-      aria-label={label}
-    >
-      <span className={styles["visually-hidden"]}>{label}</span>
+    <div className={spinnerClasses} role="status" aria-label={label}>
+      <span className="visually-hidden">{label}</span>
     </div>
   );
 };

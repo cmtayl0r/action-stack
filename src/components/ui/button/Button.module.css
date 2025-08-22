@@ -36,6 +36,9 @@ CORE STRUCTURE
 .loading {
   cursor: wait;
   pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
 }
 
 /*
@@ -84,22 +87,7 @@ BUTTON LAYOUT VARIANTS
 .iconOnly {
   aspect-ratio: 1;
   padding: 0;
-}
-
-.xs.iconOnly {
-  border-radius: var(--border-radius-lg);
-}
-
-.sm.iconOnly {
-  border-radius: var(--border-radius-lg);
-}
-
-.md.iconOnly {
-  border-radius: var(--border-radius-xl);
-}
-
-.lg.iconOnly {
-  border-radius: var(--border-radius-xl);
+  border-radius: var(--border-radius-full);
 }
 
 /*

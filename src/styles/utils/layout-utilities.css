@@ -60,3 +60,30 @@ THE STACK
   /* ↓ `height` in horizontal-tb writing mode */
   block-size: 100%;
 }
+
+/*
+================================================================================
+THE CLUSTER
+================================================================================
+*/
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* ===== JUSTIFICATION VARIANTS ===== */
+.cluster--space {
+  justify-content: space-between;
+}
+
+.cluster--center {
+  justify-content: center;
+}
+
+.cluster--end {
+  justify-content: flex-end;
+}

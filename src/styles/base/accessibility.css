@@ -6,8 +6,8 @@ ACCESSIBILITY
 
 /* Focus ring for keyboard navigation */
 *:focus-visible {
-  outline: 3px solid var(--border-focus);
-  outline-offset: 3px;
+  outline: 4px solid var(--border-focus);
+  outline-offset: 4px;
 }
 
 /* Remove focus outline for mouse users */

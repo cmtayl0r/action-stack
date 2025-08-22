@@ -192,52 +192,6 @@ DISABLED STATES
 
 /*
 ================================================================================
-LOADING STATES
-================================================================================
-*/
-
-.interactive--loading {
-  position: relative;
-  color: transparent;
-  pointer-events: none;
-  cursor: wait;
-}
-
-.interactive--loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1rem;
-  height: 1rem;
-  margin: -0.5rem 0 0 -0.5rem;
-  border: 2px solid var(--border-faint);
-  border-top-color: var(--border-primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .interactive--loading::after {
-    animation: none;
-    content: '…';
-    border: none;
-    width: auto;
-    height: auto;
-    margin: 0;
-    position: static;
-    color: var(--content-muted);
-  }
-}
-
-/*
-================================================================================
 DRAG & DROP STATES
 ================================================================================
 */

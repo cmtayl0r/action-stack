@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import type { BaseButtonProps } from "@/types";
 import styles from "./Button.module.css";
@@ -47,6 +46,8 @@ const Button = ({
   iconOnly = false,
 
   // HTML Props from BaseButtonProps
+  onClick,
+  type = "button",
   children,
   className,
   disabled,
@@ -96,10 +97,13 @@ const Button = ({
 
   return (
     <button
+      type={type !== "button" ? type : undefined}
       className={buttonClasses}
-      disabled={disabled || isLoading}
+      onClick={onClick}
+      disabled={disabled && !isLoading}
+      {...(isLoading && { "aria-disabled": true })}
       aria-label={iconOnly ? accessibleName : undefined}
-      aria-busy={isLoading} // ! ONLY show if loading. Fix this.
+      {...(isLoading && { "aria-busy": true })}
       {...props}
     >
       {isLoading ? (
