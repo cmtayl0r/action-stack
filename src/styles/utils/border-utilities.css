@@ -1,0 +1,45 @@
+/*
+================================================================================
+BORDER UTILITIES
+================================================================================
+Utility classes for border radius control using design tokens.
+*/
+
+/* ===== BORDER RADIUS UTILITIES ===== */
+.rounded-none {
+  border-radius: 0;
+}
+
+.rounded-sm {
+  border-radius: var(--border-radius-sm);
+}
+
+.rounded-md {
+  border-radius: var(--border-radius-md);
+}
+
+.rounded-lg {
+  border-radius: var(--border-radius-lg);
+}
+
+.rounded-full {
+  border-radius: var(--border-radius-full);
+}
+
+/* ===== DIVIDE UTILITIES (for lists/grids) ===== */
+
+.divide-x>*+* {
+  border-left: var(--border-width-default) var(--border-style-solid) var(--border-default);
+}
+
+.divide-y>*+* {
+  border-top: var(--border-width-default) var(--border-style-solid) var(--border-default);
+}
+
+.divide-thin>*+* {
+  border-width: var(--border-width-thin);
+}
+
+.divide-thick>*+* {
+  border-width: var(--border-width-thick);
+}
