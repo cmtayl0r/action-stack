@@ -48,7 +48,7 @@ Strong shadows and clear opacity values for maximum contrast.
   /* Tooltip elevation */
 
   /* ===== BACKDROP EFFECTS ===== */
-  --backdrop-blur: blur(var(--blur-md));
+  --backdrop-blur: blur(var(--blur-sm));
   /* Backdrop blur effect */
 
 }

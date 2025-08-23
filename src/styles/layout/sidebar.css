@@ -1,0 +1,55 @@
+/*
+================================================================================
+THE SIDEBAR - Responsive content with flexible sidebar
+================================================================================
+Main content first, sidebar second in DOM order for screen readers.
+Perfect for: app layouts, blog posts, documentation, dashboards.
+*/
+
+.with-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, var(--space-md));
+  container-type: inline-size;
+  container-name: sidebar;
+}
+
+/* Sidebar element */
+.with-sidebar> :first-child {
+  flex: 0 0 var(--sidebar-width, 20rem);
+  order: 2;
+}
+
+/* Main content element */
+.with-sidebar> :last-child {
+  flex: 1 1 var(--content-min-width, 60%);
+  order: 1;
+}
+
+/*
+================================================================================
+SIDEBAR SIZE VARIANTS
+================================================================================
+*/
+
+.with-sidebar--narrow {
+  --sidebar-width: 15rem;
+}
+
+.with-sidebar--wide {
+  --sidebar-width: 25rem;
+}
+
+/*
+================================================================================
+RESPONSIVE BEHAVIOR
+================================================================================
+*/
+
+/* Stack on small containers */
+@container sidebar (max-width: 768px) {
+  .with-sidebar>* {
+    order: initial !important;
+    flex-basis: 100% !important;
+  }
+}

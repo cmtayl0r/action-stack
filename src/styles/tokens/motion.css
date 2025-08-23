@@ -1,0 +1,123 @@
+/*
+================================================================================
+MOTION
+================================================================================
+Animation and transition tokens with reduced motion support.
+*/
+
+:root {
+  /* Motion design tokens respecting accessibility */
+
+  /* ===== DURATION SCALE ===== */
+  --duration-instant: 0ms;
+  /* No animation */
+  --duration-fast: 200ms;
+  /* Quick feedback */
+  --duration-normal: 300ms;
+  /* Standard transitions */
+  --duration-slow: 500ms;
+  /* Complex animations */
+
+  /* ===== EASING FUNCTIONS ===== */
+  /* Essential motion curves only */
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Material Design standard */
+  --easing-ease-out: cubic-bezier(0.2, 0, 0, 1);
+  /* Natural deceleration */
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Smooth both ways */
+
+  /* ===== ESSENTIAL TRANSITIONS ===== */
+  --transition-instant: var(--duration-instant) var(--easing-ease-out);
+  --transition-fast: var(--duration-fast) var(--easing-ease-out);
+  --transition-normal: var(--duration-normal) var(--easing-ease-out);
+  --transition-slow: var(--duration-slow) var(--easing-ease-in-out);
+
+  /* ===== INTERACTIVE TRANSITIONS ===== */
+  --transition-interactive: background-color var(--duration-fast) var(--easing-ease-out),
+    border-color var(--duration-fast) var(--easing-ease-out),
+    color var(--duration-fast) var(--easing-ease-out),
+    transform var(--duration-fast) var(--easing-ease-out);
+  --transition-state: background-color var(--duration-normal) var(--easing-smooth),
+    border-color var(--duration-normal) var(--easing-smooth),
+    color var(--duration-normal) var(--easing-smooth),
+    transform var(--duration-normal) var(--easing-smooth),
+    box-shadow var(--duration-normal) var(--easing-smooth);
+
+  /* ===== PROPERTY-SPECIFIC TRANSITIONS ===== */
+  /* High-performance property transitions */
+  --transition-colors: color var(--duration-fast) var(--easing-ease-out),
+    background-color var(--duration-fast) var(--easing-ease-out),
+    border-color var(--duration-fast) var(--easing-ease-out);
+  --transition-transform: transform var(--duration-fast) var(--easing-ease-out);
+  --transition-opacity: opacity var(--duration-normal) var(--easing-ease-out);
+  --transition-theme: background-color var(--duration-normal) var(--easing-smooth),
+    border-color var(--duration-normal) var(--easing-smooth),
+    color var(--duration-normal) var(--easing-smooth);
+}
+
+/*
+================================================================================
+HIGH CONTRAST MODE ADJUSTMENTS
+================================================================================
+*/
+
+@media (prefers-contrast: high) {
+  :root {
+    /* Slightly faster transitions in high contrast for immediacy */
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --transition-interactive: background-color var(--duration-fast) var(--easing-ease-out),
+      border-color var(--duration-fast) var(--easing-ease-out),
+      color var(--duration-fast) var(--easing-ease-out);
+    --transition-state: background-color var(--duration-fast) var(--easing-smooth),
+      border-color var(--duration-fast) var(--easing-smooth),
+      color var(--duration-fast) var(--easing-smooth),
+      transform var(--duration-fast) var(--easing-smooth),
+      box-shadow var(--duration-fast) var(--easing-smooth);
+  }
+}
+
+/*
+================================================================================
+REDUCED MOTION SUPPORT
+================================================================================
+/*
+ACCESSIBILITY WARNING: Respect user motion preferences
+- Disables all animations for vestibular disorder safety
+- Maintains layout functionality without motion
+*/
+@media (prefers-reduced-motion: reduce) {
+
+  :root {
+    /* Remove all motion for users who prefer reduced motion */
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+
+    /* Update all transitions to be instant */
+    --transition-instant: 0ms;
+    --transition-fast: 0ms;
+    --transition-normal: 0ms;
+    --transition-slow: 0ms;
+    --transition-interactive: 0ms;
+    --transition-state: 0ms;
+    --transition-colors: 0ms;
+    --transition-transform: 0ms;
+    --transition-opacity: 0ms;
+    --transition-button: 0ms;
+    --transition-input: 0ms;
+    --transition-modal: 0ms;
+  }
+
+  /* Remove all animations globally */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

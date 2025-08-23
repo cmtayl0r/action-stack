@@ -1,0 +1,196 @@
+/*
+================================================================================
+THE SANDWICH - Full-height layout with sticky header/footer
+================================================================================
+Three-section layout: sticky header, scrollable content, sticky footer.
+Perfect for: apps, dashboards, chat interfaces, document viewers.
+*/
+
+.sandwich {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+  min-height: 100dvh;
+  /* Use min-height instead of height */
+  width: 100%;
+  position: relative;
+  /* Enable z-index stacking context */
+}
+
+/*
+================================================================================
+HEAD SECTION
+================================================================================
+*/
+
+.sandwich__head {
+  grid-area: header;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-index-sticky);
+
+  /* Ensure header content doesn't overflow */
+  overflow-x: auto;
+  overflow-y: visible;
+
+  /* Add subtle shadow when content scrolls behind */
+  box-shadow: 0 1px 0 0 transparent;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Show shadow when content is scrolled */
+.sandwich--scrolled .sandwich__head {
+  box-shadow: 0 1px 0 0 var(--border-subtle, rgba(0, 0, 0, 0.1));
+}
+
+/*
+================================================================================
+CONTENT SECTION
+================================================================================
+*/
+
+.sandwich__content {
+  grid-area: content;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll by default */
+  z-index: 1;
+  scroll-behavior: smooth;
+  /* Smooth scrolling */
+  scroll-padding-block: var(--space-md, 1rem);
+  /* Ensure minimum height for short content */
+  min-height: 0;
+  /* Allow grid item to shrink */
+  outline: none;
+  /* Focus management for keyboard navigation */
+}
+
+/*
+================================================================================
+FOOTER SECTION
+================================================================================
+*/
+
+.sandwich__foot {
+  grid-area: footer;
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-index-sticky, 100);
+
+  /* Prevent footer content overflow */
+  overflow-x: auto;
+  overflow-y: visible;
+
+  /* Add subtle shadow when content scrolls behind */
+  box-shadow: 0 -1px 0 0 transparent;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Show shadow when content is scrolled */
+.sandwich--scrolled .sandwich__foot {
+  box-shadow: 0 -1px 0 0 var(--border-subtle, rgba(0, 0, 0, 0.1));
+}
+
+/*
+================================================================================
+LAYOUT VARIANTS
+================================================================================
+*/
+
+/* No footer variant */
+.sandwich--no-footer {
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header"
+    "content";
+}
+
+.sandwich--no-footer .sandwich__foot {
+  display: none;
+}
+
+/* No header variant */
+.sandwich--no-header {
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "content"
+    "footer";
+}
+
+.sandwich--no-header .sandwich__head {
+  display: none;
+}
+
+/* Content only variant */
+.sandwich--content-only {
+  grid-template-rows: 1fr;
+  grid-template-areas: "content";
+}
+
+.sandwich--content-only .sandwich__head,
+.sandwich--content-only .sandwich__foot {
+  display: none;
+}
+
+/*
+================================================================================
+RESPONSIVE BEHAVIOR
+================================================================================
+*/
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .sandwich {
+    /* Account for mobile browser UI */
+    min-height: 100svh;
+    /* Small viewport height */
+    min-height: 100dvh;
+    /* Dynamic viewport height - fallback above */
+  }
+
+  .sandwich__head,
+  .sandwich__foot {
+    /* Reduce padding on mobile */
+    padding-inline: var(--space-sm, 0.5rem);
+  }
+
+  .sandwich__content {
+    /* Better scroll padding for mobile */
+    scroll-padding-block: var(--space-sm, 0.5rem);
+  }
+}
+
+/*
+================================================================================
+ACCESSIBILITY ENHANCEMENTS
+================================================================================
+*/
+
+/* Skip link target */
+.sandwich__content[id] {
+  scroll-margin-top: var(--space-lg, 2rem);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .sandwich__content {
+    scroll-behavior: auto;
+  }
+
+  .sandwich__head,
+  .sandwich__foot {
+    transition: none;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+
+  .sandwich__head,
+  .sandwich__foot {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+  }
+}

@@ -1,0 +1,50 @@
+/*
+================================================================================
+DESIGN TOKENS INDEX
+================================================================================
+Imports all design tokens in a logical, dependency-aware order.
+This file acts as the single source of truth for the design system foundation.
+*/
+
+/*
+================================================================================
+CORE PRIMITIVES - The foundational atoms of the design system.
+================================================================================
+*/
+
+/* Color system (Primitives must come before Semantics) */
+@import './color-primitives.css';
+@import './color-semantics.css';
+
+/* Spacing scale */
+@import './spacing.css';
+
+/* Typography scale and families */
+@import './typography.css';
+
+/*
+================================================================================
+DERIVED & COMPONENT TOKENS - Tokens built upon the core primitives.
+================================================================================
+*/
+
+/* Borders and radii */
+@import './borders.css';
+
+/* Shadows and visual effects */
+@import './effects.css';
+
+/* Animation and transition timings */
+@import './motion.css';
+
+/*
+================================================================================
+LAYOUT & ELEVATION - Tokens governing structure and layering.
+================================================================================
+*/
+
+/* Z-index and elevation scale */
+@import './elevation.css';
+
+/* Breakpoints and container widths */
+@import './layout.css';

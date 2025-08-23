@@ -1,0 +1,54 @@
+/*
+================================================================================
+THE CLUSTER - Horizontal grouping with flexible wrapping
+================================================================================
+Groups related elements horizontally with consistent spacing.
+Perfect for: navigation, tags, buttons, breadcrumbs, form actions.
+*/
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, var(--space-md));
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* ===== JUSTIFICATION VARIANTS ===== */
+
+.cluster--space {
+  justify-content: space-between;
+}
+
+.cluster--center {
+  justify-content: center;
+}
+
+.cluster--end {
+  justify-content: flex-end;
+}
+
+/* ===== WRAPPER BEHAVIOUR VARIANTS ===== */
+
+.cluster--nowrap {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  /* Scroll if content overflows */
+  scroll-snap-type: x mandatory;
+}
+
+.cluster--nowrap>* {
+  flex-shrink: 0;
+  /* Prevent items from shrinking */
+  scroll-snap-align: start;
+}
+
+/* Full width items when wrapped */
+.cluster--full-width-on-wrap>* {
+  min-width: 100%;
+}
+
+/* Equal width items */
+.cluster--equal-width>* {
+  flex: 1;
+}

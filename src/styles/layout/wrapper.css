@@ -1,0 +1,112 @@
+/*
+================================================================================
+THE WRAPPER - Responsive content container with max-width control
+================================================================================
+Centers content with maximum width constraints and responsive padding.
+Perfect for: page sections, content areas, reading layouts, responsive design.
+*/
+
+/*
+================================================================================
+BASE WRAPPER STRUCTURE
+================================================================================
+*/
+
+.wrapper {
+  width: 100%;
+  max-width: var(--container-lg, 1200px);
+  margin-inline: auto;
+
+  /* Include padding by default for better UX */
+  padding-inline: var(--container-padding, var(--space-md, 1rem));
+
+  /* Ensure minimum margins on very small screens */
+  min-width: 0;
+  /* Prevent overflow issues */
+}
+
+/*
+================================================================================
+SIZE VARIANTS
+================================================================================
+*/
+
+.wrapper--xs {
+  max-width: var(--container-xs, 480px);
+}
+
+.wrapper--sm {
+  max-width: var(--container-sm, 640px);
+}
+
+.wrapper--md {
+  max-width: var(--container-md, 768px);
+}
+
+.wrapper--lg {
+  max-width: var(--container-lg, 1024px);
+}
+
+.wrapper--xl {
+  max-width: var(--container-xl, 1280px);
+}
+
+.wrapper--2xl {
+  max-width: var(--container-2xl, 1536px);
+}
+
+.wrapper--full {
+  max-width: none;
+}
+
+/*
+================================================================================
+PADDING VARIANTS
+================================================================================
+*/
+
+.wrapper--no-padding {
+  padding-inline: 0;
+}
+
+.wrapper--padding-sm {
+  padding-inline: var(--space-sm, 0.5rem);
+}
+
+.wrapper--padding-md {
+  padding-inline: var(--space-md, 1rem);
+}
+
+.wrapper--padding-lg {
+  padding-inline: var(--space-lg, 1.5rem);
+}
+
+.wrapper--padding-xl {
+  padding-inline: var(--space-xl, 2rem);
+}
+
+/* Responsive padding that grows with screen size */
+.wrapper--padding-responsive {
+  padding-inline: clamp(var(--space-sm, 0.5rem), 4vw, var(--space-xl, 2rem));
+}
+
+/*
+================================================================================
+RESPONSIVE BEHAVIOR
+================================================================================
+*/
+
+/*
+  NOTE: Responsive behavior is now handled by the clamp() function in the
+  base .wrapper class and the explicit max-width variants. The previous
+  media queries were redundant and created conflicting logic.
+*/
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* Skip link target */
+.wrapper[id] {
+  scroll-margin-top: var(--space-lg, 1.5rem);
+}

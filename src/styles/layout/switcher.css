@@ -1,0 +1,70 @@
+/*
+================================================================================
+THE SWITCHER - Auto-responsive horizontal/vertical layout
+================================================================================
+Automatically switches between horizontal and vertical layouts based on available space.
+Perfect for: navigation, form controls, button groups, card layouts.
+*/
+
+.switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, var(--space-md));
+  container-type: inline-size;
+  container-name: switcher;
+}
+
+.switcher>* {
+  flex-grow: 1;
+  /* The magic: negative values force wrapping when container is too narrow */
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+}
+
+/*
+================================================================================
+ITEM LIMIT VARIANTS
+================================================================================
+*/
+
+/* Default: max 4 items per row */
+.switcher> :nth-last-child(n + 5),
+.switcher> :nth-last-child(n + 5)~* {
+  flex-basis: 100%;
+}
+
+/* Max 2 items per row */
+.switcher--2> :nth-last-child(n + 3),
+.switcher--2> :nth-last-child(n + 3)~* {
+  flex-basis: 100%;
+}
+
+/* Max 3 items per row */
+.switcher--3> :nth-last-child(n + 4),
+.switcher--3> :nth-last-child(n + 4)~* {
+  flex-basis: 100%;
+}
+
+/* Max 5 items per row */
+.switcher--5> :nth-last-child(n + 6),
+.switcher--5> :nth-last-child(n + 6)~* {
+  flex-basis: 100%;
+}
+
+/* No limit - let all items flow naturally */
+.switcher--unlimited>* {
+  flex-basis: calc((var(--switcher-threshold, 40rem) - 100%) * 999);
+}
+
+/*
+================================================================================
+THRESHOLD VARIANTS
+================================================================================
+*/
+
+.switcher--narrow {
+  --switcher-threshold: 30rem;
+}
+
+.switcher--wide {
+  --switcher-threshold: 50rem;
+}

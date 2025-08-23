@@ -1,0 +1,196 @@
+/*
+================================================================================
+MODERN SPACING UTILITIES
+================================================================================
+A lean, powerful set of utilities using CSS logical properties.
+This replaces hundreds of verbose, axis-specific classes.
+*/
+
+/*
+SIMPLE PATTERN:
+1. Pick a SIZE: space-xs, space-sm, space-md, space-lg, space-xl
+2. Pick WHERE to put it: p (padding), m (margin), gap (between items)
+
+QUICK REFERENCE:
+p - Padding all sides
+p-block - Padding top+bottom
+p-inline - Padding left+right
+m - Margin all sides
+m-block-end - Margin bottom only
+gap - Space between flex/grid items
+
+EXAMPLES:
+🏠 PADDING (Inside Space)
+<!-- Padding all around -->
+<div class="space-md p">Content with medium padding</div>
+<!-- Padding only top/bottom -->
+<div class="space-lg p-block">Content with large vertical padding</div>
+<!-- Padding only left/right -->
+<div class="space-sm p-inline">Content with small horizontal padding</div>
+
+📏 MARGIN (Outside Space)
+<!-- Margin all around -->
+<div class="space-lg m">Content with large margin</div>
+<!-- Margin only bottom -->
+<div class="space-md m-block-end">Content with medium bottom margin</div>
+<!-- Center horizontally -->
+<div class="mx-auto" style="width: 300px;">Centered content</div>
+
+🔲 GAP (Between Items)
+<!-- Flex/Grid spacing -->
+<div class="space-sm gap" style="display: flex;">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <!-- Small gap between items -->
+</div>
+<!-- Stack component -->
+<div class="stack space-lg">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <!-- Large gap between items -->
+</div>
+
+HOW IT WORKS IN CSS:
+- The [class*="space-"] selector targets any class containing "space-".
+- CSS variables (--m, --p, --gap) are used to apply the spacing value.
+- Logical properties (e.g., margin-block) apply spacing based on writing mode.
+*/
+
+:where([class*="space-"]) {
+  --m: var(--space, 0);
+  --p: var(--space, 0);
+  --gap: var(--space, 0);
+}
+
+/* Margin */
+.m {
+  margin: var(--m);
+}
+
+.m-block {
+  margin-block: var(--m);
+}
+
+.m-inline {
+  margin-inline: var(--m);
+}
+
+.m-block-start {
+  margin-block-start: var(--m);
+}
+
+.m-block-end {
+  margin-block-end: var(--m);
+}
+
+.m-inline-start {
+  margin-inline-start: var(--m);
+}
+
+.m-inline-end {
+  margin-inline-end: var(--m);
+}
+
+.mx-auto {
+  margin-inline: auto;
+}
+
+/* Padding */
+.p {
+  padding: var(--p);
+}
+
+.p-block {
+  padding-block: var(--p);
+}
+
+.p-inline {
+  padding-inline: var(--p);
+}
+
+.p-block-start {
+  padding-block-start: var(--p);
+}
+
+.p-block-end {
+  padding-block-end: var(--p);
+}
+
+.p-inline-start {
+  padding-inline-start: var(--p);
+}
+
+.p-inline-end {
+  padding-inline-end: var(--p);
+}
+
+/* Gap */
+.gap {
+  gap: var(--gap);
+}
+
+/* Spacing Scale Utilities */
+.space-none {
+  --space: var(--space-none);
+}
+
+.space-2xs {
+  --space: var(--space-2xs);
+}
+
+.space-xs {
+  --space: var(--space-xs);
+}
+
+.space-sm {
+  --space: var(--space-sm);
+}
+
+.space-md {
+  --space: var(--space-md);
+}
+
+.space-lg {
+  --space: var(--space-lg);
+}
+
+.space-xl {
+  --space: var(--space-xl);
+}
+
+.space-2xl {
+  --space: var(--space-2xl);
+}
+
+.space-3xl {
+  --space: var(--space-3xl);
+}
+
+.space-4xl {
+  --space: var(--space-4xl);
+}
+
+.space-5xl {
+  --space: var(--space-5xl);
+}
+
+/* Fluid Spacing Utilities */
+.space-fluid-xs {
+  --space: var(--space-fluid-xs);
+}
+
+.space-fluid-sm {
+  --space: var(--space-fluid-sm);
+}
+
+.space-fluid-md {
+  --space: var(--space-fluid-md);
+}
+
+.space-fluid-lg {
+  --space: var(--space-fluid-lg);
+}
+
+.space-fluid-xl {
+  --space: var(--space-fluid-xl);
+}

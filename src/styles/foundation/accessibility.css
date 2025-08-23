@@ -21,31 +21,21 @@ FOCUS MANAGEMENT
 ================================================================================
 */
 
-/* Focus ring for keyboard navigation */
-*:focus-visible {
+/*
+  Modern Focus Management
+  - Uses :where() for low specificity to be easily overridden.
+  - Applies a consistent, visible focus ring for ANY focused element,
+    including keyboard, programmatic (JS .focus()), and autofill.
+  - Removes the default outline only when a custom focus ring is applied.
+*/
+:where(:focus-visible) {
   outline: var(--focus-width) solid var(--border-focus);
   outline-offset: var(--focus-offset);
 }
 
-/* Remove focus outline for mouse users */
-*:focus:not(:focus-visible) {
+/* Remove focus outline for mouse users - overridden by :focus-visible */
+:where(:focus:not(:focus-visible)) {
   outline: none;
-}
-
-/*
-  Force focus on form inputs (JS focus() support)
-  Fix to display focus ring on checkboxes and radio buttons when using focus() in js
-  because, element.focus(); // programmatic focus → ❌ no :focus-visible
-*/
-
-input:focus,
-textarea:focus,
-select:focus,
-input[type="checkbox"]:focus,
-input[type="radio"]:focus,
-input[role="switch"]:focus {
-  outline: var(--focus-width) solid var(--focus-color);
-  outline-offset: var(--focus-offset);
 }
 
 /*

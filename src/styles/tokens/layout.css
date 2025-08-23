@@ -40,6 +40,8 @@ Simplified breakpoints and container patterns.
   /* 1024px - available for large container components */
   --container-xl: var(--breakpoint-xl);
   /* 1280px - available for large container components */
+  --container-2xl: var(--breakpoint-2xl);
+  /* 1536px - available for extra large container components */
 
   /* ===== CHARACTER-BASED CONTAINERS ===== */
   /* Optimal reading and content widths */
@@ -92,7 +94,6 @@ Simplified breakpoints and container patterns.
   --aspect-golden: 1.618 / 1;
   /* Golden ratio */
 }
-
 
 /*
 ================================================================================

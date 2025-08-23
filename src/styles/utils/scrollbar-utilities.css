@@ -1,0 +1,79 @@
+/*
+================================================================================
+CUSTOM SCROLLBAR STYLES
+================================================================================
+Scrollbars that work across browsers.
+*/
+
+:root {
+  --scrollbar-width: 8px;
+}
+
+/* Thin scrollbars */
+.scrollbar-thin {
+  --scrollbar-width: 4px;
+}
+
+/* Thick scrollbars */
+.scrollbar-thick {
+  --scrollbar-width: 12px;
+}
+
+/* Hide scrollbars but keep functionality */
+.scrollbar-hidden {
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+  /* Webkit */
+}
+
+/*
+================================================================================
+WEBKIT BROWSERS (Chrome, Safari, Edge)
+================================================================================
+*/
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+  /* For horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: calc(var(--scrollbar-width) / 2);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  /* Prevents background bleeding */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--scrollbar-thumb-active);
+}
+
+/* Corner where horizontal and vertical scrollbars meet */
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
+}
+
+/*
+================================================================================
+FIREFOX SUPPORT
+================================================================================
+*/
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}

@@ -1,0 +1,66 @@
+/*
+================================================================================
+THE STACK - Vertical layout with consistent spacing
+================================================================================
+Creates vertical rhythm between child elements using the "owl selector" pattern.
+Perfect for: content sections, forms, cards, articles, page layouts.
+*/
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--gap, var(--space-md));
+}
+
+/*
+================================================================================
+ALIGNMENT VARIANTS
+================================================================================
+*/
+
+.stack--center {
+  justify-content: center;
+}
+
+.stack--end {
+  justify-content: flex-end;
+}
+
+.stack--between {
+  justify-content: space-between;
+}
+
+.stack--around {
+  justify-content: space-around;
+}
+
+.stack--evenly {
+  justify-content: space-evenly;
+}
+
+/*
+================================================================================
+LAYOUT MODIFIERS
+================================================================================
+*/
+
+.stack--fullHeight {
+  min-height: 100%;
+}
+
+/*
+================================================================================
+UTILITY CLASSES
+================================================================================
+*/
+
+/* Exception class for breaking spacing pattern */
+.stack__exception {
+  margin-block-start: var(--space-xl, 2rem) !important;
+}
+
+/* Remove spacing for specific child */
+.stack__no-spacing {
+  margin-block-start: 0 !important;
+}

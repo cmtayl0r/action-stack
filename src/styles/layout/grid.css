@@ -1,0 +1,267 @@
+/*
+================================================================================
+THE GRID - Responsive grid layout with auto-sizing columns
+================================================================================
+Creates responsive grid layouts that adapt to content and container size.
+Uses spacing tokens from spacing.css - no duplicate variables.
+Perfect for: card layouts, image galleries, product grids, content blocks.
+*/
+
+.grid {
+  display: grid;
+  gap: var(--gap, var(--space-md));
+  container-type: inline-size;
+  container-name: grid;
+
+  /* Default: responsive auto-fit grid */
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+}
+
+/* =============================================================================
+   FALLBACK FOR OLDER BROWSERS
+   ============================================================================= */
+
+@supports not (width: min(250px, 100%)) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  @media (max-width: 300px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* =============================================================================
+   COLUMN COUNT VARIANTS
+   ============================================================================= */
+
+.grid--1 {
+  grid-template-columns: 1fr;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid--5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid--6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Responsive column variants */
+.grid--2-1 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 640px) {
+  .grid--2-1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid--3-2-1 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .grid--3-2-1 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid--3-2-1 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =============================================================================
+   SEMANTIC VARIANTS - Pre-configured for Common Use Cases
+   ============================================================================= */
+
+/* Card layouts */
+.grid--cards {
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-lg);
+  /* 20px comfortable spacing */
+}
+
+/* Compact grids */
+.grid--compact {
+  grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+  gap: var(--space-xs);
+  /* 8px tight spacing */
+}
+
+/* Reading layouts */
+.grid--reading {
+  grid-template-columns: repeat(auto-fit, minmax(min(65ch, 100%), 1fr));
+  gap: var(--space-2xl);
+  /* 32px generous spacing */
+}
+
+/* Image galleries */
+.grid--gallery {
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  gap: var(--space-2xs);
+  /* 4px minimal spacing */
+}
+
+/* Product grids */
+.grid--products {
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-md);
+  /* 16px standard spacing */
+}
+
+/* Feature grids */
+.grid--features {
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-lg);
+  /* 20px comfortable spacing */
+}
+
+/* Team member grids */
+.grid--team {
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: var(--space-md);
+  /* 16px standard spacing */
+}
+
+/* Dashboard widgets */
+.grid--dashboard {
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--space-md);
+  /* 16px standard spacing */
+}
+
+/* =============================================================================
+   ALIGNMENT VARIANTS
+   ============================================================================= */
+
+.grid--center {
+  place-items: center;
+}
+
+.grid--start {
+  place-items: start;
+}
+
+.grid--end {
+  place-items: end;
+}
+
+.grid--stretch {
+  place-items: stretch;
+}
+
+/* Content alignment */
+.grid--content-center {
+  place-content: center;
+}
+
+.grid--content-start {
+  place-content: start;
+}
+
+.grid--content-end {
+  place-content: end;
+}
+
+.grid--content-between {
+  place-content: space-between;
+}
+
+.grid--content-around {
+  place-content: space-around;
+}
+
+.grid--content-evenly {
+  place-content: space-evenly;
+}
+
+/* =============================================================================
+   ASPECT RATIO VARIANTS
+   ============================================================================= */
+
+.grid--square>* {
+  aspect-ratio: 1;
+}
+
+.grid--video>* {
+  aspect-ratio: 16 / 9;
+}
+
+.grid--photo>* {
+  aspect-ratio: 4 / 3;
+}
+
+.grid--portrait>* {
+  aspect-ratio: 3 / 4;
+}
+
+/* =============================================================================
+   RESPONSIVE BEHAVIOR WITH CONTAINER QUERIES
+   ============================================================================= */
+
+@container grid (max-width: 400px) {
+  .grid--responsive {
+    grid-template-columns: 1fr;
+  }
+}
+
+@container grid (min-width: 400px) and (max-width: 800px) {
+  .grid--responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@container grid (min-width: 800px) {
+  .grid--responsive {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+/* =============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+.grid>* {
+  position: relative;
+}
+
+@media (prefers-contrast: high) {
+  .grid>* {
+    outline: 1px solid transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid {
+    container-type: normal;
+  }
+}
+
+/* =============================================================================
+   MASONRY-STYLE GRID (EXPERIMENTAL)
+   ============================================================================= */
+
+@supports (grid-template-rows: masonry) {
+  .grid--masonry {
+    grid-template-rows: masonry;
+    align-tracks: start;
+  }
+}

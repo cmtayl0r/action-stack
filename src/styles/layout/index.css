@@ -1,0 +1,55 @@
+/*
+================================================================================
+LAYOUT INDEX
+================================================================================
+Imports all layout primitive components in logical order.
+These are fundamental layout building blocks used throughout the application.
+*/
+
+/*
+================================================================================
+CONTAINER PRIMITIVES - Content constraint and centering
+================================================================================
+*/
+
+/* The Wrapper - Responsive content container with max-width control */
+@import './wrapper.css';
+
+/*
+================================================================================
+SPACING PRIMITIVES - Consistent spacing patterns
+================================================================================
+*/
+
+/* The Stack - Vertical layout with consistent spacing */
+@import './stack.css';
+
+/* The Cluster - Horizontal grouping with flexible wrapping */
+@import './cluster.css';
+
+/* The Box - Basic box padding */
+/* @import './box.css'; */
+
+/*
+================================================================================
+LAYOUT PRIMITIVES - Structural layout patterns
+================================================================================
+*/
+
+/* The Sandwich - Full-height layout with sticky header/footer */
+@import './sandwich.css';
+
+/* The Sidebar - Flex based responsive sidebar */
+@import './sidebar.css';
+
+/* The Switcher - Easy switch between horizontal and vertical layouts */
+@import './switcher.css';
+
+/*
+================================================================================
+GRID PRIMITIVES - Grid-based layouts
+================================================================================
+*/
+
+/* The Grid - Simple layout of grid items */
+@import './grid.css';

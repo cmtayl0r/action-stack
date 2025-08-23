@@ -1,0 +1,211 @@
+/*
+================================================================================
+MOTION UTILITIES
+================================================================================
+Essential animation and transition utilities.
+Strong reduced motion support for accessibility.
+*/
+
+/* ===== TRANSITION UTILITIES ===== */
+
+.transition-none {
+  transition: none;
+}
+
+.transition-instant {
+  transition: var(--transition-instant);
+}
+
+.transition-fast {
+  transition: var(--transition-fast);
+}
+
+.transition {
+  transition: var(--transition-normal);
+}
+
+.transition-slow {
+  transition: var(--transition-slow);
+}
+
+/* Property-specific transitions */
+.transition-colors {
+  transition: var(--transition-colors);
+}
+
+.transition-transform {
+  transition: var(--transition-transform);
+}
+
+.transition-opacity {
+  transition: var(--transition-opacity);
+}
+
+/* Component-specific transitions */
+.transition-interactive {
+  transition: var(--transition-interactive);
+}
+
+/* ===== TRANSFORM UTILITIES ===== */
+
+/* Scale */
+.scale-95 {
+  --transform: scale(0.95);
+}
+
+.scale-100 {
+  --transform: scale(1);
+}
+
+.scale-105 {
+  --transform: scale(1.05);
+}
+
+.scale-110 {
+  --transform: scale(1.1);
+}
+
+/* Translate */
+.translate-x-1 {
+  --transform: translateX(var(--space-xs));
+}
+
+.translate-y-1 {
+  --transform: translateY(var(--space-xs));
+}
+
+.translate-x-2 {
+  --transform: translateX(var(--space-sm));
+}
+
+.translate-y-2 {
+  --transform: translateY(var(--space-sm));
+}
+
+/* Rotate */
+.rotate-0 {
+  --transform: rotate(0deg);
+}
+
+.rotate-45 {
+  --transform: rotate(45deg);
+}
+
+.rotate-90 {
+  --transform: rotate(90deg);
+}
+
+.rotate-180 {
+  --transform: rotate(180deg);
+}
+
+/* ===== ANIMATION UTILITIES ===== */
+
+.animate-none {
+  animation: none;
+}
+
+/* Fade animations */
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) var(--easing-ease-out);
+}
+
+.animate-fade-out {
+  animation: fade-out var(--duration-normal) var(--easing-ease-out);
+}
+
+/* Pulse animation for loading states */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ===== ANIMATION KEYFRAMES ===== */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ===== HOVER AND FOCUS UTILITIES ===== */
+
+.hover\:scale-105:hover:not(:disabled) {
+  --transform: scale(1.05);
+}
+
+.hover\:scale-110:hover:not(:disabled) {
+  --transform: scale(1.1);
+}
+
+.hover\:opacity-subtle:hover:not(:disabled) {
+  opacity: var(--opacity-subtle);
+}
+
+.focus\:scale-105:focus-visible {
+  --transform: scale(1.05);
+}
+
+.active\:scale-95:active:not(:disabled) {
+  --transform: scale(0.95);
+}
+
+/*
+================================================================================
+REDUCED MOTION OVERRIDES
+================================================================================
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe {
+    /* Hide motion-based utilities when reduced motion is preferred */
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-pulse {
+    animation: none !important;
+  }
+
+  .hover\:scale-105:hover,
+  .hover\:scale-110:hover,
+  .focus\:scale-105:focus-visible,
+  .active\:scale-95:active {
+    transform: none !important;
+  }
+}
+
+/* When reduced motion is NOT preferred, hide reduced motion utilities */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-reduce {
+    display: none;
+  }
+}
