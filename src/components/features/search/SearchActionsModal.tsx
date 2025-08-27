@@ -2,6 +2,21 @@ import { useActionsContext } from "@/context/actions/ActionsContext";
 import { Modal, type ModalProps } from "@/components/ui";
 import { useMemo, useState } from "react";
 
+/**
+ * MODAL SYSTEM: Feature Modal
+ *
+ * Purpose: Specific modal for adding actions - uses Modal compound components
+ *
+ * Flow:
+ * 1. Receives isOpen/onClose from ModalHost
+ * 2. Receives custom props (like stackId) from showModal() call
+ * 3. Uses Modal.Root/Dialog/Header/Body/Footer to build UI
+ * 4. Handles its own form logic and API calls
+ *
+ * Pattern: All feature modals follow this structure for consistency
+ * Usage: Called automatically by ModalHost - don't render directly
+ */
+
 // =============================================================================
 // COMPONENT
 // =============================================================================

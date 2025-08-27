@@ -15,12 +15,24 @@ import { useFocusManagement } from "@/lib/accessibility/focus-management";
 import styles from "./Modal.module.css";
 import clsx from "clsx";
 
-// ? Understand why my BaseHTMLProps cant be used, and the AI wanted to use HTML Attributes directly
+/**
+ * MODAL SYSTEM: UI Components
+ *
+ * Purpose: Reusable compound component for building modal UIs
+ *
+ * Flow:
+ * 1. Modal.Root - Controls open/close state and provides context
+ * 2. Modal.Dialog - The actual dialog element with focus management
+ * 3. Modal.Header/Body/Footer - Layout sections with proper semantics
+ * 4. Modal.Close - Pre-wired cancel button
+ *
+ * Features: Focus trapping, keyboard navigation, mobile responsive, animations
+ * Usage: Import and compose modals like <Modal.Root><Modal.Dialog>...</Modal.Dialog></Modal.Root>
+ */
 
 // =============================================================================
 // Base modal props for all modals
 // =============================================================================
-
 interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;

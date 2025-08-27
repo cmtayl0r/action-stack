@@ -7,9 +7,23 @@ import {
 } from "react";
 
 /**
- * Purpose:
- * This file is the brain behind the modal system. It's a central place that manages which modal is currently shown on the screen.
+ * MODAL SYSTEM: Context & State Management
+ *
+ * Purpose: Central brain that tracks which modal is open and provides controls
+ *
+ * Flow:
+ * 1. ModalProvider wraps your app and holds modal state
+ * 2. Components call showModal(id, props) to open a specific modal
+ * 3. Components call hideModal() to close the current modal
+ * 4. Automatically manages focus restoration to the trigger element
+ *
+ * Usage: Wrap your app with <ModalProvider>, then use useModal() hook anywhere
  */
+
+/*
+SYSTEM FLOW SUMMARY:
+Trigger (Button) → useModal().showModal('addAction', {stackId}) → ModalContext updates state → ModalHost renders AddActionModal → Modal components handle UI/UX → onClose() → ModalContext clears state → focus returns to trigger
+*/
 
 // =============================================================================
 // 1. CONTEXT
@@ -32,7 +46,6 @@ const ModalContext = createContext<ModalContextValue | null>(null);
 
 // =============================================================================
 // 2. MODAL PROVIDER
-// Purpose: Provides the modal context to the application
 // =============================================================================
 
 interface ModalProviderProps {
@@ -84,7 +97,6 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
 
 // =============================================================================
 // 3. PUBLIC HOOK
-// Purpose: Allows components to open/close modals and access trigger ref.
 // =============================================================================
 
 export const useModal = (): ModalContextValue => {
