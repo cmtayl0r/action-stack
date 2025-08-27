@@ -1,33 +1,53 @@
-import { createPortal } from "react-dom";
-import { useModalContext } from "../../../context/modals/ModalContext";
+import { useModal } from "@/context/modals/ModalContext";
 
-// -----------------------------------------------------------------------------
-// Modal Host
-// -----------------------------------------------------------------------------
+// Import modal components directly - no registry needed
+import AddActionModal from "@/components/features/actions/AddActionModal";
+import AddStackModal from "@/components/features/stacks/AddStackModal";
+import SearchActionsModal from "@/components/features/search/SearchActionsModal";
 
-/*
- * ModalHost component is responsible for rendering the modal component.
- * It uses the useModalContext to get the current modalId and modalProps.
- * It retrieves the modal component from a registry and renders it.
- * This allows for lazy loading of several modals in the app.
- * based on the modalId and modalProps provided by the ModalContext.
- * It uses createPortal to render the modal in a different part of the DOM.
+/**
+ * Purpose:
+ * This component is the "stage" where our active modals appear.
+ * It's a single, central component that listens for instructions from the ModalContext
+ * then displays the correct modal when asked.
+ * You place this component once in your main App layout. <ModalHost />
  */
 
-const ModalHost = () => {
-  const { modalId, modalProps, registry, closeModal } = useModalContext();
+// =============================================================================
+// SIMPLE REGISTRY
+// Purpose: Simple mapping object. Maps modal IDs to their corresponding components.
+// =============================================================================
 
-  // If no modal is open, return null
-  if (!modalId) return null;
-  // Get the component from the registry
-  const ModalComponent = registry[modalId];
-  // If the component is not registered, return null
-  if (!ModalComponent) return null;
+const MODAL_COMPONENTS = {
+  addAction: AddActionModal,
+  addStack: AddStackModal,
+  search: SearchActionsModal,
+} as const;
 
-  return createPortal(
-    <ModalComponent {...modalProps} closeModal={closeModal} />,
-    document.getElementById("modal-root")
+// =============================================================================
+// MODAL HOST COMPONENT
+// Purpose: Renders the active modal component based on the current modal state.
+// =============================================================================
+
+export function ModalHost() {
+  const { currentModal, hideModal } = useModal();
+
+  // No modal to render
+  if (!currentModal.id) {
+    return null;
+  }
+
+  // Get the component to render
+  const ModalComponent =
+    MODAL_COMPONENTS[currentModal.id as keyof typeof MODAL_COMPONENTS];
+
+  // Handle unknown modal IDs
+  if (!ModalComponent) {
+    console.warn(`Unknown modal: ${currentModal.id}`);
+    return null;
+  }
+
+  return (
+    <ModalComponent isOpen={true} onClose={hideModal} {...currentModal.props} />
   );
-};
-
-export default ModalHost;
+}

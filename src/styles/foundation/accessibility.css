@@ -68,7 +68,7 @@ TOUCH TARGETS - WCAG 2.2 COMPLIANT
    HOW: <button className="touch-target">Click me</button> */
 .touch-target-md {
   min-height: var(--touch-target-default);
-  min-width: var(--touch-target-default)
+  min-width: var(--touch-target-default);
 }
 
 /* Large touch target (48px)

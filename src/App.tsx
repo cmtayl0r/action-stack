@@ -10,13 +10,13 @@ function App() {
   return (
     <AppProvider>
       <ToastProvider>
-        <ModalProvider>
-          <StacksProvider>
-            <ActionsProvider>
+        <StacksProvider>
+          <ActionsProvider>
+            <ModalProvider>
               <RouterProvider router={router} />
-            </ActionsProvider>
-          </StacksProvider>
-        </ModalProvider>
+            </ModalProvider>
+          </ActionsProvider>
+        </StacksProvider>
       </ToastProvider>
     </AppProvider>
   );

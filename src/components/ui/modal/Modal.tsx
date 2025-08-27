@@ -1,56 +1,84 @@
-import React, {
-  useRef,
-  useContext,
-  createContext,
-  cloneElement,
-  useCallback,
+import {
   useEffect,
+  useId,
+  createContext,
+  useContext,
+  type ReactNode,
+  type HTMLAttributes,
+  type ButtonHTMLAttributes,
+  type DialogHTMLAttributes,
 } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { Button } from "@/components";
+import { useFocusManagement } from "@/lib/accessibility/focus-management";
 import styles from "./Modal.module.css";
+import clsx from "clsx";
 
-// -----------------------------------------------------------------------------
-// 1 - Context and Custom Hook
-// -----------------------------------------------------------------------------
+// !: At >768 click outside the wrapper in fullscreen closes the modal/dialog
+// ? Understand why my BaseHTMLProps cant be used, and the AI wanted to use HTML Attributes directly
 
-const ModalContext = createContext();
+// =============================================================================
+// Base modal props for all modals
+// =============================================================================
 
-// -----------------------------------------------------------------------------
-// 2 - Parent Component to manage shared state and provide context
-// -----------------------------------------------------------------------------
+interface BaseModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children?: ReactNode;
+  className?: string;
+}
 
-function Modal({
-  children,
-  title,
-  onClose = () => {}, // Optional prop to handle close event
-}) {
-  // 🔖 Refs for DOM elements
-  const dialogRef = useRef(null); // Ref to the modal dialog element
-  const triggerRef = useRef(null); // Ref to the trigger element (button or link that opens the modal)
+// =============================================================================
+// CONTEXT & HOOK
+// =============================================================================
 
-  // 🛠️ Helper Methods
+// Types in context given to Modal components
+interface ModalContextType {
+  onClose: () => void;
+  titleId: string;
+  descriptionId: string;
+}
 
-  // Open modal
-  const open = useCallback(() => {
-    if (dialogRef.current) dialogRef.current?.showModal();
-  }, [dialogRef]);
+const ModalContext = createContext<ModalContextType | null>(null);
 
-  // Close modal
-  const close = useCallback(() => {
-    // If dialogRef exists, close modal
-    if (dialogRef.current) dialogRef.current?.close();
-    // Call the onClose prop if provided
-    onClose();
-  }, [dialogRef, onClose]);
+const useModalContext = () => {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error(
+      "Modal compound components must be used within a Modal component"
+    );
+  }
+  return context;
+};
 
-  const contextValue = {
-    open,
-    close,
-    dialogRef,
-    triggerRef,
-    title,
-  };
+// =============================================================================
+// PARENT/ROOT COMPONENT
+// =============================================================================
+
+function ModalRoot({ children, isOpen, onClose }: BaseModalProps) {
+  // Generate unique IDs for ARIA labeling
+  const titleId = useId();
+  const descriptionId = useId();
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      // Store original overflow to restore later
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  const contextValue = { onClose, titleId, descriptionId };
 
   return (
     <ModalContext.Provider value={contextValue}>
@@ -59,168 +87,201 @@ function Modal({
   );
 }
 
-// -----------------------------------------------------------------------------
-// 3 - Child Components
-// -----------------------------------------------------------------------------
+// =============================================================================
+// MODAL DIALOG
+// =============================================================================
 
-// 🔘 Modal.Trigger — optional for local modals
-const ModalTrigger = ({ children, ...props }) => {
-  const { open, triggerRef, id } = useContext(ModalContext);
+// ModalDialogProps extends BaseModalProps and DialogHTMLAttributes
+interface ModalDialogProps
+  extends Omit<
+    DialogHTMLAttributes<HTMLDialogElement>,
+    "children" | "className" | "onClose" | "onClick" | "onCancel"
+  > {
+  size?: "sm" | "md" | "lg" | "full";
+  closeOnBackdropClick?: boolean;
+  showCloseButton?: boolean;
+  children: ReactNode; // Explicitly add children as it's a compound component's purpose
+  className?: string; // Explicitly add className for styling
+}
 
-  // A: If there is no children, return a button element
-  // Replace with primary button from design system
-  if (!React.isValidElement(children)) {
-    return (
-      <button ref={triggerRef} onClick={open}>
-        {children}
-      </button>
-    );
-  }
-
-  // Or B: Add props to existing element (e.g., button or link)
-  return cloneElement(children, {
-    onClick: (e) => {
-      children.props.onClick?.(e);
-      open();
-    },
-    ref: triggerRef,
-    "aria-haspopup": "dialog",
-    "aria-controls": id,
-    ...props,
-  });
-};
-
-// 🪟 Modal.Dialog — handles backdrop, Escape key, and animation
 const ModalDialog = ({
   children,
+  size = "md",
   showCloseButton = true,
-  size = "medium",
-  closeOnOutsideClick = true,
+  closeOnBackdropClick = true,
+  className,
   ...props
-}) => {
-  const { close, dialogRef, id } = useContext(ModalContext);
+}: ModalDialogProps) => {
+  const { onClose, titleId, descriptionId } = useModalContext();
+  const { containerRef, saveFocus, restoreFocus, trapFocus, focusFirstInput } =
+    useFocusManagement<HTMLDialogElement>();
 
-  // Show the modal after it's rendered in the DOM
+  // Show modal and manage focus
   useEffect(() => {
-    // Show the modal after it's rendered in the DOM
-    if (dialogRef.current) {
-      setTimeout(() => {
-        dialogRef.current.showModal();
-      }, 0);
-    }
-    // Cleanup function - close the dialog when component unmounts
-    return () => {
-      if (dialogRef.current) {
-        dialogRef.current.close();
-      }
-    };
-  }, [dialogRef]);
+    const dialog = containerRef.current;
+    if (!dialog) return;
 
-  // Handle click outside to close modal
-  const handleBackdropClick = (e) => {
-    // if (e.target === dialogRef.current) close();
-    if (closeOnOutsideClick && e.target === dialogRef.current) close();
+    // Save focus before opening
+    saveFocus();
+
+    // Show the modal
+    dialog.showModal();
+
+    // Enable focus trap
+    trapFocus(true);
+
+    // Focus first input field (not close button) - better accessibility
+    setTimeout(() => {
+      focusFirstInput();
+    }, 100);
+
+    // Cleanup when component unmounts
+    return () => {
+      trapFocus(false);
+      restoreFocus();
+    };
+  }, [saveFocus, restoreFocus, trapFocus, focusFirstInput]);
+
+  // 🛠️ Handle backdrop click
+  const handleClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (closeOnBackdropClick && e.target === containerRef.current) {
+      onClose();
+    }
   };
+
+  // 🛠️ Handle escape key (native dialog behavior)
+  const handleCancel = (e: React.SyntheticEvent<HTMLDialogElement, Event>) => {
+    e.preventDefault();
+    onClose();
+  };
+
+  const dialogClasses = clsx(styles.modal, styles[`modal--${size}`], className);
 
   return createPortal(
     <dialog
-      className={`${styles.modal} ${styles[`modal--${size}`]}`}
-      ref={dialogRef}
-      onClick={handleBackdropClick}
-      id={id}
+      ref={containerRef}
+      className={dialogClasses}
       aria-modal="true"
-      aria-labelledby={`${id}-heading`}
-      {...props} // Spread any other props
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      onClick={handleClick} // Handles closing via backdrop click
+      onCancel={handleCancel}
+      {...props}
     >
       <div className={styles["modal__wrapper"]}>
         {showCloseButton && (
-          <button
+          <Button
+            iconOnly
+            onClick={onClose}
+            variant="ghost"
+            icon={X}
             aria-label="Close modal"
             className={styles["modal__close-button"]}
-            onClick={close}
-          >
-            <X aria-hidden="true" />
-          </button>
+          />
         )}
         {children}
       </div>
     </dialog>,
-    document.body
+    document.getElementById("modal-root") ?? document.body
   );
 };
 
-// Heading
-const ModalHeading = ({ children, ...props }) => {
-  const { id } = useContext(ModalContext);
+// =============================================================================
+// MODAL HEADER
+// =============================================================================
+
+const ModalHeader = ({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<HTMLElement>) => {
+  const { titleId } = useModalContext();
+  const headerClasses = clsx(styles["modal__header"], className);
 
   return (
-    <h2 id={`${id}-heading`} className={styles["modal__heading"]} {...props}>
-      {children}
-    </h2>
+    <header className={headerClasses}>
+      <h2 id={titleId} className={styles["modal__title"]} {...props}>
+        {children}
+      </h2>
+    </header>
   );
 };
 
-// Content
-const ModalContent = ({ children, ...props }) => {
+// =============================================================================
+// MODAL BODY
+// =============================================================================
+
+const ModalBody = ({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<HTMLElement>) => {
+  const { descriptionId } = useModalContext();
+  const bodyClasses = clsx(styles["modal__body"], className);
+
   return (
-    <main className={styles["modal__content"]} {...props}>
+    <main id={descriptionId} className={bodyClasses} {...props}>
       {children}
     </main>
   );
 };
 
-// Footer
-const ModalFooter = ({ children, ...props }) => {
+// =============================================================================
+// MODAL FOOTER
+// =============================================================================
+
+const ModalFooter = ({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<HTMLElement>) => {
+  const footerClasses = clsx(
+    styles["modal__footer"],
+    "cluster",
+    "cluster--end",
+    className
+  );
+
   return (
-    <footer className={styles["modal__footer"]} {...props}>
+    <footer className={footerClasses} {...props}>
       {children}
     </footer>
   );
 };
 
-// Close button
-const ModalCloseButton = ({ children, ...props }) => {
-  const { close } = useContext(ModalContext);
+// =============================================================================
+// MODAL CLOSE BUTTON
+// =============================================================================
 
-  // A: Create a new button element
-  // Replace with secondary button from design system
-  if (!React.isValidElement(children)) {
-    return (
-      <button
-        className={styles["modal__close-button"]}
-        onClick={close}
-        {...props} // Spread any other props
-      >
-        {children || "Cancel"}
-      </button>
-    );
-  }
+const ModalClose = ({
+  children,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const { onClose } = useModalContext();
 
-  // or B: Add props to existing element (e.g., button or link)
-  return cloneElement(children, {
-    onClick: (e) => {
-      children.props.onClick?.(e);
-      close();
-    },
-    ...props, // Spread any other props
-  });
+  return (
+    <Button
+      onClick={onClose}
+      variant="outline"
+      aria-label={"Cancel and close modal"}
+      {...props}
+    >
+      {children || "Cancel"}
+    </Button>
+  );
 };
 
-// -----------------------------------------------------------------------------
-// 4 - Compound Pattern Assignment
-// -----------------------------------------------------------------------------
+// =============================================================================
+// 5. COMPOUND COMPONENT ASSIGNMENT
+// =============================================================================
 
-Modal.Trigger = ModalTrigger;
-Modal.Dialog = ModalDialog;
-Modal.Heading = ModalHeading;
-Modal.Content = ModalContent;
-Modal.Footer = ModalFooter;
-Modal.CloseButton = ModalCloseButton;
-
-// -----------------------------------------------------------------------------
-// 5 - Export
-// -----------------------------------------------------------------------------
+export const Modal = {
+  Root: ModalRoot,
+  Dialog: ModalDialog,
+  Header: ModalHeader,
+  Body: ModalBody,
+  Footer: ModalFooter,
+  Close: ModalClose,
+};
 
 export default Modal;
-
-// export types if using TypeScript

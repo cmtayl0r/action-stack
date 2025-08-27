@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useModalContext } from "@/context/modals/ModalContext";
+import { useModal } from "@/context/modals/ModalContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useAppContext } from "@/context/app/AppContext";
 import {
@@ -14,32 +14,30 @@ import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
 
 function Sidebar() {
+  const { showModal } = useModal();
   const { state, toggleTheme } = useAppContext();
   const { stacks } = useStacksContext();
-  const { openModal } = useModalContext();
   const { stackId = "inbox" } = useParams(); // get current stack in view
 
   // Show all stacks except "inbox"
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
 
-  const modalHandlers = {
-    addAction: () => openModal("add-action", { stackId }),
-    addStack: () => openModal("add-stack"),
-    search: () => openModal("search-actions"),
-  };
-
   return (
     <aside className={styles["sidebar"]} aria-label="Sidebar">
       <div className="stack">
         <Button
-          onClick={modalHandlers.search}
+          onClick={() => showModal("search")}
           icon={LucideSearch}
           variant="outline"
           isFullWidth
         >
           Search
         </Button>
-        <Button onClick={modalHandlers.addAction} icon={LucidePlus} isFullWidth>
+        <Button
+          onClick={() => showModal("addAction", { stackId })}
+          icon={LucidePlus}
+          isFullWidth
+        >
           Add Action
         </Button>
 
@@ -64,7 +62,7 @@ function Sidebar() {
         </ul>
 
         <Button
-          onClick={modalHandlers.addStack}
+          onClick={() => showModal("addStack")}
           icon={Layers2}
           variant="outline"
           isFullWidth

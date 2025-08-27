@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
 import Sidebar from "./sidebar/Sidebar";
-import { ModalHost, ToastHost } from "@/components";
+import { ToastHost, ModalHost } from "@/components";
 
 function AppLayout() {
   const { state } = useAppContext();
@@ -10,8 +10,8 @@ function AppLayout() {
     <div className="app-layout">
       {state.sidebarOpen && <Sidebar />}
       <Outlet />
-      <ModalHost />
       <ToastHost />
+      <ModalHost />
     </div>
   );
 }

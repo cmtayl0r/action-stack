@@ -1,57 +1,79 @@
 import {
   createContext,
-  useReducer,
-  useMemo,
-  useCallback,
   useContext,
+  useState,
+  useRef,
+  type ReactNode,
 } from "react";
-import { modalReducer, initialModalState } from "./modalReducer";
-import * as actions from "./modalActions";
-import { modalRegistry } from "../../utils/modalRegistry";
 
-// -----------------------------------------------------------------------------
-// 1️⃣ Context for sharing context
-// -----------------------------------------------------------------------------
+/**
+ * Purpose:
+ * This file is the brain behind the modal system. It's a central place that manages which modal is currently shown on the screen.
+ */
 
-const ModalContext = createContext();
+// =============================================================================
+// 1. CONTEXT
+// =============================================================================
 
-// -----------------------------------------------------------------------------
-// 2️⃣ Create a provider component
-// -----------------------------------------------------------------------------
+interface ModalState {
+  id: string | null;
+  props: Record<string, any>;
+}
 
-export const ModalProvider = ({ children }) => {
-  // 2A: 🧠 useReducer handles state logic
-  const [state, dispatch] = useReducer(modalReducer, initialModalState);
+interface ModalContextValue {
+  showModal: (id: string, props?: Record<string, any>) => void;
+  hideModal: () => void;
+  currentModal: ModalState;
+  triggerRef: React.RefObject<HTMLElement>;
+}
 
-  // 2B: 🧠 Memoized helper methods
-  const openModal = useCallback((id, props) => {
-    dispatch(actions.openModal(id, props));
-  }, []);
+// The actual React Context object
+const ModalContext = createContext<ModalContextValue | null>(null);
 
-  const closeModal = useCallback(() => {
-    dispatch(actions.closeModal());
-  }, []);
+// =============================================================================
+// 2. MODAL PROVIDER
+// Purpose: Provides the modal context to the application
+// =============================================================================
 
-  const registerModal = useCallback((id, component) => {
-    dispatch(actions.registerModal(id, component));
-  }, []);
+interface ModalProviderProps {
+  children: ReactNode;
+}
 
-  // ✅ Register all modals once at app start
-  useMemo(() => {
-    modalRegistry.forEach(({ id, component }) => {
-      registerModal(id, component);
-    });
-  }, [registerModal]);
+export const ModalProvider = ({ children }: ModalProviderProps) => {
+  // 🎛️ Simple state - no complex generics
+  const [currentModal, setCurrentModal] = useState<ModalState>({
+    id: null,
+    props: {},
+  });
 
-  // 2C: ♻️ Memoize the context value
-  const contextValue = useMemo(
-    () => ({
-      ...state,
-      openModal,
-      closeModal,
-    }),
-    [state, openModal, closeModal]
-  );
+  // 🏷️ Ref to store the element that triggered the modal, for focus restoration
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  // 🔧 function to open a specific modal with optional props
+  const showModal = (id: string, props: Record<string, any> = {}) => {
+    // Save the currently focused element before opening modal
+    triggerRef.current = document.activeElement as HTMLElement;
+    setCurrentModal({ id, props });
+  };
+
+  // 🔧 function to Close modal and restore focus
+  const hideModal = () => {
+    setCurrentModal({ id: null, props: {} });
+
+    // Restore focus to the element that opened the modal
+    setTimeout(() => {
+      if (triggerRef.current) {
+        triggerRef.current.focus();
+      }
+    }, 10);
+  };
+
+  const contextValue: ModalContextValue = {
+    showModal,
+    hideModal,
+    currentModal,
+    triggerRef,
+  };
 
   return (
     <ModalContext.Provider value={contextValue}>
@@ -60,14 +82,15 @@ export const ModalProvider = ({ children }) => {
   );
 };
 
-// -----------------------------------------------------------------------------
-// 3️⃣  Create a custom hook to use the ModalContext
-// -----------------------------------------------------------------------------
+// =============================================================================
+// 3. PUBLIC HOOK
+// Purpose: Allows components to open/close modals and access trigger ref.
+// =============================================================================
 
-export const useModalContext = () => {
+export const useModal = (): ModalContextValue => {
   const context = useContext(ModalContext);
   if (!context) {
-    throw new Error("useModalContext must be used within a ModalProvider");
+    throw new Error("useModal must be used within a ModalProvider");
   }
   return context;
 };

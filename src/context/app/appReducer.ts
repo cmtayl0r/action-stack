@@ -1,17 +1,25 @@
-export const initialState = {
+import { AppState, AppAction } from "@/types";
+
+export const initialState: AppState = {
   theme: "dark",
   sidebarOpen: true,
-  toast: null, // { message: '', type: 'success' | 'error' }
+  toast: null,
   currentStackId: "inbox",
 };
 
-export function appReducer(state, action) {
+export function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case "TOGGLE_SIDEBAR":
       return { ...state, sidebarOpen: !state.sidebarOpen };
 
     case "SET_THEME":
       return { ...state, theme: action.payload };
+
+    case "TOGGLE_THEME":
+      return {
+        ...state,
+        theme: state.theme === "dark" ? "light" : "dark",
+      };
 
     // case "SHOW_TOAST":
     //   return { ...state, toast: action.payload };

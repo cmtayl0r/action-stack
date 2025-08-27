@@ -3,43 +3,83 @@ import { useNavigate } from "react-router-dom";
 import { useToastContext } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useActionsContext } from "@/context/actions/ActionsContext";
-import { Modal } from "@/components/ui";
+import { Modal, Button } from "@/components/ui";
 import { Action } from "@/types";
 
-type AddActionModalProps = {
-  closeModal: () => void;
-  stackId?: string;
-};
+// =============================================================================
+// TYPES
+// =============================================================================
+
+// Simple, direct props - no generics
+interface AddActionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  stackId?: string; // Optional prop passed from context
+}
+
+// =============================================================================
+// COMPONENT
+// =============================================================================
 
 function AddActionModal({
-  closeModal,
-  stackId: initialStackId = "inbox",
+  isOpen,
+  onClose,
+  stackId = "inbox", // stackId is now part of ComponentMountProps<"addAction">
 }: AddActionModalProps) {
   const { stacks } = useStacksContext();
   const { addAction } = useActionsContext();
-  const { success } = useToastContext();
-  const [title, setTitle] = useState("");
-  const [priority, setPriority] = useState<Action["priority"]>("medium");
-  const [stackId, setStackId] = useState(initialStackId);
+  const { success, error } = useToastContext();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // 🎛️ Form State
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState<Action["priority"]>("medium");
+  const [selectedStackId, setSelectedStackId] = useState(stackId);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 🔧 Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    // Prevent default form submission
     e.preventDefault();
+
+    // Trim whitespace from title
     const trimmedTitle = title.trim();
     if (!trimmedTitle) return;
 
-    await addAction(trimmedTitle, priority, stackId);
-    navigate(`/stack/${stackId}`);
-    success(`${trimmedTitle} saved successfully!`);
-    closeModal();
+    // Set isSubmitting to true so we can show a loading indicator
+    setIsSubmitting(true);
+
+    try {
+      // Call the addAction function from the useActionsContext
+      await addAction(trimmedTitle, priority, selectedStackId);
+
+      // Success feedback
+      const successMessage = `${trimmedTitle} added to ${selectedStackId}`;
+      success(successMessage); // Trigger toast notification
+
+      // Navigate and close
+      navigate(`/stack/${selectedStackId}`);
+      onClose();
+
+      // Reset form state
+      setTitle("");
+      setPriority("medium");
+      setSelectedStackId(stackId);
+    } catch (err) {
+      const errorMessage = "Failed to add action. Please try again.";
+      error(errorMessage); // Trigger toast notification
+      console.error("Error adding action:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <Modal title="Add Action" onClose={closeModal}>
-      <Modal.Dialog>
-        <Modal.Heading>Add New Action</Modal.Heading>
-        <form onSubmit={handleSubmit}>
-          <Modal.Content>
+    <Modal.Root isOpen={isOpen} onClose={onClose}>
+      <Modal.Dialog size="md">
+        <form onSubmit={handleSubmit} className="stack">
+          <Modal.Header>Add New Action</Modal.Header>
+          <Modal.Body className="stack">
             <label htmlFor="action-title">Action Title</label>
             <input
               id="action-title"
@@ -47,10 +87,9 @@ function AddActionModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              autoFocus
+              disabled={isSubmitting}
               placeholder="Enter action title"
             />
-
             <label htmlFor="priority">Priority</label>
             <select
               id="priority"
@@ -58,17 +97,18 @@ function AddActionModal({
               onChange={(e) =>
                 setPriority(e.target.value as Action["priority"])
               }
+              disabled={isSubmitting}
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
-
-            <label htmlFor="stack">Stack</label>
+            <label htmlFor="stack-select">Stack</label>
             <select
-              id="stack"
-              value={stackId}
-              onChange={(e) => setStackId(e.target.value)}
+              id="stack-select"
+              value={selectedStackId}
+              onChange={(e) => setSelectedStackId(e.target.value)}
+              disabled={isSubmitting}
             >
               {stacks.map((stack) => (
                 <option key={stack.id} value={stack.id}>
@@ -76,16 +116,20 @@ function AddActionModal({
                 </option>
               ))}
             </select>
-          </Modal.Content>
+          </Modal.Body>
           <Modal.Footer>
-            <button type="button" onClick={closeModal}>
-              Cancel
-            </button>
-            <button type="submit">Add Action</button>
+            <Modal.Close disabled={isSubmitting}>Cancel</Modal.Close>
+            <Button
+              type="submit"
+              isLoading={isSubmitting}
+              disabled={!title.trim()}
+            >
+              {isSubmitting ? "Adding..." : "Add Action"}
+            </Button>
           </Modal.Footer>
         </form>
       </Modal.Dialog>
-    </Modal>
+    </Modal.Root>
   );
 }
 
