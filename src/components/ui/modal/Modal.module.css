@@ -171,10 +171,9 @@ RESPONSIVE BEHAVIOUR
   TODO: This class approach seems inefficient for responsive behavior
   I've used .modal[open] because it doesn't work (display properly) without it
   */
-  .modal--sm,
-  .modal--md,
-  .modal--lg,
-  .modal[open] {
+  .modal[open].modal--sm,
+  .modal[open].modal--md,
+  .modal[open].modal--lg {
     /* Full screen on mobile for better UX */
     width: 100vw;
     height: 100vh;

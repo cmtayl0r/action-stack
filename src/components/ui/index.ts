@@ -7,7 +7,7 @@ export { Toast, ToastHost } from "./toast";
 
 // Modal components
 export { Modal, ModalHost } from "./modal";
-// export type { ModalProps, ModalHostProps } from "./modal";
+export type { ModalProps } from "./modal";
 
 // Loading Spinner components
 export { LoadingSpinner } from "./loading-spinner";

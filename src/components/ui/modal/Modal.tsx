@@ -15,7 +15,6 @@ import { useFocusManagement } from "@/lib/accessibility/focus-management";
 import styles from "./Modal.module.css";
 import clsx from "clsx";
 
-// !: At >768 click outside the wrapper in fullscreen closes the modal/dialog
 // ? Understand why my BaseHTMLProps cant be used, and the AI wanted to use HTML Attributes directly
 
 // =============================================================================
@@ -28,6 +27,9 @@ interface BaseModalProps {
   children?: ReactNode;
   className?: string;
 }
+
+// Export for other modal components to extend
+export interface ModalProps extends BaseModalProps {}
 
 // =============================================================================
 // CONTEXT & HOOK
@@ -92,6 +94,7 @@ function ModalRoot({ children, isOpen, onClose }: BaseModalProps) {
 // =============================================================================
 
 // ModalDialogProps extends BaseModalProps and DialogHTMLAttributes
+// why Omit?: To prevent conflicts with the props we want to manage ourselves
 interface ModalDialogProps
   extends Omit<
     DialogHTMLAttributes<HTMLDialogElement>,
@@ -131,9 +134,7 @@ const ModalDialog = ({
     trapFocus(true);
 
     // Focus first input field (not close button) - better accessibility
-    setTimeout(() => {
-      focusFirstInput();
-    }, 100);
+    focusFirstInput();
 
     // Cleanup when component unmounts
     return () => {
@@ -144,12 +145,17 @@ const ModalDialog = ({
 
   // 🛠️ Handle backdrop click
   const handleClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    // Don't close on backdrop click for fullscreen on mobile
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && ["sm", "md", "lg"].includes(size)) return;
+
     if (closeOnBackdropClick && e.target === containerRef.current) {
       onClose();
     }
   };
 
   // 🛠️ Handle escape key (native dialog behavior)
+  // Why synthetic event?: To prevent the default behavior of the dialog element
   const handleCancel = (e: React.SyntheticEvent<HTMLDialogElement, Event>) => {
     e.preventDefault();
     onClose();

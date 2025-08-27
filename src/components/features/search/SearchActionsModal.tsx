@@ -1,16 +1,18 @@
 import { useActionsContext } from "@/context/actions/ActionsContext";
-import { Modal } from "@/components";
+import { Modal, type ModalProps } from "@/components/ui";
 import { useMemo, useState } from "react";
 
-import { ComponentMountProps } from "@/components/ui/modal/modal.types";
+// =============================================================================
+// COMPONENT
+// =============================================================================
 
-// SearchActionsModalProps now extends ComponentMountProps specific to "search"
-type SearchActionsModalProps = ComponentMountProps<"search">;
-
-function SearchActionsModal({ isOpen, onClose }: SearchActionsModalProps) {
+function SearchActionsModal({ isOpen, onClose }: ModalProps) {
   const { actions } = useActionsContext();
+
+  // 🎛️ Form State
   const [query, setQuery] = useState("");
 
+  // 🔧 Handle filtered actions
   const filteredActions = useMemo(() => {
     return actions.filter((action) =>
       action.title.toLowerCase().includes(query.toLowerCase())

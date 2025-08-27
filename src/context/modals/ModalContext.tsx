@@ -24,7 +24,7 @@ interface ModalContextValue {
   showModal: (id: string, props?: Record<string, any>) => void;
   hideModal: () => void;
   currentModal: ModalState;
-  triggerRef: React.RefObject<HTMLElement>;
+  triggerRef: React.RefObject<HTMLElement | null>;
 }
 
 // The actual React Context object

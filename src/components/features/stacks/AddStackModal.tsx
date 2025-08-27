@@ -2,23 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToastContext } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
-import { Modal, Button } from "@/components/ui";
-
-// =============================================================================
-// TYPES
-// =============================================================================
-
-// Simple, direct props - no generics
-interface AddStackModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { Modal, Button, type ModalProps } from "@/components/ui";
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-function AddStackModal({ isOpen, onClose }: AddStackModalProps) {
+function AddStackModal({ isOpen, onClose }: ModalProps) {
   const { addStack } = useStacksContext();
   const { success, error } = useToastContext();
   const navigate = useNavigate();

@@ -3,17 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useToastContext } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useActionsContext } from "@/context/actions/ActionsContext";
-import { Modal, Button } from "@/components/ui";
+import { Modal, Button, type ModalProps } from "@/components/ui";
 import { Action } from "@/types";
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
-// Simple, direct props - no generics
-interface AddActionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+// Simple interface extending base modal props
+interface AddActionModalProps extends ModalProps {
   stackId?: string; // Optional prop passed from context
 }
 
