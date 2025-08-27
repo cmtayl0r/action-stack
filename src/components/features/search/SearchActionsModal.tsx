@@ -36,19 +36,19 @@ function SearchActionsModal({ isOpen, onClose }: ModalProps) {
 
   return (
     <Modal.Root isOpen={isOpen} onClose={onClose}>
-      <Modal.Dialog showCloseButton={false}>
+      <Modal.Dialog showCloseButton={false} className="stack">
+        <Modal.Header>Search all your actions</Modal.Header>
         <Modal.Body className="stack">
           {/* F-004.1: Proper labeling for accessibility */}
           <label htmlFor="search-actions-input" className="sr-only">
-            Search all actions
+            Search actions
           </label>
           <input
             id="search-actions-input" // Connect label to input
             type="text"
-            placeholder="Search all actions"
+            placeholder="Type to search your actions..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            autoFocus
           />
           <ul>
             {filteredActions.length > 0 ? (

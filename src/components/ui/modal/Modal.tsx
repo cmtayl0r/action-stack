@@ -131,6 +131,12 @@ const ModalDialog = ({
   const { containerRef, saveFocus, restoreFocus, trapFocus, focusFirstInput } =
     useFocusManagement<HTMLDialogElement>();
 
+  useEffect(() => {
+    setTimeout(() => {
+      console.log("Currently focused:", document.activeElement);
+    }, 100);
+  }, []);
+
   // Show modal and manage focus
   useEffect(() => {
     const dialog = containerRef.current;
@@ -146,7 +152,7 @@ const ModalDialog = ({
     trapFocus(true);
 
     // Focus first input field (not close button) - better accessibility
-    focusFirstInput();
+    // focusFirstInput();
 
     // Cleanup when component unmounts
     return () => {
@@ -186,19 +192,17 @@ const ModalDialog = ({
       onCancel={handleCancel}
       {...props}
     >
-      <div className={styles["modal__wrapper"]}>
-        {showCloseButton && (
-          <Button
-            iconOnly
-            onClick={onClose}
-            variant="ghost"
-            icon={X}
-            aria-label="Close modal"
-            className={styles["modal__close-button"]}
-          />
-        )}
-        {children}
-      </div>
+      {children}
+      {showCloseButton && (
+        <Button
+          iconOnly
+          onClick={onClose}
+          variant="ghost"
+          icon={X}
+          aria-label="Close dialog"
+          className={styles["modal__close-button"]}
+        />
+      )}
     </dialog>,
     document.getElementById("modal-root") ?? document.body
   );
@@ -281,7 +285,7 @@ const ModalClose = ({
     <Button
       onClick={onClose}
       variant="outline"
-      aria-label={"Cancel and close modal"}
+      aria-label={"Cancel and close dialog"}
       {...props}
     >
       {children || "Cancel"}

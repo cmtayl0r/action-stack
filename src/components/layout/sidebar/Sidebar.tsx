@@ -29,6 +29,8 @@ function Sidebar() {
           onClick={() => showModal("search")}
           icon={LucideSearch}
           variant="outline"
+          aria-label="Search all actions"
+          aria-haspopup="dialog"
           isFullWidth
         >
           Search
@@ -36,6 +38,8 @@ function Sidebar() {
         <Button
           onClick={() => showModal("addAction", { stackId })}
           icon={LucidePlus}
+          aria-label="Add new action"
+          aria-haspopup="dialog"
           isFullWidth
         >
           Add Action
@@ -65,6 +69,8 @@ function Sidebar() {
           onClick={() => showModal("addStack")}
           icon={Layers2}
           variant="outline"
+          aria-label="Add new stack"
+          aria-haspopup="dialog"
           isFullWidth
         >
           Add Stack

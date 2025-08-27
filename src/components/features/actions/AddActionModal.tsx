@@ -99,9 +99,8 @@ function AddActionModal({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              required
               disabled={isSubmitting}
-              placeholder="Enter action title"
+              placeholder="e.g., Write shopping list"
             />
             <label htmlFor="priority">Priority</label>
             <select

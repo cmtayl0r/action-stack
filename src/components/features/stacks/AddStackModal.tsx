@@ -66,9 +66,7 @@ function AddStackModal({ isOpen, onClose }: ModalProps) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
-              autoFocus
-              placeholder="Enter stack name"
+              placeholder="e.g. Travel Ideas"
             />
           </Modal.Body>
           <Modal.Footer>
