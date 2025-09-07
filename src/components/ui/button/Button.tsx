@@ -3,15 +3,17 @@ import styles from "./Button.module.css";
 import clsx from "clsx";
 import {
   Button as AriaButton,
+  ButtonRenderProps,
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components";
 import LoadingSpinner from "@/components/ui/loading-spinner/LoadingSpinner";
+import type { LucideIcon } from "lucide-react";
 
 // =============================================================================
 // 📝 INTERFACE - What props our Button accepts
 // =============================================================================
 
-interface ButtonProps extends Omit<AriaButtonProps, "className"> {
+interface ButtonProps extends AriaButtonProps {
   // Visual variants
   variant?:
     | "primary"
@@ -25,16 +27,14 @@ interface ButtonProps extends Omit<AriaButtonProps, "className"> {
   isFullWidth?: boolean;
 
   // 🎯 Icon support - Works with Lucide React icons
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon?: LucideIcon;
   iconPosition?: "left" | "right";
   isIconOnly?: boolean;
 
-  // State
-  isLoading?: boolean;
+  // Pass a function as a child to dynamically change the button's content based on its state, like whether it's pressed or hovered.
+  children?: React.ReactNode | ((states: ButtonRenderProps) => React.ReactNode);
 
-  // 📝 Content and styling
-  children?: React.ReactNode;
-  className?: string;
+  // 📝 All other React Aria Props already included
 }
 
 // =============================================================================
@@ -50,14 +50,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       // 📐 Layout props with defaults
       isFullWidth = false,
       isIconOnly = false,
-      // 🔄 State props with defaults
-      isLoading = false,
       // 🎯 Icon props
       icon: Icon,
       iconPosition = "left",
-      // 📝 Content props
+      // 📝 React Aria Content props
       children,
       className,
+      // 🔄 React Aria State props
+      isPending,
       isDisabled,
       // 🔗 All other props pass through to React Aria Button
       ...props
@@ -79,7 +79,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
      * Icons are hidden from screen readers (aria-hidden) since button text describes the action
      */
     const renderIcon = () => {
-      if (!Icon || isLoading) return null;
+      if (!Icon || isPending) return null;
       return (
         <span className={clsx(styles.btn__icon)} aria-hidden="true">
           <Icon className={styles.icon} />
@@ -94,8 +94,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const renderContent = () => {
       // ⭕ Icon-only: Just show the icon
       if (isIconOnly) return renderIcon();
-      // ⏳ Loading: Show spinner instead of content
-      if (isLoading) return <LoadingSpinner />;
       // 📝 Standard: Show text with optional icons
       return (
         <>
@@ -119,7 +117,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       { [styles.fullWidth]: isFullWidth },
       { [styles.iconOnly]: isIconOnly },
       // Loading state handling
-      { [styles.loading]: isLoading },
+      // { [styles.loading]: isLoading },
       // Interactive state modifiers (from global CSS)
       { "interactive--disabled": isDisabled },
       // Custom class names
@@ -130,17 +128,26 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <AriaButton
         ref={ref}
         className={buttonClasses}
-        // 🚫 Disable button if explicitly disabled OR loading
-        isDisabled={Boolean(isDisabled || isLoading)}
-        // ♿ Loading accessibility attributes
-        {...(isLoading && {
-          "aria-busy": true, // Tell screen readers we're busy
-          "aria-live": "polite", // Announce loading state changes
-        })}
+        isDisabled={isDisabled}
+        isPending={isPending}
         // 🔗 Pass through all other props (onClick, onPress, etc.)
         {...props}
       >
-        {renderContent()}
+        {/* 1. React Aria provides the interaction states here */}
+        {(renderProps) => (
+          <>
+            {/* 2. Your component's internal logic takes priority (e.g., showing a spinner) */}
+            {isPending ? (
+              <LoadingSpinner />
+            ) : // 3. Now, handle the children. If it's a function, call it with the states.
+            typeof children === "function" ? (
+              children(renderProps)
+            ) : (
+              // 4. Otherwise, render your standard content.
+              renderContent() // Usually just children
+            )}
+          </>
+        )}
       </AriaButton>
     );
   }

@@ -28,12 +28,23 @@ CORE STRUCTURE
   padding: 0 var(--space-md);
 }
 
-.loading {
+/*
+================================================================================
+REACT ARIA SPECIFIC STYLE SELECTORS
+================================================================================
+*/
+
+/* React Aria prop selectors */
+.btn[data-pending] {
   cursor: wait;
   pointer-events: none;
   transform: none !important;
   box-shadow: none !important;
   transition: none !important;
+}
+
+.btn[data-pressed] {
+  transform: scale(0.98) translateY(0.1rem);
 }
 
 /*
@@ -117,27 +128,4 @@ ICON SYSTEM
 /* Ensure icons don't affect button height */
 .btn__icon svg {
   display: block;
-}
-
-/*
-================================================================================
-BUTTON SPECIFIC OVERRIDES
-================================================================================
-*/
-/* Only add button-specific behavior that differs from .interactive */
-
-/* Subtle scale on active for better button feedback */
-/* Universal Button animation for all variants */
-button:active:not(:disabled) {
-  transform: scale(0.98) translateY(0.1rem);
-}
-
-/* Button-specific focus (if different from .interactive) */
-.btn:focus-visible {
-  /* Inherits from .interactive, override only if needed */
-}
-
-/* Button-specific disabled styling (if different from .interactive) */
-.btn:disabled {
-  /* Inherits from .interactive--disabled, override only if needed */
 }
