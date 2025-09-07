@@ -23,7 +23,10 @@ function Sidebar() {
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
 
   return (
-    <aside className={styles["sidebar"]} aria-label="Sidebar">
+    <aside
+      className={`stack stack--between space-sm p ${styles["sidebar"]}`}
+      aria-label="Sidebar"
+    >
       <div className="stack">
         <Button
           onClick={() => showModal("search")}
@@ -46,12 +49,16 @@ function Sidebar() {
         </Button>
 
         <p>Action Stacks</p>
-        <ul className={styles["sidebar__stacks"]}>
+        <ul className={`stack ${styles["sidebar__stacks"]}`}>
           {stacks.map((stack) => (
             <li key={stack.id}>
               <NavLink
                 to={`/stack/${stack.id}`}
-                className={({ isActive }) => (isActive ? "active-link" : "")}
+                className={`
+                  cluster
+                  touch-target-md
+                  ${({ isActive }) => (isActive ? "active-link" : "")}
+                `}
                 aria-label={`${stack.name} list`}
               >
                 {stack.id === "inbox" ? (
