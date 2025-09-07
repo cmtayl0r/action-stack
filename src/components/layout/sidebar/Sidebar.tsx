@@ -83,7 +83,7 @@ function Sidebar() {
           onClick={toggleTheme}
           icon={state.theme === "dark" ? Moon : Sun}
           aria-label="Toggle theme"
-          iconOnly
+          isIconOnly
         />
         <small>Theme is {state.theme}</small>
       </div>
