@@ -6,6 +6,7 @@ import Header from "@/components/layout/header/Header";
 import ActionsFilter from "../actions/ActionsFilter";
 import ActionsList from "../actions/ActionsList";
 import { Action, Stack } from "@/types";
+import styles from "./stacks.module.css";
 
 function StackView() {
   const { state, toggleSidebar } = useAppContext();
@@ -51,7 +52,7 @@ function StackView() {
   }, [actions, filter, stack.id]);
 
   return (
-    <main className="stack-view">
+    <main className={styles["stack-view"]}>
       <Header
         appState={state}
         stackName={stack.name}

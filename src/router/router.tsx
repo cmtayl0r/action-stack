@@ -2,8 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import { Suspense } from "react";
 
 // LAYOUTS
-import AppLayout from "@/components/layout/AppLayout";
-import ErrorView from "@/components/layout/ErrorView";
+import AppLayout from "@/components/layout/app-layout/AppLayout";
+import ErrorView from "@/components/layout/error-view/ErrorView";
 import StackView from "@/components/features/stacks/StackView";
 
 // LOADERS

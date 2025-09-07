@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useActionsContext } from "@/context/actions/ActionsContext";
 import { Flag, Pencil, Save, Trash2 } from "lucide-react";
-import styles from "./ActionsList.module.css";
+import styles from "./actions.module.css";
 import { Action } from "@/types";
 
 type ActionListItemProps = {

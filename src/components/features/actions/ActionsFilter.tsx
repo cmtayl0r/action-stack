@@ -1,4 +1,4 @@
-import styles from "./ActionsList.module.css";
+import styles from "./actions.module.css";
 
 function ActionsFilter({ filter, onFilterChange }) {
   return (

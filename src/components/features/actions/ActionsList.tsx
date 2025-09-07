@@ -1,4 +1,4 @@
-import styles from "./ActionsList.module.css";
+import styles from "./actions.module.css";
 import ActionListItem from "./ActionListItem";
 import { useEffect } from "react";
 import { Action } from "@/types";
