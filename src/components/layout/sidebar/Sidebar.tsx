@@ -9,6 +9,7 @@ import {
   Layers2,
   Moon,
   Sun,
+  LucidePlusSquare,
 } from "lucide-react";
 import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
