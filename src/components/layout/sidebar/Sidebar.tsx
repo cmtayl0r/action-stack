@@ -26,7 +26,7 @@ function Sidebar() {
   // Show all stacks except "inbox"
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
 
-  // 🔧 Modal trigger handlers - clean and focused
+  // 🔧 Modal trigger handlers, IDs from ModalHost
   const handleAddAction = () => {
     openModal(MODAL_IDS.ADD_ACTION, { stackId });
   };
