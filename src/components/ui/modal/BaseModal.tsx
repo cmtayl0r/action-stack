@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
+import { motion, AnimatePresence } from "framer-motion";
 import { useModal } from "@/context/modals/ModalContext";
 import { Button } from "@/components";
 import { X } from "lucide-react";
@@ -34,6 +35,10 @@ interface BaseModalProps {
   className?: string;
 }
 
+// Create motion components from React Aria components
+const MotionModalOverlay = motion(ModalOverlay);
+const MotionModal = motion(Modal);
+
 export function BaseModal({
   modalId,
   children,
@@ -55,37 +60,58 @@ export function BaseModal({
   const modalClasses = clsx(styles.modal, styles[`modal--${size}`], className);
 
   return (
-    <ModalOverlay
-      className={styles["modal__overlay"]}
-      isDismissable={isDismissable}
-      isKeyboardDismissDisabled={isKeyboardDismissDisabled}
-      isOpen={isOpen}
-      onOpenChange={(open) => {
-        // React Aria calls this when user closes modal (ESC, click outside, etc.)
-        if (!open) closeModal();
-      }}
-    >
-      <Modal className={modalClasses} {...props}>
-        <Dialog>
-          <div className="stack">
-            {title && (
-              <Heading level={2} slot="title">
-                {title}
-              </Heading>
-            )}
-            {children}
-          </div>
-          <Button
-            isIconOnly
-            variant="ghost"
-            onPress={closeModal}
-            icon={X}
-            aria-label="Close modal"
-            className={styles["modal__close-button"]}
-          />
-        </Dialog>
-      </Modal>
-    </ModalOverlay>
+    <AnimatePresence>
+      {isOpen && (
+        <MotionModalOverlay
+          className={styles["modal__overlay"]}
+          isDismissable={isDismissable}
+          isKeyboardDismissDisabled={isKeyboardDismissDisabled}
+          isOpen={isOpen}
+          onOpenChange={(open) => {
+            // React Aria calls this when user closes modal (ESC, click outside, etc.)
+            if (!open) closeModal();
+          }}
+          // Backdrop Motion animation
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <MotionModal
+            className={modalClasses}
+            {...props}
+            // Modal Motion animations
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{
+              type: "spring",
+              damping: 25,
+              stiffness: 300,
+            }}
+          >
+            <Dialog>
+              <div className="stack">
+                {title && (
+                  <Heading level={2} slot="title">
+                    {title}
+                  </Heading>
+                )}
+                {children}
+              </div>
+              <Button
+                isIconOnly
+                variant="ghost"
+                onPress={closeModal}
+                icon={X}
+                aria-label="Close modal"
+                className={styles["modal__close-button"]}
+              />
+            </Dialog>
+          </MotionModal>
+        </MotionModalOverlay>
+      )}
+    </AnimatePresence>
   );
 }
 
