@@ -7,17 +7,16 @@ import styles from "./Modal.module.css";
 import clsx from "clsx";
 
 /**
- * BASE MODAL: Foundation component using modern React Aria Components
+ * BASE MODAL: Foundation component with Framer Motion animations
  *
- * Purpose: Provides consistent structure, accessibility, and styling base
+ * Purpose: Provides consistent structure, accessibility, and smooth animations
  * Benefits:
- * - Modern React Aria Components v1.14+ (no legacy hooks)
- * - Automatic focus management, ARIA, keyboard navigation
- * - Built-in animation states and styling hooks
+ * - React Aria for accessibility (focus management, ARIA, keyboard navigation)
+ * - Framer Motion for reliable, smooth animations
+ * - AnimatePresence handles mount/unmount animations
  * - Clean separation between modal logic and content
  * - Reusable across different modal types
  *
- * Usage: Wrap your modal content with BaseModal and pass modalId
  */
 
 interface BaseModalProps {
@@ -34,6 +33,7 @@ interface BaseModalProps {
   // Additional styling
   className?: string;
 }
+
 export function BaseModal({
   modalId,
   children,
