@@ -1,6 +1,8 @@
-import { useActionsContext } from "@/context/actions/ActionsContext";
-import { Modal, type ModalProps } from "@/components/ui";
 import { useMemo, useState } from "react";
+import { useActionsContext } from "@/context/actions/ActionsContext";
+import { BaseModal, Button } from "@/components/ui";
+import { useModal } from "@/context/modals/ModalContext";
+import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 
 /**
  * MODAL SYSTEM: Feature Modal
@@ -21,7 +23,11 @@ import { useMemo, useState } from "react";
 // COMPONENT
 // =============================================================================
 
-function SearchActionsModal({ isOpen, onClose }: ModalProps) {
+function SearchActionsModal() {
+  // 🎯 Connect to modal system
+  const { closeModal } = useModal();
+
+  // 🔗 Connect to actions context
   const { actions } = useActionsContext();
 
   // 🎛️ Form State
@@ -35,33 +41,35 @@ function SearchActionsModal({ isOpen, onClose }: ModalProps) {
   }, [actions, query]);
 
   return (
-    <Modal.Root isOpen={isOpen} onClose={onClose}>
-      <Modal.Dialog showCloseButton={false} className="stack">
-        <Modal.Header>Search all your actions</Modal.Header>
-        <Modal.Body className="stack">
-          {/* F-004.1: Proper labeling for accessibility */}
-          <label htmlFor="search-actions-input" className="sr-only">
-            Search actions
-          </label>
-          <input
-            id="search-actions-input" // Connect label to input
-            type="text"
-            placeholder="Type to search your actions..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <ul>
-            {filteredActions.length > 0 ? (
-              filteredActions.map((action) => (
-                <li key={action.id}>{action.title}</li>
-              ))
-            ) : (
-              <li>No matching actions found.</li>
-            )}
-          </ul>
-        </Modal.Body>
-      </Modal.Dialog>
-    </Modal.Root>
+    <BaseModal modalId={MODAL_IDS.SEARCH} title="Search Actions" size="lg">
+      <div className="stack">
+        {/* F-004.1: Proper labeling for accessibility */}
+        <label htmlFor="search-actions-input" className="sr-only">
+          Search actions
+        </label>
+        <input
+          id="search-actions-input" // Connect label to input
+          type="text"
+          placeholder="Type to search your actions..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <ul>
+          {filteredActions.length > 0 ? (
+            filteredActions.map((action) => (
+              <li key={action.id}>{action.title}</li>
+            ))
+          ) : (
+            <li>No matching actions found.</li>
+          )}
+        </ul>
+        <div className="cluster">
+          <Button onPress={closeModal} variant="outline">
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </BaseModal>
   );
 }
 

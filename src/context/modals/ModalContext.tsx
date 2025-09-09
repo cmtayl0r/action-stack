@@ -1,47 +1,32 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useRef,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 /**
- * MODAL SYSTEM: Context & State Management
+ * MODAL REGISTRY: Centralized modal state management
  *
- * Purpose: Central brain that tracks which modal is open and provides controls
+ * Purpose: Single source of truth for which modal is open and modal data
+ * Benefits: Type-safe, clean separation, easy to extend
  *
- * Flow:
- * 1. ModalProvider wraps your app and holds modal state
- * 2. Components call showModal(id, props) to open a specific modal
- * 3. Components call hideModal() to close the current modal
- * 4. Automatically manages focus restoration to the trigger element
- *
- * Usage: Wrap your app with <ModalProvider>, then use useModal() hook anywhere
+ * Flow: Component calls openModal(id, props) → Registry updates → BaseModal renders → Focus management handled by React Aria
  */
-
-/*
-SYSTEM FLOW SUMMARY:
-Trigger (Button) → useModal().showModal('addAction', {stackId}) → ModalContext updates state → ModalHost renders AddActionModal → Modal components handle UI/UX → onClose() → ModalContext clears state → focus returns to trigger
-*/
 
 // =============================================================================
 // 1. CONTEXT
 // =============================================================================
 
-interface ModalState {
+interface ModalState<T = any> {
   id: string | null;
-  props: Record<string, any>;
+  props: T;
 }
-
 interface ModalContextValue {
-  showModal: (id: string, props?: Record<string, any>) => void;
-  hideModal: () => void;
-  currentModal: ModalState;
-  triggerRef: React.RefObject<HTMLElement | null>;
+  // Current modal state
+  modalState: ModalState;
+  // Core actions - simple and focused
+  openModal: <T = any>(id: string, props?: T) => void;
+  closeModal: () => void;
+  // Helper to check if specific modal is open
+  isModalOpen: (id: string) => boolean;
 }
 
-// The actual React Context object
 const ModalContext = createContext<ModalContextValue | null>(null);
 
 // =============================================================================
@@ -53,39 +38,30 @@ interface ModalProviderProps {
 }
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
-  // 🎛️ Simple state - no complex generics
-  const [currentModal, setCurrentModal] = useState<ModalState>({
+  // 🎛️ State for Modal
+  const [modalState, setModalState] = useState<ModalState>({
     id: null,
     props: {},
   });
 
-  // 🏷️ Ref to store the element that triggered the modal, for focus restoration
-  const triggerRef = useRef<HTMLElement | null>(null);
-
-  // 🔧 function to open a specific modal with optional props
-  const showModal = (id: string, props: Record<string, any> = {}) => {
-    // Save the currently focused element before opening modal
-    triggerRef.current = document.activeElement as HTMLElement;
-    setCurrentModal({ id, props });
+  // 🔧 Open any modal with optional props
+  const openModal = <T = any,>(id: string, props: T = {} as T) => {
+    setModalState({ id, props });
   };
 
-  // 🔧 function to Close modal and restore focus
-  const hideModal = () => {
-    setCurrentModal({ id: null, props: {} });
-
-    // Restore focus to the element that opened the modal
-    setTimeout(() => {
-      if (triggerRef.current) {
-        triggerRef.current.focus();
-      }
-    }, 10);
+  // 🔧 Close modal and clear state
+  const closeModal = () => {
+    setModalState({ id: null, props: {} });
   };
+
+  // 🔧 Helper to check if specific modal is open
+  const isModalOpen = (id: string) => modalState.id === id;
 
   const contextValue: ModalContextValue = {
-    showModal,
-    hideModal,
-    currentModal,
-    triggerRef,
+    modalState,
+    openModal,
+    closeModal,
+    isModalOpen,
   };
 
   return (

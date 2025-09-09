@@ -10,14 +10,14 @@ UI
 */
 
 export {
-  Modal,
+  BaseModal,
   ModalHost,
   Toast,
   ToastHost,
   LoadingSpinner,
   Button,
 } from "./ui";
-export type { ModalProps } from "./ui";
+// export type { ModalProps } from "./ui";
 
 /*
 ================================================================================

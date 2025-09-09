@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useToastContext } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useActionsContext } from "@/context/actions/ActionsContext";
-import { Modal, Button, type ModalProps } from "@/components/ui";
+import { BaseModal, Button } from "@/components/ui";
 import { Action } from "@/types";
+import { useModal } from "@/context/modals/ModalContext";
+import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 
 /**
  * MODAL SYSTEM: Feature Modal
@@ -25,30 +27,31 @@ import { Action } from "@/types";
 // TYPES
 // =============================================================================
 
-// Simple interface extending base modal props
-interface AddActionModalProps extends ModalProps {
-  stackId?: string; // Optional prop passed from context
+interface AddActionModalProps {
+  stackId?: string;
 }
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-function AddActionModal({
-  isOpen,
-  onClose,
-  stackId = "inbox", // stackId is now part of ComponentMountProps<"addAction">
-}: AddActionModalProps) {
+function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
+  // 🎯 Connect to modal system
+  const { closeModal } = useModal();
+
+  // 🔗 Connect to stacks, actions, and toast contexts
   const { stacks } = useStacksContext();
   const { addAction } = useActionsContext();
   const { success, error } = useToastContext();
+
+  // Navigation
   const navigate = useNavigate();
 
   // 🎛️ Form State
   const [title, setTitle] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [priority, setPriority] = useState<Action["priority"]>("medium");
   const [selectedStackId, setSelectedStackId] = useState(stackId);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 🔧 Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,7 +75,7 @@ function AddActionModal({
 
       // Navigate and close
       navigate(`/stack/${selectedStackId}`);
-      onClose();
+      closeModal();
 
       // Reset form state
       setTitle("");
@@ -88,60 +91,62 @@ function AddActionModal({
   };
 
   return (
-    <Modal.Root isOpen={isOpen} onClose={onClose}>
-      <Modal.Dialog size="md">
-        <form onSubmit={handleSubmit} className="stack">
-          <Modal.Header>Add New Action</Modal.Header>
-          <Modal.Body className="stack">
-            <label htmlFor="action-title">Action Title</label>
-            <input
-              id="action-title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              disabled={isSubmitting}
-              placeholder="e.g., Write shopping list"
-            />
-            <label htmlFor="priority">Priority</label>
-            <select
-              id="priority"
-              value={priority}
-              onChange={(e) =>
-                setPriority(e.target.value as Action["priority"])
-              }
-              disabled={isSubmitting}
+    <BaseModal modalId={MODAL_IDS.ADD_ACTION} title="Add New Action" size="md">
+      <form onSubmit={handleSubmit} className="stack">
+        {/* <Modal.Header>Add New Action</Modal.Header> */}
+        <div className="stack">
+          <label htmlFor="action-title">Action Title</label>
+          <input
+            id="action-title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={isSubmitting}
+            placeholder="e.g., Write shopping list"
+          />
+          <label htmlFor="priority">Priority</label>
+          <select
+            id="priority"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value as Action["priority"])}
+            disabled={isSubmitting}
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+          <label htmlFor="stack-select">Stack</label>
+          <select
+            id="stack-select"
+            value={selectedStackId}
+            onChange={(e) => setSelectedStackId(e.target.value)}
+            disabled={isSubmitting}
+          >
+            {stacks.map((stack) => (
+              <option key={stack.id} value={stack.id}>
+                {stack.name}
+              </option>
+            ))}
+          </select>
+          <div className="cluster">
+            <Button
+              onPress={closeModal}
+              variant="outline"
+              isDisabled={isSubmitting}
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-            <label htmlFor="stack-select">Stack</label>
-            <select
-              id="stack-select"
-              value={selectedStackId}
-              onChange={(e) => setSelectedStackId(e.target.value)}
-              disabled={isSubmitting}
-            >
-              {stacks.map((stack) => (
-                <option key={stack.id} value={stack.id}>
-                  {stack.name}
-                </option>
-              ))}
-            </select>
-          </Modal.Body>
-          <Modal.Footer>
-            <Modal.Close disabled={isSubmitting}>Cancel</Modal.Close>
+              Cancel
+            </Button>
             <Button
               type="submit"
-              isLoading={isSubmitting}
-              disabled={!title.trim()}
+              isPending={isSubmitting}
+              isDisabled={!title.trim()}
             >
               {isSubmitting ? "Adding..." : "Add Action"}
             </Button>
-          </Modal.Footer>
-        </form>
-      </Modal.Dialog>
-    </Modal.Root>
+          </div>
+        </div>
+      </form>
+    </BaseModal>
   );
 }
 

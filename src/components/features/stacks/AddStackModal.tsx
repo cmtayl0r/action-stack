@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToastContext } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
-import { Modal, Button, type ModalProps } from "@/components/ui";
+import { BaseModal, Button } from "@/components/ui";
+import { useModal } from "@/context/modals/ModalContext";
+import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 
 /**
  * MODAL SYSTEM: Feature Modal
@@ -23,9 +25,15 @@ import { Modal, Button, type ModalProps } from "@/components/ui";
 // COMPONENT
 // =============================================================================
 
-function AddStackModal({ isOpen, onClose }: ModalProps) {
+function AddStackModal() {
+  // 🎯 Connect to modal system
+  const { closeModal } = useModal();
+
+  // 🔗 Connect to stacks, actions, and toast contexts
   const { addStack } = useStacksContext();
   const { success, error } = useToastContext();
+
+  // Navigation
   const navigate = useNavigate();
 
   // 🎛️ Form State
@@ -45,7 +53,7 @@ function AddStackModal({ isOpen, onClose }: ModalProps) {
       const savedStack = await addStack({ name: trimmedName });
       success(`${savedStack.name} saved successfully!`);
       navigate(`/stack/${savedStack.id}`);
-      onClose();
+      closeModal();
     } catch (err) {
       error("Failed to add stack. Please try again.");
       console.error("Error adding stack:", err);
@@ -55,27 +63,32 @@ function AddStackModal({ isOpen, onClose }: ModalProps) {
   };
 
   return (
-    <Modal.Root isOpen={isOpen} onClose={onClose}>
-      <Modal.Dialog>
-        <form onSubmit={handleSubmit} className="stack">
-          <Modal.Header>Add New Stack</Modal.Header>
-          <Modal.Body className="stack">
-            <label htmlFor="stack-name">Stack Name</label>
-            <input
-              id="stack-name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Travel Ideas"
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Modal.Close>Cancel</Modal.Close>
-            <Button type="submit">Add Stack</Button>
-          </Modal.Footer>
-        </form>
-      </Modal.Dialog>
-    </Modal.Root>
+    <BaseModal modalId={MODAL_IDS.ADD_STACK} title="Add New Stack" size="md">
+      <form onSubmit={handleSubmit} className="stack">
+        <div className="stack">
+          <label htmlFor="stack-name">Stack Name</label>
+          <input
+            id="stack-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="e.g. Travel Ideas"
+          />
+          <div className="cluster">
+            <Button
+              onPress={closeModal}
+              variant="outline"
+              isDisabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" isPending={isSubmitting}>
+              {isSubmitting ? "Adding..." : "Add Stack"}
+            </Button>
+          </div>
+        </div>
+      </form>
+    </BaseModal>
   );
 }
 

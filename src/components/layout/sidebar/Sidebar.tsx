@@ -1,5 +1,4 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useModal } from "@/context/modals/ModalContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useAppContext } from "@/context/app/AppContext";
 import {
@@ -9,19 +8,36 @@ import {
   Layers2,
   Moon,
   Sun,
-  LucidePlusSquare,
 } from "lucide-react";
+import { useModal } from "@/context/modals/ModalContext";
+import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
 
 function Sidebar() {
-  const { showModal } = useModal();
+  // 🎯 Connect to modal system
+  const { openModal } = useModal();
+
+  // 🔗 Connect to app context for theme and stacks
   const { state, toggleTheme } = useAppContext();
   const { stacks } = useStacksContext();
   const { stackId = "inbox" } = useParams(); // get current stack in view
 
   // Show all stacks except "inbox"
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
+
+  // 🔧 Modal trigger handlers - clean and focused
+  const handleAddAction = () => {
+    openModal(MODAL_IDS.ADD_ACTION, { stackId });
+  };
+
+  const handleSearch = () => {
+    openModal(MODAL_IDS.SEARCH);
+  };
+
+  const handleAddStack = () => {
+    openModal(MODAL_IDS.ADD_STACK);
+  };
 
   return (
     <aside
@@ -30,7 +46,7 @@ function Sidebar() {
     >
       <div className="stack">
         <Button
-          onClick={() => showModal("search")}
+          onPress={handleSearch}
           icon={LucideSearch}
           variant="outline"
           aria-label="Search all actions"
@@ -40,7 +56,7 @@ function Sidebar() {
           Search
         </Button>
         <Button
-          onClick={() => showModal("addAction", { stackId })}
+          onPress={handleAddAction}
           icon={LucidePlus}
           aria-label="Add new action"
           aria-haspopup="dialog"
@@ -74,7 +90,7 @@ function Sidebar() {
         </ul>
 
         <Button
-          onClick={() => showModal("addStack")}
+          onPress={handleAddStack}
           icon={Layers2}
           variant="outline"
           aria-label="Add new stack"
