@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToastContext } from "@/context/toasts/ToastContext";
+import { useToast } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { useActionsContext } from "@/context/actions/ActionsContext";
 import { BaseModal, Button } from "@/components/ui";
@@ -42,7 +42,7 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
   // 🔗 Connect to stacks, actions, and toast contexts
   const { stacks } = useStacksContext();
   const { addAction } = useActionsContext();
-  const { success, error } = useToastContext();
+  const { success, error } = useToast();
 
   // Navigation
   const navigate = useNavigate();

@@ -1,7 +1,6 @@
 // Component-Level Indices
 // components/ui/toast/index.ts
 export { Toast, ToastContainer } from "./Toast";
-export { default as ToastHost } from "./ToastHost";
 
 // Export types if using TypeScript
 // export type { ToastProps } from "./Toast";

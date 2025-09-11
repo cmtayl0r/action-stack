@@ -1,4 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from "react";
 
 /**
  * MODAL REGISTRY: Centralized modal state management
@@ -45,24 +52,30 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   });
 
   // 🔧 Open any modal with optional props
-  const openModal = <T = any,>(id: string, props: T = {} as T) => {
+  const openModal = useCallback(<T = any,>(id: string, props: T = {} as T) => {
     setModalState({ id, props });
-  };
+  }, []);
 
   // 🔧 Close modal and clear state
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalState({ id: null, props: {} });
-  };
+  }, []);
 
   // 🔧 Helper to check if specific modal is open
-  const isModalOpen = (id: string) => modalState.id === id;
+  const isModalOpen = useCallback(
+    (id: string) => modalState.id === id,
+    [modalState.id]
+  );
 
-  const contextValue: ModalContextValue = {
-    modalState,
-    openModal,
-    closeModal,
-    isModalOpen,
-  };
+  const contextValue: ModalContextValue = useMemo(
+    () => ({
+      modalState,
+      openModal,
+      closeModal,
+      isModalOpen,
+    }),
+    [modalState, openModal, closeModal, isModalOpen]
+  );
 
   return (
     <ModalContext.Provider value={contextValue}>

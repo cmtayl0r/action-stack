@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import styles from "./Toast.module.css";
-import { BadgeInfo, CircleCheck, TriangleAlert, X } from "lucide-react";
 import { createPortal } from "react-dom";
+import { BadgeInfo, CircleCheck, TriangleAlert, X } from "lucide-react";
+import styles from "./Toast.module.css";
+import { useToast } from "@/context/toasts/ToastContext";
+import type { Toast as ToastType } from "@/context/toasts/types";
+import { Button } from "@/components";
 
 /*
   Toast Component
@@ -13,87 +16,97 @@ import { createPortal } from "react-dom";
   - props sent to component via the provider using the context API
 */
 
+const ICONS = {
+  info: BadgeInfo,
+  success: CircleCheck,
+  error: TriangleAlert,
+  warning: TriangleAlert,
+} as const;
+
+interface ToastItemProps {
+  toast: ToastType;
+  onClose: (id: string) => void;
+}
+
 // -----------------------------------------------------------------------------
-// 1️⃣ Individual Toast Component
+// 🍞 Individual Toast Component
 // -----------------------------------------------------------------------------
 
-export const Toast = ({ id, message, type, duration, onClose }) => {
-  const [isExiting, setIsExiting] = useState(false);
-  // Debug
-  // console.log("Toast rendered:", { id, message, type });
+export const Toast = ({ toast, onClose }: ToastItemProps) => {
+  const [isPaused, setIsPaused] = useState(false);
+  const Icon = ICONS[toast.type];
 
-  // Clear toast after duration
+  // ⏰ Auto-dismiss timer
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExiting(true); // Triggers exit animation via CSS class
-
-      // Remove after animation completes
-      setTimeout(() => {
-        onClose(id);
-      }, duration); // Using duration here will delay removal by the same duration as the initial display
-    }, duration);
-
-    // Clean up the timer when the component unmounts or when toast changes
+    if (isPaused) return;
+    const timer = setTimeout(() => onClose(toast.id), toast.duration);
     return () => clearTimeout(timer);
-  }, [id, duration, onClose]);
+  }, [toast.id, toast.duration, isPaused, onClose]);
 
-  // Determine the icon based on the type of toast
-  const getIcon = () => {
-    switch (type) {
-      case "success":
-        return <CircleCheck />;
-      case "error":
-        return <TriangleAlert />;
-      case "info":
-        return <BadgeInfo />;
-      case "warning":
-        return <TriangleAlert />;
-      default:
-        return null;
-    }
+  // ⏸️ Pause timer on hover/focus for accessibility
+  const handleMouseEnter = () => setIsPaused(true);
+  const handleMouseLeave = () => setIsPaused(false);
+  const handleFocus = () => setIsPaused(true);
+  const handleBlur = () => setIsPaused(false);
+
+  // ⌨️ Keyboard support - Escape key to dismiss
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") onClose(toast.id);
+  };
+
+  // 🔊 Get appropriate ARIA live region setting
+  const getAriaLive = () => {
+    return toast.type === "error" ? "assertive" : "polite";
   };
 
   return (
     <div
-      data-toast-id={id}
-      className={`
-          ${styles.toast}
-          ${type ? styles[`toast--${type}`] : ""}
-          ${isExiting ? styles["toast--exiting"] : ""}
-        `}
-      aria-live="polite"
+      className={`${styles.toast} ${styles[`toast--${toast.type}`]}`}
+      role="alertdialog"
+      aria-live={getAriaLive()}
+      aria-atomic="true"
+      aria-labelledby={`toast-message-${toast.id}`}
+      tabIndex={0}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
     >
-      <span className={styles["toast__icon"]}>{getIcon()}</span>
-      <div className={styles["toast__message"]}>{message}</div>
-      <button
-        onClick={() => onClose(id)}
+      <Icon className={styles.toast__icon} aria-hidden="true" />
+      <div className={styles["toast__message"]}>{toast.message}</div>
+      <Button
+        variant="outline"
+        size="lg"
+        isIconOnly
+        icon={X}
+        onClick={() => onClose(toast.id)}
         aria-label="Dismiss Toast"
-        className={styles["toast__close"]}
-      >
-        <X size={20} />
-      </button>
+      />
     </div>
   );
 };
 
 // -----------------------------------------------------------------------------
-// 2️⃣ ToastContainer Component
+// 🪣 ToastContainer Component
 // -----------------------------------------------------------------------------
 
-export const ToastContainer = ({ toasts, onClose }) => {
+export const ToastContainer = () => {
+  const { toasts, hideToast } = useToast();
+
+  if (!toasts.length) return null;
+
   return createPortal(
-    <div className={styles["toast-container"]}>
+    <div
+      className={styles["toast-container"]}
+      aria-label="Notifications"
+      role="region"
+      aria-live="polite"
+    >
       {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          id={toast.id}
-          message={toast.message}
-          type={toast.type}
-          duration={toast.duration}
-          onClose={onClose}
-        />
+        <Toast key={toast.id} toast={toast} onClose={hideToast} />
       ))}
     </div>,
-    document.body
+    document.getElementById("toast-root")
   );
 };

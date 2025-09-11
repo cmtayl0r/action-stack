@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToastContext } from "@/context/toasts/ToastContext";
+import { useToast } from "@/context/toasts/ToastContext";
 import { useStacksContext } from "@/context/stacks/StacksContext";
 import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
@@ -31,7 +31,9 @@ function AddStackModal() {
 
   // 🔗 Connect to stacks, actions, and toast contexts
   const { addStack } = useStacksContext();
-  const { success, error } = useToastContext();
+
+  // Toasts from context hook
+  const toast = useToast();
 
   // Navigation
   const navigate = useNavigate();
@@ -51,11 +53,11 @@ function AddStackModal() {
 
     try {
       const savedStack = await addStack({ name: trimmedName });
-      success(`${savedStack.name} saved successfully!`);
+      toast.success(`${savedStack.name} saved successfully!`);
       navigate(`/stack/${savedStack.id}`);
       closeModal();
     } catch (err) {
-      error("Failed to add stack. Please try again.");
+      toast.error("Failed to add stack. Please try again.");
       console.error("Error adding stack:", err);
     } finally {
       setIsSubmitting(false);

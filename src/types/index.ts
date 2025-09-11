@@ -39,11 +39,6 @@ export type StacksContextType = {
   addStack: (stack: Partial<Stack>) => Promise<Stack>;
 };
 
-export type ToastContextType = {
-  success: (message: string) => void;
-  error: (message: string) => void;
-};
-
 export type AppState = {
   theme: "light" | "dark";
   sidebarOpen: boolean;
@@ -62,4 +57,3 @@ export type AppContextType = {
   toggleSidebar: () => void;
   toggleTheme: () => void;
 };
-

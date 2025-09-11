@@ -8,65 +8,110 @@ import {
 } from "react";
 import { toastReducer, initialToastState } from "./toastReducer";
 import * as actions from "./toastActions";
-import { ToastContextType } from "../../types";
+import { ToastContextValue, Toast } from "@/context/toasts/types";
 
-// -----------------------------------------------------------------------------
-// 1️⃣ Context for sharing context
-// -----------------------------------------------------------------------------
+// =============================================================================
+// 🏗️ CONTEXT CREATION
+// =============================================================================
 
-const ToastContext = createContext<ToastContextType | null>(null);
+const ToastContext = createContext<ToastContextValue | null>(null);
 
-// -----------------------------------------------------------------------------
-// 2️⃣ Create a provider component
-// -----------------------------------------------------------------------------
+// =============================================================================
+// 🎯 TOAST PROVIDER COMPONENT
+// =============================================================================
 
-export const ToastProvider = ({ children }: { children: ReactNode }) => {
-  // 2A: 🧠 useReducer handles state logic
+interface ToastProviderProps {
+  children: ReactNode;
+  /** Maximum number of toasts to show at once (default: 5) */
+  maxToasts?: number;
+}
+
+export const ToastProvider = ({
+  children,
+  maxToasts = 5,
+}: ToastProviderProps) => {
+  // 🧠 State management using reducer pattern
   const [state, dispatch] = useReducer(toastReducer, initialToastState);
 
-  // 2B: 🧠 Memoized helper methods
+  // 🎬 ACTION DISPATCHERS - Memoized for performance
+  /**
+   * Shows a new toast notification
+   * Automatically enforces maximum toast limit
+   */
   const showToast = useCallback(
-    (
-      message: string,
-      type: "info" | "success" | "error" | "warning" = "info",
-      duration = 3000
-    ) => {
+    (message: string, type: Toast["type"] = "info", duration = 3000) => {
+      // If at max capacity, remove oldest toast first
+      if (state.toasts.length >= maxToasts) {
+        const oldestToastId = state.toasts[0]?.id;
+        if (oldestToastId) {
+          dispatch(actions.hideToast(oldestToastId));
+        }
+      }
+
       dispatch(actions.showToast(message, type, duration));
     },
-    []
+    [state.toasts.length, maxToasts]
   );
 
+  /**
+   * Hides a specific toast by ID
+   */
   const hideToast = useCallback((id: string) => {
     dispatch(actions.hideToast(id));
   }, []);
 
+  /**
+   * Clears all visible toasts
+   */
   const clearAllToasts = useCallback(() => {
     dispatch(actions.clearAllToasts());
   }, []);
 
-  // Convenience methods for different toast types
+  // 🎨 CONVENIENCE METHODS - Pre-configured toast types
+
   const success = useCallback(
     (message: string) => showToast(message, "success"),
     [showToast]
   );
 
   const error = useCallback(
-    (message: string) => showToast(message, "error"),
+    (message: string) => showToast(message, "error", 5000),
+    [showToast]
+  );
+
+  const warning = useCallback(
+    (message: string) => showToast(message, "warning", 4000),
+    [showToast]
+  );
+
+  const info = useCallback(
+    (message: string) => showToast(message, "info"),
     [showToast]
   );
 
   // 2C: ♻️ Memoize the context value
   const contextValue = useMemo(
     () => ({
+      // State
       state,
       toasts: state.toasts,
+
+      // Actions
       showToast,
       hideToast,
       clearAllToasts,
+
+      // Convenience methods
       success,
       error,
+      warning,
+      info,
+
+      // Utility
+      hasToasts: state.toasts.length > 0,
+      toastCount: state.toasts.length,
     }),
-    [state, showToast, hideToast, clearAllToasts, success, error]
+    [state, showToast, hideToast, clearAllToasts, success, error, warning, info]
   );
 
   return (
@@ -76,13 +121,35 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// -----------------------------------------------------------------------------
-// 3️⃣ Custom hook to use the Toast context
-// -----------------------------------------------------------------------------
-export const useToastContext = () => {
+// =============================================================================
+// 🪝 CUSTOM HOOK - Safe context consumption
+// =============================================================================
+
+/**
+ * Hook to access toast functionality
+ * Must be used within a ToastProvider
+ *
+ * @example
+ * const { showToast, success, error } = useToastContext();
+ *
+ * // Show basic toast
+ * showToast('Hello world!');
+ *
+ * // Show success toast
+ * success('Operation completed!');
+ *
+ * // Show error toast
+ * error('Something went wrong');
+ */
+export const useToast = (): ToastContextValue => {
   const context = useContext(ToastContext);
+
   if (!context) {
-    throw new Error("useToastContext must be used within a ToastProvider");
+    throw new Error(
+      "useToastContext must be used within a ToastProvider. " +
+        "Wrap your component tree with <ToastProvider>."
+    );
   }
+
   return context;
 };

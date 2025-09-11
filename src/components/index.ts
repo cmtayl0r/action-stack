@@ -13,7 +13,7 @@ export {
   BaseModal,
   ModalHost,
   Toast,
-  ToastHost,
+  ToastContainer,
   LoadingSpinner,
   Button,
 } from "./ui";
