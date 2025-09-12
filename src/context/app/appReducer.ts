@@ -1,4 +1,4 @@
-import { AppState, AppAction } from "@/types";
+import { AppState, AppAction } from "./types";
 
 export const initialState: AppState = {
   theme: "dark",

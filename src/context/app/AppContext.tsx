@@ -7,7 +7,7 @@ import {
 } from "react";
 import { appReducer, initialState } from "./appReducer";
 import * as actions from "./appActions";
-import { AppContextType } from "../../types";
+import { AppContextType } from "./types";
 
 // This context manages the application state, including the sidebar and theme.
 // It provides a way to access and update the state from any component in the app.
