@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { makeStorageAPI } from "@/api/localStorageAPI";
 import { Action } from "@/types";
+import { useToast } from "@/context/toasts/ToastContext";
 
 const actionAPI = makeStorageAPI("todoApp:actions");
 
 function useActions() {
   const [actions, setActions] = useState<Action[]>([]);
+  const { success, error } = useToast();
 
   const loadActions = useCallback(async () => {
     try {
@@ -39,6 +41,7 @@ function useActions() {
     async (actionId: string) => {
       await actionAPI.remove(actionId);
       setActions((prev) => prev.filter((a) => a.id !== actionId));
+      success("Action deleted");
     },
     [setActions]
   );
@@ -47,6 +50,7 @@ function useActions() {
     async (actionId: string, updatedData: Partial<Action>) => {
       const updated = await actionAPI.update(actionId, updatedData);
       setActions((prev) => prev.map((a) => (a.id === actionId ? updated : a)));
+      success("Action updated");
     },
     [setActions]
   );

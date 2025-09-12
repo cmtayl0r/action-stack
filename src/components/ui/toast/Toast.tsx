@@ -73,15 +73,15 @@ export const Toast = ({ toast, onClose }: ToastItemProps) => {
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     >
-      <Icon className={styles.toast__icon} aria-hidden="true" />
+      <Icon className={styles.toast__icon} size={32} aria-hidden="true" />
       <div className={styles["toast__message"]}>{toast.message}</div>
       <Button
-        variant="outline"
-        size="lg"
+        variant="ghost"
+        size="md"
         isIconOnly
         icon={X}
         onClick={() => onClose(toast.id)}
-        aria-label="Dismiss Toast"
+        aria-label="Dismiss notification"
       />
     </div>
   );
@@ -93,8 +93,16 @@ export const Toast = ({ toast, onClose }: ToastItemProps) => {
 
 export const ToastContainer = () => {
   const { toasts, hideToast } = useToast();
+  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
 
-  if (!toasts.length) return null;
+  useEffect(() => {
+    const root = document.getElementById("toast-root");
+    if (root) {
+      setPortalRoot(root);
+    }
+  }, []);
+
+  if (!toasts.length || !portalRoot) return null;
 
   return createPortal(
     <div
@@ -107,6 +115,6 @@ export const ToastContainer = () => {
         <Toast key={toast.id} toast={toast} onClose={hideToast} />
       ))}
     </div>,
-    document.getElementById("toast-root")
+    portalRoot
   );
 };
