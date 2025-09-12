@@ -10,10 +10,16 @@ function Header({ appState, stackName, toggleSidebar }) {
         variant="ghost"
         isIconOnly
         icon={appState.sidebarOpen ? SquareChevronLeft : SquareChevronRight}
+        aria-label="Toggle sidebar"
       />
       {/* <small>Sidebar {appState.sidebarOpen ? "is open" : "is closed"}</small> */}
       <h5 className={styles["stack__title"]}>{stackName}</h5>
-      <Button variant="ghost" isIconOnly icon={Ellipsis} />
+      <Button
+        variant="ghost"
+        isIconOnly
+        icon={Ellipsis}
+        aria-label="More options"
+      />
     </header>
   );
   s;

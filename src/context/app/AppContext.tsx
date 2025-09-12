@@ -5,8 +5,8 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import { appReducer, initialState } from "./appReducer";
-import * as actions from "./appActions";
+import { appReducer, initialState } from "./reducer";
+import * as actions from "./actions";
 import { AppContextType } from "./types";
 
 // This context manages the application state, including the sidebar and theme.

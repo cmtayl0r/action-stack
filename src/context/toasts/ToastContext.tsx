@@ -6,8 +6,8 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import { toastReducer, initialToastState } from "./toastReducer";
-import * as actions from "./toastActions";
+import { toastReducer, initialToastState } from "./reducer";
+import * as actions from "./actions";
 import { ToastContextValue, Toast } from "@/context/toasts/types";
 
 // ! Voiceover does not announce toasts

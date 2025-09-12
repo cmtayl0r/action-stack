@@ -2,7 +2,10 @@
 // pure functions returning objects that have no side effects or expensive logic
 
 // --- Theme ---
-export const setTheme = (theme: "light" | "dark") => ({ type: "SET_THEME", payload: theme });
+export const setTheme = (theme: "light" | "dark") => ({
+  type: "SET_THEME",
+  payload: theme,
+});
 export const toggleTheme = () => ({ type: "TOGGLE_THEME" });
 
 // --- Sidebar ---
