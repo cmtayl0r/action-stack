@@ -10,6 +10,8 @@ import { toastReducer, initialToastState } from "./toastReducer";
 import * as actions from "./toastActions";
 import { ToastContextValue, Toast } from "@/context/toasts/types";
 
+// ! Voiceover does not announce toasts
+
 // =============================================================================
 // 🏗️ CONTEXT CREATION
 // =============================================================================
