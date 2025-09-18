@@ -3,22 +3,25 @@ import { ModalProvider } from "./context/modals/ModalContext";
 import { ToastProvider } from "./context/toasts/ToastContext";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router";
-import { StacksProvider } from "./context/stacks/StacksContext";
-import { ActionsProvider } from "./context/actions/ActionsContext";
+
+// React Query setup
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/data/QueryClient";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   return (
-    <AppProvider>
-      <ToastProvider>
-        <StacksProvider>
-          <ActionsProvider>
-            <ModalProvider>
-              <RouterProvider router={router} />
-            </ModalProvider>
-          </ActionsProvider>
-        </StacksProvider>
-      </ToastProvider>
-    </AppProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
+        <ToastProvider>
+          <ModalProvider>
+            <RouterProvider router={router} />
+            {/* Dev tools for React Query - remove in production */}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ModalProvider>
+        </ToastProvider>
+      </AppProvider>
+    </QueryClientProvider>
   );
 }
 

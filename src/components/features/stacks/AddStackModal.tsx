@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/toasts/ToastContext";
-import { useStacksContext } from "@/context/stacks/StacksContext";
+import useStacks from "@/hooks/data/useStacks";
 import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
@@ -29,20 +29,20 @@ function AddStackModal() {
   // 🎯 Connect to modal system
   const { closeModal } = useModal();
 
-  // 🔗 Connect to stacks, actions, and toast contexts
-  const { addStack } = useStacksContext();
+  // 🪝 Connect to Stacks hook
+  const { addStack } = useStacks();
 
-  // Toasts from context hook
+  // 🪝 Connect to Toasts hook
   const toast = useToast();
 
-  // Navigation
+  // 🧭 Navigation
   const navigate = useNavigate();
 
-  // 🎛️ Form State
+  // 📦 Form State
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 🔧 Handle form submission
+  // ⚡️ Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedName = name.trim();
@@ -52,7 +52,19 @@ function AddStackModal() {
     setIsSubmitting(true);
 
     try {
-      const savedStack = await addStack({ name: trimmedName });
+      const savedStack = await addStack({
+        name: trimmedName,
+        color: "#0066cc", // Default color
+        icon: "📋", // Default icon
+        is_default: false,
+        is_inbox: false,
+        is_archived: false,
+        sort_order: 0,
+        sort_by: "created_at",
+        sort_direction: "desc",
+        total_actions: 0,
+        completed_actions: 0,
+      });
       toast.success(`${savedStack.name} saved successfully!`);
       navigate(`/stack/${savedStack.id}`);
       closeModal();

@@ -4,12 +4,12 @@ function ActionsFilter({ filter, onFilterChange }) {
   return (
     <div className={styles["actions-filter"]}>
       <div className={styles["actions-filter__group"]}>
-        <label htmlFor="title">Search actions</label>
+        <label htmlFor="name">Search actions</label>
         <input
           type="text"
-          id="title"
-          value={filter.title}
-          onChange={(e) => onFilterChange("title", e.target.value)}
+          id="name"
+          value={filter.name}
+          onChange={(e) => onFilterChange("name", e.target.value)}
         />
       </div>
 

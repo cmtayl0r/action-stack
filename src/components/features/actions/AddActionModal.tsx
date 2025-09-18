@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/toasts/ToastContext";
-import { useStacksContext } from "@/context/stacks/StacksContext";
-import { useActionsContext } from "@/context/actions/ActionsContext";
+import useStacks from "@/hooks/data/useStacks";
+import useActions from "@/hooks/data/useActions";
 import { BaseModal, Button } from "@/components/ui";
 import { Action } from "@/types";
 import { useModal } from "@/context/modals/ModalContext";
@@ -40,17 +40,17 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
   const { closeModal } = useModal();
 
   // 🔗 Connect to stacks, actions, and toast contexts
-  const { stacks } = useStacksContext();
-  const { addAction } = useActionsContext();
+  const { stacks } = useStacks();
+  const { addAction } = useActions();
   const { success, error } = useToast();
 
   // Navigation
   const navigate = useNavigate();
 
   // 🎛️ Form State
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [priority, setPriority] = useState<Action["priority"]>("medium");
+  const [priority, setPriority] = useState<Action["priority"]>("2");
   const [selectedStackId, setSelectedStackId] = useState(stackId);
 
   // 🔧 Handle form submission
@@ -58,19 +58,19 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
     // Prevent default form submission
     e.preventDefault();
 
-    // Trim whitespace from title
-    const trimmedTitle = title.trim();
-    if (!trimmedTitle) return;
+    // Trim whitespace from name
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
 
     // Set isSubmitting to true so we can show a loading indicator
     setIsSubmitting(true);
 
     try {
-      // Call the addAction function from the useActionsContext
-      await addAction(trimmedTitle, priority, selectedStackId);
+      // Call the addAction function from the useActions hook
+      await addAction(trimmedName, Number(priority), selectedStackId);
 
       // Success feedback
-      const successMessage = `${trimmedTitle} added to ${selectedStackId}`;
+      const successMessage = `${trimmedName} added to ${selectedStackId}`;
       success(successMessage); // Trigger toast notification
 
       // Navigate and close
@@ -78,7 +78,7 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
       closeModal();
 
       // Reset form state
-      setTitle("");
+      setName("");
       setPriority("medium");
       setSelectedStackId(stackId);
     } catch (err) {
@@ -95,12 +95,12 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
       <form onSubmit={handleSubmit} className="stack">
         {/* <Modal.Header>Add New Action</Modal.Header> */}
         <div className="stack">
-          <label htmlFor="action-title">Action Title</label>
+          <label htmlFor="action-name">Action Name</label>
           <input
-            id="action-title"
+            id="action-name"
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             disabled={isSubmitting}
             placeholder="e.g., Write shopping list"
           />
@@ -111,9 +111,9 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
             onChange={(e) => setPriority(e.target.value as Action["priority"])}
             disabled={isSubmitting}
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
           </select>
           <label htmlFor="stack-select">Stack</label>
           <select
@@ -139,7 +139,7 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
             <Button
               type="submit"
               isPending={isSubmitting}
-              isDisabled={!title.trim()}
+              isDisabled={!name.trim()}
             >
               {isSubmitting ? "Adding..." : "Add Action"}
             </Button>

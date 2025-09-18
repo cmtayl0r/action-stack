@@ -46,6 +46,6 @@
   /* border-bottom: 1px solid var(--color-gray-light); */
 }
 
-.action-list__title {
+.action-list__name {
   flex-grow: 1;
 }

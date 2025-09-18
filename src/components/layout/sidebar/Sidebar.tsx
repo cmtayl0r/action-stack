@@ -1,5 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
-import { useStacksContext } from "@/context/stacks/StacksContext";
+import useStacks from "@/hooks/data/useStacks";
 import { useAppContext } from "@/context/app/AppContext";
 import {
   LucidePlus,
@@ -18,9 +18,13 @@ function Sidebar() {
   // 🎯 Connect to modal system
   const { openModal } = useModal();
 
-  // 🔗 Connect to app context for theme and stacks
+  // 🪝 Connect to stacks hook
+  const { stacks } = useStacks();
+
+  // 🌐 Connect to app context for theme and stacks
   const { state, toggleTheme } = useAppContext();
-  const { stacks } = useStacksContext();
+
+  // 🗺️ Get current stack from URL params
   const { stackId = "inbox" } = useParams(); // get current stack in view
 
   // Show all stacks except "inbox"
@@ -78,7 +82,7 @@ function Sidebar() {
                 `}
                 aria-label={`${stack.name} list`}
               >
-                {stack.id === "inbox" ? (
+                {stack.is_inbox ? (
                   <LucideInbox size={16} />
                 ) : (
                   <Layers2 size={16} />

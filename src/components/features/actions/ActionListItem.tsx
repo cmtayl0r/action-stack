@@ -1,24 +1,23 @@
 import { useRef, useState } from "react";
-import { useActionsContext } from "@/context/actions/ActionsContext";
+import useActions from "@/hooks/data/useActions";
 import { Flag, Pencil, Save, Trash2 } from "lucide-react";
 import styles from "./actions.module.css";
 import { Action } from "@/types";
-import { useToast } from "@/context/toasts/ToastContext";
 
 type ActionListItemProps = {
   action: Action;
 };
 
 function ActionListItem({ action }: ActionListItemProps) {
-  const { id, title, completed, priority, createdAt } = action;
+  const { id, name, completed, priority, createdAt } = action;
   const [isEditing, setIsEditing] = useState(false);
-  const { removeAction, updateAction, toggleComplete } = useActionsContext();
+  const { removeAction, updateAction, toggleComplete } = useActions();
   const nameRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!nameRef.current || nameRef.current.value.trim() === "") return;
-    updateAction(id, { title: nameRef.current.value });
+    updateAction(id, { name: nameRef.current.value });
     setIsEditing(false);
   };
 
@@ -32,7 +31,7 @@ function ActionListItem({ action }: ActionListItemProps) {
     <li key={id} className={styles["action-list__item"]}>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
-          <input type="text" defaultValue={title} ref={nameRef} autoFocus />
+          <input type="text" defaultValue={name} ref={nameRef} autoFocus />
           <button type="submit">
             <Save />
           </button>
@@ -44,7 +43,7 @@ function ActionListItem({ action }: ActionListItemProps) {
             checked={completed}
             onChange={() => toggleComplete(id)}
           />
-          <span className={styles["action-list__title"]}>{title}</span>
+          <span className={styles["action-list__name"]}>{name}</span>
           <small>{formatted}</small>
           <Flag className={styles[`label-priority--${priority}`]} />
           <button onClick={() => removeAction(id)}>

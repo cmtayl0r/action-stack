@@ -1,46 +1,103 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useCallback } from "react";
-import { makeStorageAPI } from "@/api/localStorageAPI";
-import { Stack } from "@/types";
+import { makeSupabaseAPI } from "@/lib/data/supabaseAPI";
+import { Stack } from "@/types/database";
 
-const stackAPI = makeStorageAPI("todoApp:stacks");
+const stacksAPI = makeSupabaseAPI("stacks");
+// The query key for stacks, used for caching and invalidation.
+const STACKS_QUERY_KEY = ["stacks"];
 
 function useStacks() {
-  const [stacks, setStacks] = useState<Stack[]>([]);
+  const queryClient = useQueryClient();
 
+  // 📦 State for stacks, loading, and error
+  const [stacks, setStacks] = useState<Stack[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // 📡 Async function to load stacks
   const loadStacks = useCallback(async () => {
-    const stacks = await stackAPI.getAll();
-    setStacks(stacks);
+    try {
+      setLoading(true); // Start loading
+      setError(null); // Reset error state before loading
+      const data = await stacksAPI.getAll();
+      setStacks(data);
+    } catch (err) {
+      console.error("Failed to load stacks:", err);
+      setError("Failed to load stacks");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  // 🔄 Load stacks on mount
   useEffect(() => {
     loadStacks();
   }, [loadStacks]);
 
+  // 📡 Add a new stack
   const addStack = useCallback(async (stackData: Partial<Stack>) => {
-    const newStack = await stackAPI.create(stackData);
-    setStacks((prev) => [...prev, newStack]);
-    return newStack;
+    try {
+      const newStack = await stacksAPI.create(stackData);
+      setStacks((prev) => [newStack, ...prev]);
+      return newStack;
+    } catch (err) {
+      console.error("Failed to add stack:", err);
+      setError("Failed to add stack");
+      throw err; // Re-throw to let caller handle if needed
+    }
   }, []);
 
-  const removeStack = useCallback(async (stackId: string) => {
-    await stackAPI.remove(stackId);
-    setStacks((prev) => prev.filter((s) => s.id !== stackId));
+  // 📡 Remove a stack by ID
+  const removeStack = useCallback(async (stackId: string | number) => {
+    try {
+      await stacksAPI.remove(stackId);
+      setStacks((prev) => prev.filter((s) => s.id !== stackId));
+    } catch (err) {
+      console.error("Failed to remove stack:", err);
+      setError("Failed to remove stack");
+      throw err;
+    }
   }, []);
 
-  const updateStack = async (id: string, updates: Partial<Stack>) => {
-    const updated = await stackAPI.update(id, updates);
-    setStacks((prev) => prev.map((s) => (s.id === id ? updated : s)));
-  };
+  // 📡 Update a stack by ID
+  const updateStack = useCallback(
+    async (id: string | number, updates: Partial<Stack>) => {
+      try {
+        const updated = await stacksAPI.update(id, updates);
+        setStacks((prev) => prev.map((s) => (s.id === id ? updated : s)));
+      } catch (err) {
+        console.error("Failed to update stack:", err);
+        setError("Failed to update stack");
+        throw err;
+      }
+    },
+    []
+  );
 
-  const getStackById = async (id: string) => stackAPI.getById(id);
+  // 📡 Get a stack by ID
+  const getStackById = useCallback(async (id: string | number) => {
+    try {
+      return await stacksAPI.getById(id);
+    } catch (err) {
+      console.error("Failed to get stack by ID:", err);
+      setError("Failed to get stack");
+      throw err;
+    }
+  }, []);
 
-  const renameStack = async (id: string, newName: string) => {
-    const updated = await stackAPI.update(id, { name: newName });
-    setStacks((prev) => prev.map((s) => (s.id === id ? updated : s)));
-  };
+  // 📡 Rename a stack
+  const renameStack = useCallback(
+    async (id: string | number, newName: string) => {
+      return await updateStack(id, { name: newName });
+    },
+    [updateStack]
+  );
 
   return {
     stacks,
+    loading,
+    error,
     addStack,
     removeStack,
     updateStack,

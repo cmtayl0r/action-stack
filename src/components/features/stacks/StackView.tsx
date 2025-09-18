@@ -1,23 +1,30 @@
 import { useMemo, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
-import { useActionsContext } from "@/context/actions/ActionsContext";
+import useActions from "@/hooks/data/useActions";
 import Header from "@/components/layout/header/Header";
 import ActionsFilter from "../actions/ActionsFilter";
 import ActionsList from "../actions/ActionsList";
-import { Action, Stack } from "@/types";
+import { Action, Stack } from "@/types/database";
 import styles from "./stacks.module.css";
 
 function StackView() {
+  // 🌐 App context
   const { state, toggleSidebar } = useAppContext();
+
+  // Get the stack data from the loader
   const { stack } = useLoaderData() as { stack: Stack };
-  const { actions } = useActionsContext();
+  const {
+    actions,
+    loading: actionsLoading,
+    error: actionsError,
+  } = useActions();
 
   const [filter, setFilter] = useState({
-    title: "",
+    name: "",
     completed: false,
     priority: "priority",
-    sortDirection: "asc",
+    sortDirection: "desc",
   });
 
   const handleFilterChange = (key: string, value: string | boolean) => {
@@ -32,11 +39,12 @@ function StackView() {
       high: 3,
       medium: 2,
       low: 1,
+      none: 0,
     };
     return actions
-      .filter((a) => a.stackId === stack.id)
+      .filter((a) => a.stack_id === stack.id)
       .filter((a) => (filter.completed ? !a.completed : true))
-      .filter((a) => a.title.toLowerCase().includes(filter.title.toLowerCase()))
+      .filter((a) => a.name.toLowerCase().includes(filter.name.toLowerCase()))
       .sort((a, b) => {
         const direction = filter.sortDirection === "asc" ? 1 : -1;
         if (filter.priority === "priority") {
@@ -59,7 +67,11 @@ function StackView() {
         toggleSidebar={toggleSidebar}
       />
       <ActionsFilter filter={filter} onFilterChange={handleFilterChange} />
-      <ActionsList stackId={stack.id} actions={filterActions} />
+      {actionsLoading && <div>Loading actions...</div>}
+      {actionsError && <div>Error loading actions: {actionsError.message}</div>}
+      {!actionsLoading && !actionsError && (
+        <ActionsList stackId={stack.id} actions={filterActions} />
+      )}
     </main>
   );
 }

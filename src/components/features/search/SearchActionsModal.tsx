@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useActionsContext } from "@/context/actions/ActionsContext";
+import useActions from "@/hooks/data/useActions";
 import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
@@ -27,8 +27,8 @@ function SearchActionsModal() {
   // 🎯 Connect to modal system
   const { closeModal } = useModal();
 
-  // 🔗 Connect to actions context
-  const { actions } = useActionsContext();
+  // 🪝 Connect to actions hook
+  const { actions } = useActions();
 
   // 🎛️ Form State
   const [query, setQuery] = useState("");
@@ -36,7 +36,7 @@ function SearchActionsModal() {
   // 🔧 Handle filtered actions
   const filteredActions = useMemo(() => {
     return actions.filter((action) =>
-      action.title.toLowerCase().includes(query.toLowerCase())
+      action.name.toLowerCase().includes(query.toLowerCase())
     );
   }, [actions, query]);
 
