@@ -10,6 +10,8 @@ import StackView from "@/components/features/stacks/StackView";
 // COMPONENTS
 import { LoadingSpinner } from "@/components";
 
+// TODO: Fix the Inbox as default stack issue
+
 export const router = createBrowserRouter([
   {
     path: "/",

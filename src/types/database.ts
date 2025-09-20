@@ -30,8 +30,6 @@ export interface Stack {
   sort_order: number; // Custom sort order for user-defined stacks
   sort_by: string; // 'priority', 'name', 'due_date', 'created_at'
   sort_direction: string; // 'asc', 'desc'
-  total_actions: number; // Count of all actions in this stack
-  completed_actions: number; // Count of completed actions (stats)
   created_at: string; // Creation timestamp
   updated_at: string; // Last updated timestamp
 }
@@ -63,7 +61,7 @@ export interface StackFilters {
 export const DEFAULT_FILTERS: StackFilters = {
   search: "",
   sort_by: "created_at",
-  sort_direction: "asc",
+  sort_direction: "desc",
   show_completed: true,
 };
 

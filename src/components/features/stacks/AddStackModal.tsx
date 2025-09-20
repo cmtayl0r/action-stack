@@ -62,8 +62,6 @@ function AddStackModal() {
         sort_order: 0,
         sort_by: "created_at",
         sort_direction: "desc",
-        total_actions: 0,
-        completed_actions: 0,
       });
       toast.success(`${savedStack.name} saved successfully!`);
       navigate(`/stack/${savedStack.id}`);

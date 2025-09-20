@@ -129,3 +129,18 @@ function useActions(stackId: number) {
 }
 
 export default useActions;
+
+// ===============================================================
+// ACTION UTILITIES - Helper functions for working with actions
+// ===============================================================
+
+export function getStackActionStats(stackId: number, actions: Action[]) {
+  const stackActions = actions.filter((action) => action.stack_id === stackId);
+  const totalActions = stackActions.length;
+  const completedActions = stackActions.filter(
+    (action) => action.completed
+  ).length;
+  const remainingActions = totalActions - completedActions;
+
+  return { totalActions, completedActions, remainingActions };
+}

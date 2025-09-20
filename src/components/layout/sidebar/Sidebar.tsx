@@ -14,6 +14,7 @@ import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
 import { getCurrentStackId } from "@/router/router";
+import { useMemo } from "react";
 
 function Sidebar() {
   // 🎯 Connect to modal system
@@ -28,10 +29,17 @@ function Sidebar() {
   // 🗺️ Get current stack from URL for highlighting active stack
   const params = useParams();
   const currentStackId = getCurrentStackId(params);
-  console.log("Current stack ID from URL:", currentStackId);
 
-  // Show all stacks except "inbox"
-  // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
+  // 📊 Sort stacks: Inbox first
+  const sortedStacks = useMemo(() => {
+    return [...stacks].sort((a, b) => {
+      // Inbox stacks come first
+      if (a.is_inbox && !b.is_inbox) return -1;
+      if (!a.is_inbox && b.is_inbox) return 1;
+      // Otherwise maintain original order
+      return 0;
+    });
+  }, [stacks]);
 
   // 🔧 Modal trigger handlers, IDs from ModalHost
   const handleAddAction = () => {
@@ -74,7 +82,7 @@ function Sidebar() {
 
         <p>Action Stacks</p>
         <ul className={`stack ${styles["sidebar__stacks"]}`}>
-          {stacks.map((stack) => (
+          {sortedStacks.map((stack: Stack) => (
             <li key={stack.id}>
               <NavLink
                 to={`/stack/${stack.id}`}
@@ -90,7 +98,7 @@ function Sidebar() {
                 ) : (
                   <Layers2 size={16} />
                 )}
-                {stack.name} {`(${stack.total_actions})`}
+                {stack.name}{" "}
               </NavLink>
             </li>
           ))}

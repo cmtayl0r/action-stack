@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { stacksAPI } from "@/lib/data/supabaseAPI";
-import { Stack, CreateStackData, UpdateStackData } from "@/types/database";
+import { Stack } from "@/types/database";
 
 // 🔑 Query keys for React Query caching
 const QUERY_KEYS = {
@@ -132,21 +132,6 @@ export default useStacks;
 // 🏠 Find inbox stack from the stacks list
 export function findInboxStack(stacks: Stack[]): Stack | undefined {
   return stacks.find((stack) => stack.is_inbox);
-}
-
-// 📊 Get stack statistics (total actions, completed percentage)
-export function getStackStats(stack: Stack) {
-  const completionRate =
-    stack.total_actions > 0
-      ? Math.round((stack.completed_actions / stack.total_actions) * 100)
-      : 0;
-
-  return {
-    total: stack.total_actions,
-    completed: stack.completed_actions,
-    remaining: stack.total_actions - stack.completed_actions,
-    completionRate,
-  };
 }
 
 // 🎨 Get stack display color (fallback for missing colors)

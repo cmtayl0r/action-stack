@@ -139,8 +139,6 @@ export const stacksAPI = {
       is_default: false,
       is_archived: false,
       is_inbox: false,
-      total_actions: 0,
-      completed_actions: 0,
       sort_order: Date.now(),
     }),
   update: (id: number, updates: Record<string, any>) =>
