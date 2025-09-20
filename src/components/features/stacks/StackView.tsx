@@ -1,77 +1,59 @@
-import { useMemo, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
 import useActions from "@/hooks/data/useActions";
+import useStacks from "@/hooks/data/useStacks";
 import Header from "@/components/layout/header/Header";
 import ActionsFilter from "../actions/ActionsFilter";
+import { useUrlFilters } from "@/hooks/data/useUrlFilters";
 import ActionsList from "../actions/ActionsList";
-import { Action, Stack } from "@/types/database";
 import styles from "./stacks.module.css";
+import { getCurrentStackId } from "@/router/router";
 
 function StackView() {
   // 🌐 App context
   const { state, toggleSidebar } = useAppContext();
 
-  // Get the stack data from the loader
-  const { stack } = useLoaderData() as { stack: Stack };
+  // 🧭 Get current stack ID from URL parameters
+  const params = useParams();
+  const stackId = getCurrentStackId(params);
+
+  // 🔍 URL-based filters
+  const { filters } = useUrlFilters();
+
+  // 🪝 Get stacks
+  const { stacks, isLoading: stackLoading, error: stackError } = useStacks();
   const {
     actions,
-    loading: actionsLoading,
+    isLoading: actionsLoading,
     error: actionsError,
-  } = useActions();
+  } = useActions(stackId);
 
-  const [filter, setFilter] = useState({
-    name: "",
-    completed: false,
-    priority: "priority",
-    sortDirection: "desc",
-  });
+  // Get current stack from stacks
+  const currentStack = useMemo(
+    () => stacks.find((s) => s.id === stackId),
+    [stacks, stackId]
+  );
 
-  const handleFilterChange = (key: string, value: string | boolean) => {
-    setFilter((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  const filterActions = useMemo(() => {
-    const priorityOrder: Record<Action["priority"], number> = {
-      high: 3,
-      medium: 2,
-      low: 1,
-      none: 0,
-    };
-    return actions
-      .filter((a) => a.stack_id === stack.id)
-      .filter((a) => (filter.completed ? !a.completed : true))
-      .filter((a) => a.name.toLowerCase().includes(filter.name.toLowerCase()))
-      .sort((a, b) => {
-        const direction = filter.sortDirection === "asc" ? 1 : -1;
-        if (filter.priority === "priority") {
-          const valA = priorityOrder[a.priority] || 0;
-          const valB = priorityOrder[b.priority] || 0;
-          return (valA - valB) * direction;
-        } else {
-          const dateA = new Date(a.createdAt);
-          const dateB = new Date(b.createdAt);
-          return (dateA.getTime() - dateB.getTime()) * direction;
-        }
-      });
-  }, [actions, filter, stack.id]);
+  // Loading and error states
+  if (stackLoading || actionsLoading) return <div>Loading...</div>;
+  if (stackError || actionsError) return <div>Error loading data</div>;
+  if (!currentStack) return <div>Stack not found</div>;
 
   return (
     <main className={styles["stack-view"]}>
       <Header
         appState={state}
-        stackName={stack.name}
         toggleSidebar={toggleSidebar}
+        stackName={currentStack?.name}
       />
-      <ActionsFilter filter={filter} onFilterChange={handleFilterChange} />
-      {actionsLoading && <div>Loading actions...</div>}
-      {actionsError && <div>Error loading actions: {actionsError.message}</div>}
-      {!actionsLoading && !actionsError && (
-        <ActionsList stackId={stack.id} actions={filterActions} />
-      )}
+      <ActionsFilter filters={filters} />
+      <ActionsList
+        stackId={stackId}
+        actions={actions}
+        filters={filters}
+        emptyMessage={`No actions in ${currentStack.name}`}
+      />
     </main>
   );
 }

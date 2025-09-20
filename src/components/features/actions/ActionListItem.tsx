@@ -1,38 +1,60 @@
 import { useRef, useState } from "react";
-import useActions from "@/hooks/data/useActions";
 import { Flag, Pencil, Save, Trash2 } from "lucide-react";
 import styles from "./actions.module.css";
-import { Action } from "@/types";
+import useActions from "@/hooks/data/useActions";
+import type { Action } from "@/types/database";
+
+// TODO: Create Edit action modal for better UX
 
 type ActionListItemProps = {
   action: Action;
+  stackId: number;
 };
 
-function ActionListItem({ action }: ActionListItemProps) {
-  const { id, name, completed, priority, createdAt } = action;
+function ActionListItem({ action, stackId }: ActionListItemProps) {
+  // 🪝 Use the actions hook directly for all mutations
+  const { updateAction, deleteAction, toggleComplete } = useActions(stackId);
+
+  // 📦 Local editing state
   const [isEditing, setIsEditing] = useState(false);
-  const { removeAction, updateAction, toggleComplete } = useActions();
+
+  // 📌 Ref for action name input during editing
   const nameRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // ⚡️ Handles submitted edits
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!nameRef.current || nameRef.current.value.trim() === "") return;
-    updateAction(id, { name: nameRef.current.value });
-    setIsEditing(false);
+    const newName = nameRef.current?.value?.trim();
+    if (!newName) return;
+    try {
+      await updateAction(action.id, { name: newName });
+      setIsEditing(false);
+      // Optionally, show a success message or toast here
+    } catch (error) {
+      console.error("Failed to update action:", error);
+      // Optionally, show an error message or toast here
+    }
   };
 
-  const date = new Date(createdAt);
-  const formatted = date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
-    <li key={id} className={styles["action-list__item"]}>
+    <li className={styles["action-list__item"]}>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
-          <input type="text" defaultValue={name} ref={nameRef} autoFocus />
-          <button type="submit">
+          <input
+            type="text"
+            defaultValue={action.name}
+            ref={nameRef}
+            autoFocus
+            aria-label={`Edit action: ${action.name}`}
+          />
+          <button type="submit" aria-label="Save changes">
             <Save />
           </button>
         </form>
@@ -40,16 +62,28 @@ function ActionListItem({ action }: ActionListItemProps) {
         <>
           <input
             type="checkbox"
-            checked={completed}
-            onChange={() => toggleComplete(id)}
+            checked={action.completed}
+            onChange={() => toggleComplete(action.id)}
+            aria-label={`Mark ${action.name} as ${
+              action.completed ? "incomplete" : "complete"
+            }`}
           />
-          <span className={styles["action-list__name"]}>{name}</span>
-          <small>{formatted}</small>
-          <Flag className={styles[`label-priority--${priority}`]} />
-          <button onClick={() => removeAction(id)}>
+          <span className={styles["action-list__name"]}>{action.name}</span>
+          <small>{formatDate(action.created_at)}</small>
+          <Flag
+            className={styles[`label-priority--${action.priority}`]}
+            aria-label={`Priority: ${action.priority}`}
+          />
+          <button
+            onClick={() => deleteAction(action.id)}
+            aria-label={`Delete ${action.name}`}
+          >
             <Trash2 />
           </button>
-          <button onClick={() => setIsEditing((prev) => !prev)}>
+          <button
+            onClick={() => setIsEditing((prev) => !prev)}
+            aria-label={`Edit ${action.name}`}
+          >
             <Pencil />
           </button>
         </>

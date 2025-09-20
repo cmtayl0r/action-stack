@@ -13,6 +13,7 @@ import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 import { Button } from "@/components";
 import styles from "./Sidebar.module.css";
+import { getCurrentStackId } from "@/router/router";
 
 function Sidebar() {
   // 🎯 Connect to modal system
@@ -24,15 +25,17 @@ function Sidebar() {
   // 🌐 Connect to app context for theme and stacks
   const { state, toggleTheme } = useAppContext();
 
-  // 🗺️ Get current stack from URL params
-  const { stackId = "inbox" } = useParams(); // get current stack in view
+  // 🗺️ Get current stack from URL for highlighting active stack
+  const params = useParams();
+  const currentStackId = getCurrentStackId(params);
+  console.log("Current stack ID from URL:", currentStackId);
 
   // Show all stacks except "inbox"
   // const visibleStacks = stacks.filter((s) => s.id !== "inbox");
 
   // 🔧 Modal trigger handlers, IDs from ModalHost
   const handleAddAction = () => {
-    openModal(MODAL_IDS.ADD_ACTION, { stackId });
+    openModal(MODAL_IDS.ADD_ACTION, { currentStackId });
   };
 
   const handleSearch = () => {
@@ -87,7 +90,7 @@ function Sidebar() {
                 ) : (
                   <Layers2 size={16} />
                 )}
-                {stack.name}
+                {stack.name} {`(${stack.total_actions})`}
               </NavLink>
             </li>
           ))}

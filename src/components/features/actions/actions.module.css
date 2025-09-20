@@ -19,15 +19,15 @@
   gap: 0.5rem;
 }
 
-.label-priority--low {
+.label-priority--1 {
   color: var(--color-blue);
 }
 
-.label-priority--medium {
+.label-priority--2 {
   color: var(--color-orange);
 }
 
-.label-priority--high {
+.label-priority--3 {
   color: var(--color-red);
 }
 

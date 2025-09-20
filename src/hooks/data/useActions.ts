@@ -1,124 +1,130 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { makeSupabaseAPI } from "@/lib/data/supabaseAPI";
-import { Action } from "@/types/database";
-import { useToast } from "@/context/toasts/ToastContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { actionsAPI } from "@/lib/data/supabaseAPI";
+import { Action, StackFilters } from "@/types/database";
 
-const actionAPI = makeSupabaseAPI("actions");
+// 🔑 Query keys
+const QUERY_KEYS = {
+  actions: (stackId: number) => ["actions", stackId] as const,
+  action: (id: number) => ["action", id] as const,
+};
 
-function useActions() {
-  // 📦 State for actions, loading, and error
-  const [actions, setActions] = useState<Action[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+// ===============================================================
+// MAIN ACTIONS HOOK
+// ===============================================================
 
-  // 🪝 Toast notifications
-  const { success, error: showError } = useToast();
+function useActions(stackId: number) {
+  // Create query client instance
+  const queryClient = useQueryClient();
 
-  // 📡 Async function to load actions
-  const loadActions = useCallback(async () => {
-    try {
-      setLoading(true); // Start loading
-      setError(null); // Reset error state before loading
-      const data = await actionAPI.getAll();
-      setActions(data);
-    } catch (error) {
-      console.error("Failed to load actions:", error);
-      setError("Failed to load actions");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // 📡 Get all actions for stack
+  const {
+    data: actions = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: QUERY_KEYS.actions(stackId),
+    queryFn: () => actionsAPI.getByStackId(stackId),
+    enabled: !!stackId,
+    staleTime: 2 * 60 * 1000,
+  });
 
-  // 🔄 Load actions on mount
-  useEffect(() => {
-    loadActions();
-  }, [loadActions]);
+  // 1️⃣ The "Engine": Handles the raw API call and state management.
 
-  // 📡 Add a new action
-  const addAction = useCallback(
-    async (name: string, priority: number, stack_id: string | number) => {
-      try {
-        const newAction = await actionAPI.create(
-          { name, priority, stack_id },
-          { completed: false }
+  // ⚡️ Add action
+  const createActionMutation = useMutation({
+    mutationFn: actionsAPI.create,
+    onSuccess: (newAction) => {
+      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) => [
+        ...old,
+        newAction,
+      ]);
+    },
+  });
+
+  // ⚡️ Update action
+  const updateActionMutation = useMutation({
+    mutationFn: ({ id, updates }) => actionsAPI.update(id, updates),
+    onSuccess: (updatedAction) => {
+      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+        old.map((action) =>
+          action.id === updatedAction.id ? updatedAction : action
+        )
+      );
+      queryClient.setQueryData(
+        QUERY_KEYS.action(updatedAction.id),
+        updatedAction
+      );
+    },
+  });
+
+  // ⚡️ Remove action
+  const deleteActionMutation = useMutation({
+    mutationFn: actionsAPI.remove,
+    onSuccess: (_, deletedActionId) => {
+      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+        old.filter((action) => action.id !== deletedActionId)
+      );
+      queryClient.removeQueries({
+        queryKey: QUERY_KEYS.action(deletedActionId),
+      });
+    },
+  });
+
+  // ⚡️ Toggle complete with optimistic update
+  const toggleCompleteMutation = useMutation({
+    mutationFn: actionsAPI.toggleComplete,
+    onMutate: async (actionId) => {
+      await queryClient.cancelQueries({
+        queryKey: QUERY_KEYS.actions(stackId),
+      });
+      const previousActions = queryClient.getQueryData(
+        QUERY_KEYS.actions(stackId)
+      );
+
+      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+        old.map((action) =>
+          action.id === actionId
+            ? { ...action, completed: !action.completed }
+            : action
+        )
+      );
+
+      return { previousActions };
+    },
+    onError: (error, actionId, context) => {
+      if (context?.previousActions) {
+        queryClient.setQueryData(
+          QUERY_KEYS.actions(stackId),
+          context.previousActions
         );
-        setActions((prev) => [...prev, newAction]);
-        success("Action added successfully");
-        return newAction;
-      } catch (err) {
-        console.error("Failed to add action:", err);
-        showError("Failed to add action");
-        throw err; // Re-throw to let caller handle if needed
       }
     },
-    [showError, success]
-  );
-
-  // 📡 Remove an action by ID
-  const removeAction = useCallback(
-    async (actionId: string | number) => {
-      try {
-        await actionAPI.remove(actionId);
-        setActions((prev) => prev.filter((a) => a.id !== actionId));
-        success("Action deleted");
-      } catch (err) {
-        console.error("Failed to delete action:", err);
-        showError("Failed to delete action");
-        throw err;
-      }
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.actions(stackId) });
     },
-    [success, showError]
-  );
-
-  // 📡 Update an action by ID
-  const updateAction = useCallback(
-    async (actionId: string | number, updatedData: Partial<Action>) => {
-      try {
-        const updated = await actionAPI.update(actionId, updatedData);
-        setActions((prev) =>
-          prev.map((a) => (a.id === actionId ? updated : a))
-        );
-        success("Action updated");
-      } catch (err) {
-        console.error("Failed to update action:", err);
-        showError("Failed to update action");
-        throw err;
-      }
-    },
-    [showError, success]
-  );
-
-  // 📡 Toggle completion status of an action
-  const toggleComplete = useCallback(
-    async (actionId: string | number) => {
-      const action = actions.find((a) => a.id === actionId);
-      if (action) {
-        await updateAction(actionId, { completed: !action.completed });
-      }
-    },
-    [actions, updateAction]
-  );
-
-  // 📡 Get counts of completed and incomplete actions
-  const getCompletedCount = useMemo(() => {
-    return actions.filter((a) => a.completed).length;
-  }, [actions]);
-
-  const getIncompleteCount = useMemo(() => {
-    return actions.filter((a) => !a.completed).length;
-  }, [actions]);
+  });
 
   return {
+    // Data and state
     actions,
-    loading,
+    isLoading,
     error,
-    addAction,
-    updateAction,
-    removeAction,
-    toggleComplete,
-    reload: loadActions,
-    getCompletedCount,
-    getIncompleteCount,
+
+    // Action operations
+    createAction: createActionMutation.mutate,
+    updateAction: (id, updates) => updateActionMutation.mutate({ id, updates }),
+    toggleComplete: toggleCompleteMutation.mutate,
+    deleteAction: deleteActionMutation.mutate,
+
+    // Status flags
+    isCreating: createActionMutation.isPending,
+    isUpdating: updateActionMutation.isPending,
+    isToggling: toggleCompleteMutation.isPending,
+    isDeleting: deleteActionMutation.isPending,
+
+    // Manual refetch if needed
+    refetch,
   };
 }
 

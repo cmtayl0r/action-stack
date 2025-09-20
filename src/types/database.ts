@@ -1,3 +1,14 @@
+// ===============================================================
+// DATABASE TYPES & INTERFACES
+// ===============================================================
+// Centralized data types for our Stack & Actions todo app
+// These match exactly with our Supabase table structure
+
+// 🧪 Test user ID for development (replace with real auth later)
+export const TEST_USER_ID = "00000000-0000-0000-0000-000000000000";
+export const INBOX_STACK_ID = 32;
+
+// Supbabase table interfaces
 export interface UserProfile {
   id: string;
   full_name: string | null;
@@ -26,12 +37,12 @@ export interface Stack {
 }
 
 export interface Action {
-  id: number; // You chose int8 (good for simple incrementing)
+  id: number; // int8 (good for simple incrementing)
   stack_id: number; // UUID reference to stacks
   user_id: string; // UUID reference to auth.users
   name: string; // Action title
   description?: string | null;
-  priority: 0 | 1 | 2 | 3; // 0-3 priority levels
+  priority: 0 | 1 | 2 | 3; // 0=none, 1=low, 2=medium, 3=high
   due_date?: string | null;
   completed: boolean; // Simple true/false (good choice!)
   tags?: string[]; // array of tag strings
@@ -40,26 +51,26 @@ export interface Action {
   updated_at: string;
 }
 
-// React Query specific types
-export interface CreateStackData {
-  name: string;
-  description?: string;
-  color?: string;
-  icon?: string;
-  is_default?: boolean;
-  is_inbox?: boolean;
-  is_archived?: boolean;
-  sort_order?: number;
-  sort_by?: string;
-  sort_direction?: string;
+// 🔍 Filter types for URL query params and search
+export interface StackFilters {
+  search?: string; // Search actions by name
+  sort_by?: "priority" | "name" | "due_date" | "created_at";
+  sort_direction?: "asc" | "desc";
+  show_completed?: boolean; // Include completed actions
 }
 
-export interface CreateActionData {
-  name: string;
-  stack_id: number;
-  priority?: 0 | 1 | 2 | 3;
-  description?: string;
-  due_date?: string;
-  tags?: string[];
-  external_url?: string;
-}
+// 📊 Default filter values to ensure consistent behavior
+export const DEFAULT_FILTERS: StackFilters = {
+  search: "",
+  sort_by: "created_at",
+  sort_direction: "asc",
+  show_completed: true,
+};
+
+// 🔄 Sort options for UI dropdowns
+export const SORT_OPTIONS = [
+  { value: "created_at", label: "Date Created" },
+  { value: "priority", label: "Priority" },
+  { value: "name", label: "Name" },
+  { value: "due_date", label: "Due Date" },
+] as const;
