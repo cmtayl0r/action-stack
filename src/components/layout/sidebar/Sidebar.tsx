@@ -81,8 +81,8 @@ function Sidebar() {
           Add Action
         </Button>
 
-        <p>Action Stacks</p>
-        <ul className={`stack ${styles["sidebar__stacks"]}`}>
+        <p>Stacks</p>
+        <ul className={`stack stack--none ${styles["sidebar__stacks"]}`}>
           {sortedStacks.map((stack: Stack) => (
             <li key={stack.id}>
               <NavLink

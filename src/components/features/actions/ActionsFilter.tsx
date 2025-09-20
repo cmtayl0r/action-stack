@@ -37,7 +37,7 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
   // };
 
   return (
-    <div className={styles["actions-filter"]}>
+    <div className={`p-sm ${styles["actions-filter"]}`}>
       <div className={styles["actions-filter__group"]}>
         <strong>Filters:</strong> {getFilterSummary(filters) || "None"}
       </div>

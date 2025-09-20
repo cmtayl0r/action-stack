@@ -13,6 +13,10 @@ Perfect for: content sections, forms, cards, articles, page layouts.
   gap: var(--space-md);
 }
 
+.stack--none {
+  gap: 0;
+}
+
 .stack--xs {
   gap: var(--space-xs);
 }
