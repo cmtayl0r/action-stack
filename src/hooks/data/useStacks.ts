@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { stacksAPI } from "@/lib/data/supabaseAPI";
-import { Stack } from "@/types/database";
+import type { Stack } from "@/types/database";
 
 // 🔑 Query keys for React Query caching
 const QUERY_KEYS = {

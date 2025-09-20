@@ -1,7 +1,8 @@
 import styles from "./actions.module.css";
 import ActionListItem from "./ActionListItem";
 import { applyFiltersToActions } from "@/hooks/data/useUrlFilters";
-import type { Action, StackFilters } from "@/types/database";
+import type { Action } from "@/types/database";
+import type { StackFilters } from "@/types/filters";
 
 type ActionsListProps = {
   stackId: number;
@@ -29,7 +30,7 @@ function ActionsList({
 
   return (
     <div className={styles["actions-list"]}>
-      <ul role="list">
+      <ul>
         {filteredActions.map((action) => (
           <ActionListItem key={action.id} action={action} stackId={stackId} />
         ))}

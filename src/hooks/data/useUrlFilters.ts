@@ -6,7 +6,8 @@
 
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useMemo } from "react";
-import { StackFilters, DEFAULT_FILTERS } from "@/types/database";
+import type { StackFilters } from "@/types/filters";
+import { DEFAULT_FILTERS } from "@/types/filters";
 
 // 🪝 Main hook for managing filter state in URL query parameters
 export const useUrlFilters = () => {

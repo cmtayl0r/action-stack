@@ -1,14 +1,19 @@
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+// CONTEXT
 import { useAppContext } from "@/context/app/AppContext";
+// HOOKS
 import useActions from "@/hooks/data/useActions";
 import useStacks from "@/hooks/data/useStacks";
+import { useUrlFilters } from "@/hooks/data/useUrlFilters";
+// HELPERS
+import { getCurrentStackId } from "@/router/router";
+// COMPONENTS
 import Header from "@/components/layout/header/Header";
 import ActionsFilter from "../actions/ActionsFilter";
-import { useUrlFilters } from "@/hooks/data/useUrlFilters";
 import ActionsList from "../actions/ActionsList";
+// STYLES
 import styles from "./stacks.module.css";
-import { getCurrentStackId } from "@/router/router";
 
 function StackView() {
   // 🌐 App context

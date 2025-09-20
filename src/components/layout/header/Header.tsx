@@ -4,7 +4,7 @@ import styles from "./Header.module.css";
 
 function Header({ appState, stackName, toggleSidebar }) {
   return (
-    <header className={`cluster cluster--space space-sm p ${styles["header"]}`}>
+    <header className={`cluster cluster--space p-sm ${styles["header"]}`}>
       <Button
         onClick={toggleSidebar}
         variant="ghost"

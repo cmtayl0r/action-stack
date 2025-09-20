@@ -1,5 +1,6 @@
 import styles from "./actions.module.css";
-import { StackFilters, SORT_OPTIONS } from "@/types/database";
+import type { StackFilters } from "@/types/filters";
+import { SORT_OPTIONS } from "@/types/filters";
 import { useUrlFilters, getFilterSummary } from "@/hooks/data/useUrlFilters";
 import { useState } from "react";
 

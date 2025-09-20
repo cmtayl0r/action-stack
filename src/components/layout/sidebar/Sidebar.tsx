@@ -1,5 +1,5 @@
+import { useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import useStacks from "@/hooks/data/useStacks";
 import { useAppContext } from "@/context/app/AppContext";
 import {
   LucidePlus,
@@ -9,12 +9,13 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
+
+import useStacks from "@/hooks/data/useStacks";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 import { Button } from "@/components";
-import styles from "./Sidebar.module.css";
 import { getCurrentStackId } from "@/router/router";
-import { useMemo } from "react";
+import styles from "./Sidebar.module.css";
 
 function Sidebar() {
   // 🎯 Connect to modal system
@@ -56,7 +57,7 @@ function Sidebar() {
 
   return (
     <aside
-      className={`stack stack--between space-sm p ${styles["sidebar"]}`}
+      className={`stack stack--between p-sm ${styles["sidebar"]}`}
       aria-label="Sidebar"
     >
       <div className="stack">
@@ -86,11 +87,7 @@ function Sidebar() {
             <li key={stack.id}>
               <NavLink
                 to={`/stack/${stack.id}`}
-                className={`
-                  cluster
-                  touch-target-md
-                  ${({ isActive }) => (isActive ? "active-link" : "")}
-                `}
+                className={`cluster touch-target-md`}
                 aria-label={`${stack.name} list`}
               >
                 {stack.is_inbox ? (

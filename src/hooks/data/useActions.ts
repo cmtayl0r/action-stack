@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { actionsAPI } from "@/lib/data/supabaseAPI";
-import { Action, StackFilters } from "@/types/database";
+import type { Action } from "@/types/database";
 
 // 🔑 Query keys
 const QUERY_KEYS = {

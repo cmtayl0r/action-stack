@@ -27,9 +27,6 @@ export interface Stack {
   is_default: boolean; // Is this the user's default stack?
   is_inbox: boolean; // Inbox stack (special handling)
   is_archived: boolean; // Archived stacks (hidden but not deleted)
-  sort_order: number; // Custom sort order for user-defined stacks
-  sort_by: string; // 'priority', 'name', 'due_date', 'created_at'
-  sort_direction: string; // 'asc', 'desc'
   created_at: string; // Creation timestamp
   updated_at: string; // Last updated timestamp
 }
@@ -48,27 +45,3 @@ export interface Action {
   created_at: string;
   updated_at: string;
 }
-
-// 🔍 Filter types for URL query params and search
-export interface StackFilters {
-  search?: string; // Search actions by name
-  sort_by?: "priority" | "name" | "due_date" | "created_at";
-  sort_direction?: "asc" | "desc";
-  show_completed?: boolean; // Include completed actions
-}
-
-// 📊 Default filter values to ensure consistent behavior
-export const DEFAULT_FILTERS: StackFilters = {
-  search: "",
-  sort_by: "created_at",
-  sort_direction: "desc",
-  show_completed: true,
-};
-
-// 🔄 Sort options for UI dropdowns
-export const SORT_OPTIONS = [
-  { value: "created_at", label: "Date Created" },
-  { value: "priority", label: "Priority" },
-  { value: "name", label: "Name" },
-  { value: "due_date", label: "Due Date" },
-] as const;

@@ -7,3 +7,10 @@
   list-style: none;
   padding: 0;
 }
+
+.active {
+  color: brown;
+  text-transform: capitalize;
+  font-weight: bold;
+  background-color: var(--color-gray-light);
+}
