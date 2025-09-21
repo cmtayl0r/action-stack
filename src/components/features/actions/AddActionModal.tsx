@@ -4,7 +4,7 @@ import { useToast } from "@/context/toasts/ToastContext";
 import useStacks from "@/hooks/data/useStacks";
 import useActions from "@/hooks/data/useActions";
 import { BaseModal, Button } from "@/components/ui";
-import { Action } from "@/types";
+import { Action, CreateActionData } from "@/types";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 
@@ -39,56 +39,54 @@ function AddActionModal({ stackId }: AddActionModalProps) {
   // 🎯 Connect to modal system
   const { closeModal } = useModal();
 
-  // 🔗 Connect to stacks, actions, and toast contexts
+  // 🔗 Connect to stacks, actions
   const { stacks } = useStacks();
-  const { createAction } = useActions(stackId);
-  const { success, error } = useToast();
+  const { createAction, isCreating } = useActions(stackId);
+
+  // 🪝 Connect to Toasts hook
+  const toast = useToast();
 
   // Navigation
   const navigate = useNavigate();
 
   // 🎛️ Form State
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState("");
-  const [priority, setPriority] = useState<Action["priority"]>(0);
+  const [priority, setPriority] = useState<0 | 1 | 2 | 3>(0);
   const [selectedStackId, setSelectedStackId] = useState(stackId);
 
   // 🔧 Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    // Prevent default form submission
     e.preventDefault();
-
-    // Trim whitespace from name
     const trimmedName = name.trim();
-    if (!trimmedName) return;
-
-    const newData = { name: trimmedName, priority, stack_id: selectedStackId };
-
-    // Set isSubmitting to true so we can show a loading indicator
-    setIsSubmitting(true);
+    // Early validation
+    if (!trimmedName) {
+      toast.error("Action name is required");
+      return;
+    }
 
     try {
-      // Call the createAction function from the useActions hook
-      await createAction(newData);
-
-      // Success feedback
-      const successMessage = `${trimmedName} added to ${selectedStackId}`;
-      success(successMessage); // Trigger toast notification
-
-      // Navigate and close
+      const actionData: CreateActionData = {
+        name: trimmedName,
+        priority,
+        stack_id: selectedStackId,
+      };
+      // 🚀 Use the async version from useActions hook
+      const savedAction = await createAction(actionData);
+      // 🎉 Success feedback
+      const stackName =
+        stacks.find((s) => s.id === selectedStackId)?.name || "stack";
+      toast.success(`"${trimmedName}" added to ${stackName}`);
+      // 🧭 Navigate to the new actions stack view
       navigate(`/stack/${selectedStackId}`);
+      // 👁️ Close the modal;
       closeModal();
-
       // Reset form state
       setName("");
       setPriority(0);
       setSelectedStackId(stackId);
     } catch (err) {
-      const errorMessage = "Failed to add action. Please try again.";
-      error(errorMessage); // Trigger toast notification
+      toast.error("Failed to add action. Please try again.");
       console.error("Error adding action:", err);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -110,15 +108,19 @@ function AddActionModal({ stackId }: AddActionModalProps) {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            disabled={isSubmitting}
             placeholder="e.g., Write shopping list"
+            autoFocus
+            required
+            disabled={isCreating}
           />
           <label htmlFor="priority">Priority</label>
           <select
             id="priority"
             value={priority}
-            onChange={(e) => setPriority(e.target.value as Action["priority"])}
-            disabled={isSubmitting}
+            onChange={(e) =>
+              setPriority(Number(e.target.value) as 0 | 1 | 2 | 3)
+            }
+            disabled={isCreating}
           >
             <option value="0">None</option>
             <option value="1">Low</option>
@@ -129,8 +131,8 @@ function AddActionModal({ stackId }: AddActionModalProps) {
           <select
             id="stack-select"
             value={selectedStackId}
-            onChange={(e) => setSelectedStackId(e.target.value)}
-            disabled={isSubmitting}
+            onChange={(e) => setSelectedStackId(Number(e.target.value))}
+            disabled={isCreating}
           >
             {stacks.map((stack) => (
               <option key={stack.id} value={stack.id}>
@@ -142,16 +144,16 @@ function AddActionModal({ stackId }: AddActionModalProps) {
             <Button
               onPress={closeModal}
               variant="outline"
-              isDisabled={isSubmitting}
+              isDisabled={isCreating}
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              isPending={isSubmitting}
+              isPending={isCreating}
               isDisabled={!name.trim()}
             >
-              {isSubmitting ? "Adding..." : "Add Action"}
+              {isCreating ? "Creating.." : "Add Action"}
             </Button>
           </div>
         </div>

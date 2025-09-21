@@ -406,3 +406,138 @@ import { getCurrentStackId, getStackUrl } from "@/router/router";
 2. Consider `stacksApi` vs `stacksAPI` for consistency (both acceptable)
 
 **Overall Assessment: 🟢 Excellent naming conventions with minimal cleanup needed.**
+
+## 🧹 CRUD Hook Consistency Issues
+
+After reviewing `useActions.ts` and `useStacks.ts`, here are the inconsistencies and best practice improvements needed:
+
+### 🔧 Current Issues
+
+**1. Inconsistent Mutation Patterns**
+
+- `useActions`: Mixes optimistic updates (create, toggle) with success updates (update, delete)
+- `useStacks`: Uses only success updates for all operations
+- **Problem**: Inconsistent user experience and unpredictable behavior
+
+**2. Console Logging in Production Code**
+
+- `useStacks`: Has console.log/console.error statements
+- `useActions`: Clean of console statements
+- **Problem**: Production logs should use proper logging/toast system
+
+**3. Cache Update Bug**
+
+- `useActions` line 89: Wrong query key `queryKeys.actions.byStack(updatedAction.id)` should be `queryKeys.actions.detail(updatedAction.id)`
+- **Problem**: Cache inconsistency
+
+**4. Missing Error Handling**
+
+- Both hooks log errors but provide no user feedback
+- **Problem**: Poor user experience on failures
+
+### ✅ Recommended Simple & Clean Pattern
+
+**For immediate feedback operations (create, toggle):**
+
+```typescript
+const createMutation = useMutation({
+  mutationFn: api.create,
+  onMutate: async (data) => {
+    await queryClient.cancelQueries({ queryKey });
+    const previous = queryClient.getQueryData(queryKey);
+
+    queryClient.setQueryData(queryKey, (old) => [...old, optimisticItem]);
+
+    return { previous };
+  },
+  onError: (error, variables, context) => {
+    if (context?.previous) {
+      queryClient.setQueryData(queryKey, context.previous);
+    }
+  },
+  onSettled: () => {
+    queryClient.invalidateQueries({ queryKey });
+  },
+});
+```
+
+**For validation-sensitive operations (update, delete):**
+
+```typescript
+const updateMutation = useMutation({
+  mutationFn: api.update,
+  onSuccess: (updatedItem) => {
+    queryClient.setQueryData(queryKey, (old) =>
+      old.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+  },
+  onError: (error) => {
+    // Handle error consistently across all mutations
+    console.error("Update failed:", error);
+  },
+});
+```
+
+### 🎯 Specific Fixes Needed
+
+**useActions.ts:**
+
+```typescript
+// Fix line 89 - wrong query key:
+queryClient.setQueryData(
+  queryKeys.actions.detail(updatedAction.id), // Not byStack
+  updatedAction
+);
+
+// Make error handling consistent across all mutations
+```
+
+**useStacks.ts:**
+
+```typescript
+// Remove console.log statements:
+onSuccess: (newStack) => {
+  queryClient.setQueryData(queryKeys.stacks.all, (old = []) => [
+    ...old,
+    newStack,
+  ]);
+  // Remove: console.log("Stack created successfully:", newStack.name);
+},
+onError: (error) => {
+  // Remove: console.error("Failed to create stack:", error);
+  // Keep simple error handling
+},
+
+// Add missing import:
+import type { UpdateStackData } from "@/types/database";
+```
+
+### 🧪 Simple Consistency Rules
+
+**Apply optimistic updates for:**
+
+- ✅ Create operations (immediate feedback)
+- ✅ Toggle operations (high confidence)
+
+**Use success updates for:**
+
+- ✅ Complex updates (validation needed)
+- ✅ Delete operations (confirmation needed)
+
+**Always include:**
+
+- ✅ Consistent error patterns across all hooks
+- ✅ Remove console.log statements
+- ✅ Simple, predictable cache updates
+
+### 📊 Priority
+
+**High Priority (Fix First):**
+
+1. Fix cache update bug in useActions line 89
+2. Add missing UpdateStackData import in useStacks
+3. Remove console statements from useStacks
+
+**Medium Priority:** 4. Make error handling consistent 5. Standardize optimistic vs success update patterns
+
+**Approach: Keep it simple - don't over-engineer the patterns, just make them consistent.**

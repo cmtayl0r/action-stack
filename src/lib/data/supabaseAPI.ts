@@ -130,7 +130,6 @@ export const stacksAPI = {
       is_default: false,
       is_archived: false,
       is_inbox: false,
-      sort_order: Date.now(),
     }),
   update: (id: number, updates: Record<string, any>) =>
     update("stacks", id, updates, { user_id: TEST_USER_ID }),

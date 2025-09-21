@@ -5,6 +5,7 @@ import useStacks from "@/hooks/data/useStacks";
 import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
+import type { CreateStackData } from "@/types/database";
 
 /**
  * MODAL SYSTEM: Feature Modal
@@ -30,7 +31,7 @@ function AddStackModal() {
   const { closeModal } = useModal();
 
   // 🪝 Connect to Stacks hook
-  const { addStack } = useStacks();
+  const { createStack, isCreating } = useStacks();
 
   // 🪝 Connect to Toasts hook
   const toast = useToast();
@@ -40,37 +41,37 @@ function AddStackModal() {
 
   // 📦 Form State
   const [name, setName] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ⚡️ Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedName = name.trim();
-    if (!trimmedName) return;
-
-    // Set isSubmitting to true so we can show a loading indicator
-    setIsSubmitting(true);
+    // Early validation
+    if (!trimmedName) {
+      toast.error("Stack name is required");
+      return;
+    }
 
     try {
-      const savedStack = await addStack({
+      // 🎯 Create stack data matching the CreateStackData interface
+      const stackData: CreateStackData = {
         name: trimmedName,
-        color: "#0066cc", // Default color
+        description: "", // Empty description by default
+        color: "#0066cc", // Default blue color
         icon: "📋", // Default icon
-        is_default: false,
-        is_inbox: false,
-        is_archived: false,
-        sort_order: 0,
-        sort_by: "created_at",
-        sort_direction: "desc",
-      });
-      toast.success(`${savedStack.name} saved successfully!`);
+      };
+      // 🚀 Use the async version from useStacks hook
+      const savedStack = await createStack(stackData);
+      // 🎉 Success feedback
+      const successMessage = `${trimmedName} stack created successfully!`;
+      toast.success(successMessage);
+      // 🧭 Navigate to the new stack's page
       navigate(`/stack/${savedStack.id}`);
+      // 👁️ Close the modal;
       closeModal();
     } catch (err) {
       toast.error("Failed to add stack. Please try again.");
       console.error("Error adding stack:", err);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -85,17 +86,24 @@ function AddStackModal() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Travel Ideas"
+            autoFocus
+            required
+            disabled={isCreating}
           />
           <div className="cluster">
             <Button
               onPress={closeModal}
               variant="outline"
-              isDisabled={isSubmitting}
+              isDisabled={isCreating}
             >
               Cancel
             </Button>
-            <Button type="submit" isPending={isSubmitting}>
-              {isSubmitting ? "Adding..." : "Add Stack"}
+            <Button
+              type="submit"
+              isPending={isCreating}
+              isDisabled={!name.trim()}
+            >
+              {isCreating ? "Creating..." : "Add Stack"}
             </Button>
           </div>
         </div>
