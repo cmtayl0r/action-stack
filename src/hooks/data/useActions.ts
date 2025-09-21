@@ -1,15 +1,16 @@
+// ===============================================================
+// ACTIONS HOOK - Action Management with React Query
+// ===============================================================
+// Custom hook for CRUD operations on actions using React Query
+// Provides caching, background updates, and optimistic updates
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { actionsAPI } from "@/lib/data/supabaseAPI";
-import type { Action } from "@/types/database";
-
-// 🔑 Query keys
-const QUERY_KEYS = {
-  actions: (stackId: number) => ["actions", stackId] as const,
-  action: (id: number) => ["action", id] as const,
-};
+import { TEST_USER_ID, type Action } from "@/types/database";
+import { queryKeys } from "@/lib/query-keys";
 
 // ===============================================================
-// MAIN ACTIONS HOOK
+// 🪝 MAIN ACTIONS HOOK
 // ===============================================================
 
 function useActions(stackId: number) {
@@ -23,10 +24,10 @@ function useActions(stackId: number) {
     error,
     refetch,
   } = useQuery({
-    queryKey: QUERY_KEYS.actions(stackId),
+    queryKey: queryKeys.actions.byStack(stackId),
     queryFn: () => actionsAPI.getByStackId(stackId),
     enabled: !!stackId,
-    staleTime: 2 * 60 * 1000,
+    // select: (data) => data.slice(0, 100), // Limit to 100 items for performance
   });
 
   // 1️⃣ The "Engine": Handles the raw API call and state management.
@@ -34,11 +35,44 @@ function useActions(stackId: number) {
   // ⚡️ Add action
   const createActionMutation = useMutation({
     mutationFn: actionsAPI.create,
-    onSuccess: (newAction) => {
-      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) => [
-        ...old,
-        newAction,
-      ]);
+    onMutate: async (newActionData) => {
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.actions.byStack(stackId),
+      });
+      // Snapshot previous actions
+      const previousActions = queryClient.getQueryData(
+        queryKeys.actions.byStack(stackId)
+      );
+      // Optimistically add new action to cache
+      const tempAction = {
+        id: Date.now(), // Temporary ID
+        ...newActionData,
+        user_id: TEST_USER_ID,
+        completed: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      // Add to the top of the list for visibility
+      queryClient.setQueryData(
+        queryKeys.actions.byStack(stackId),
+        (old = []) => [tempAction, ...old]
+      );
+      // Return context with previous actions for rollback on error
+      return { previousActions };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousActions) {
+        queryClient.setQueryData(
+          queryKeys.actions.byStack(stackId),
+          context.previousActions
+        );
+      }
+    },
+    onSettled: () => {
+      // Always refetch after error or success to sync with server
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.actions.byStack(stackId),
+      });
     },
   });
 
@@ -46,13 +80,13 @@ function useActions(stackId: number) {
   const updateActionMutation = useMutation({
     mutationFn: ({ id, updates }) => actionsAPI.update(id, updates),
     onSuccess: (updatedAction) => {
-      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+      queryClient.setQueryData(queryKeys.actions.byStack(stackId), (old = []) =>
         old.map((action) =>
           action.id === updatedAction.id ? updatedAction : action
         )
       );
       queryClient.setQueryData(
-        QUERY_KEYS.action(updatedAction.id),
+        queryKeys.actions.byStack(updatedAction.id),
         updatedAction
       );
     },
@@ -62,11 +96,11 @@ function useActions(stackId: number) {
   const deleteActionMutation = useMutation({
     mutationFn: actionsAPI.remove,
     onSuccess: (_, deletedActionId) => {
-      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+      queryClient.setQueryData(queryKeys.actions.byStack(stackId), (old = []) =>
         old.filter((action) => action.id !== deletedActionId)
       );
       queryClient.removeQueries({
-        queryKey: QUERY_KEYS.action(deletedActionId),
+        queryKey: queryKeys.actions.byStack(deletedActionId),
       });
     },
   });
@@ -76,13 +110,13 @@ function useActions(stackId: number) {
     mutationFn: actionsAPI.toggleComplete,
     onMutate: async (actionId) => {
       await queryClient.cancelQueries({
-        queryKey: QUERY_KEYS.actions(stackId),
+        queryKey: queryKeys.actions.byStack(stackId),
       });
       const previousActions = queryClient.getQueryData(
-        QUERY_KEYS.actions(stackId)
+        queryKeys.actions.byStack(stackId)
       );
 
-      queryClient.setQueryData(QUERY_KEYS.actions(stackId), (old = []) =>
+      queryClient.setQueryData(queryKeys.actions.byStack(stackId), (old = []) =>
         old.map((action) =>
           action.id === actionId
             ? { ...action, completed: !action.completed }
@@ -95,13 +129,15 @@ function useActions(stackId: number) {
     onError: (error, actionId, context) => {
       if (context?.previousActions) {
         queryClient.setQueryData(
-          QUERY_KEYS.actions(stackId),
+          queryKeys.actions.byStack(stackId),
           context.previousActions
         );
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.actions(stackId) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.actions.byStack(stackId),
+      });
     },
   });
 

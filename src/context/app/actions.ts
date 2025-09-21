@@ -10,9 +10,3 @@ export const toggleTheme = () => ({ type: "TOGGLE_THEME" });
 
 // --- Sidebar ---
 export const toggleSidebar = () => ({ type: "TOGGLE_SIDEBAR" });
-
-// --- Stacks (lists) ---
-export const setCurrentStackId = (stackId: string) => ({
-  type: "SET_CURRENT_STACK_ID",
-  payload: stackId,
-});

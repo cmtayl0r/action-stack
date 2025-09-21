@@ -1,6 +1,6 @@
 import styles from "./actions.module.css";
 import ActionListItem from "./ActionListItem";
-import { applyFiltersToActions } from "@/hooks/data/useUrlFilters";
+import { applyFiltersToActions } from "@/lib/filters";
 import type { Action } from "@/types/database";
 import type { StackFilters } from "@/types/filters";
 

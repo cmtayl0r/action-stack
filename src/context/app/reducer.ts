@@ -1,10 +1,9 @@
-import { AppState, AppAction } from "./types";
+import { AppState, AppAction } from "@/types/app";
 
 export const initialState: AppState = {
   theme: "dark",
   sidebarOpen: true,
   toast: null,
-  currentStackId: "inbox",
 };
 
 export function appReducer(state: AppState, action: AppAction): AppState {
@@ -26,9 +25,6 @@ export function appReducer(state: AppState, action: AppAction): AppState {
 
     // case "CLEAR_TOAST":
     //   return { ...state, toast: null };
-
-    case "SET_CURRENT_STACK_ID":
-      return { ...state, currentStackId: action.payload };
 
     default:
       return state;

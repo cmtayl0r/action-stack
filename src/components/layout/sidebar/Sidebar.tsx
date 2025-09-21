@@ -27,7 +27,7 @@ function Sidebar() {
   // 🌐 Connect to app context for theme and stacks
   const { state, toggleTheme } = useAppContext();
 
-  // 🗺️ Get current stack from URL for highlighting active stack
+  // 🗺️ Get current stack from URL for highlighting active stack and modals
   const params = useParams();
   const currentStackId = getCurrentStackId(params);
 
@@ -44,7 +44,8 @@ function Sidebar() {
 
   // 🔧 Modal trigger handlers, IDs from ModalHost
   const handleAddAction = () => {
-    openModal(MODAL_IDS.ADD_ACTION, { currentStackId });
+    console.log("currentStackId being passed:", currentStackId);
+    openModal(MODAL_IDS.ADD_ACTION, { stackId: currentStackId });
   };
 
   const handleSearch = () => {

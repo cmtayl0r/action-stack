@@ -8,7 +8,7 @@
 export const TEST_USER_ID = "00000000-0000-0000-0000-000000000000";
 export const INBOX_STACK_ID = 32;
 
-// Supbabase table interfaces
+// Supabase table interfaces
 export interface UserProfile {
   id: string;
   full_name: string | null;
@@ -33,7 +33,7 @@ export interface Stack {
 
 export interface Action {
   id: number; // int8 (good for simple incrementing)
-  stack_id: number; // UUID reference to stacks
+  stack_id: number; // int8 reference to stacks table
   user_id: string; // UUID reference to auth.users
   name: string; // Action title
   description?: string | null;
@@ -44,4 +44,30 @@ export interface Action {
   external_url?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface CreateStackData {
+  name: string;
+  description?: string;
+  color: string;
+  icon: string;
+}
+
+export interface UpdateStackData {
+  name?: string;
+  description?: string;
+  color?: string;
+  icon?: string;
+  is_default?: boolean;
+  is_archived?: boolean;
+}
+
+export interface CreateActionData {
+  name: string;
+  description?: string;
+  stack_id: number;
+  priority: 0 | 1 | 2 | 3;
+  due_date?: string;
+  tags?: string[];
+  external_url?: string;
 }

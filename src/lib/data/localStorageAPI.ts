@@ -6,68 +6,63 @@
   This allows us to easily switch to a real API in the future if needed.
 */
 
-export function makeStorageAPI(keyName) {
-  // Utilities to handle localStorage
-  const load = () => JSON.parse(localStorage.getItem(keyName)) || [];
-  const save = (data) => localStorage.setItem(keyName, JSON.stringify(data));
-  const generateId = () => crypto.randomUUID();
+interface StorageItem {
+  id: string;
+  createdAt: string;
+}
+
+export function makeStorageAPI<T extends StorageItem>(keyName: string) {
+  const load = (): T[] => JSON.parse(localStorage.getItem(keyName) || "[]");
+  const save = (data: T[]) =>
+    localStorage.setItem(keyName, JSON.stringify(data));
+  const generateId = (): string => crypto.randomUUID();
 
   return {
-    // 1️⃣ Load all items
-    getAll: async () => load(),
+    getAll: async (): Promise<T[]> => load(),
 
-    // 2️⃣ Load item by ID
-    getById: async (id) => {
+    getById: async (id: string): Promise<T> => {
       const items = load();
       const item = items.find((i) => i.id === id);
       if (!item) throw new Error(`${keyName} item ${id} not found`);
       return item;
     },
 
-    // 3️⃣ Create a new item
-    create: async (data, defaults = {}) => {
+    create: async (
+      data: Omit<T, "id" | "createdAt">,
+      defaults: Partial<T> = {}
+    ): Promise<T> => {
       const newItem = {
         id: generateId(),
         createdAt: new Date().toISOString(),
-        ...defaults, // Default values for new items
-        ...data, // User-provided data
-      };
+        ...defaults,
+        ...data,
+      } as T;
       const items = load();
       save([...items, newItem]);
       return newItem;
     },
 
-    // 4️⃣ Update an existing item
-    update: async (id, updates) => {
+    update: async (id: string, updates: Partial<T>): Promise<T> => {
       const items = load();
       const updated = items.map((i) =>
         i.id === id ? { ...i, ...updates } : i
       );
       save(updated);
-      return updated.find((i) => i.id === id);
+      const item = updated.find((i) => i.id === id);
+      if (!item) throw new Error(`${keyName} item ${id} not found`);
+      return item;
     },
 
-    // 5️⃣ Remove an item
-    remove: async (id) => {
+    remove: async (id: string): Promise<void> => {
       const items = load();
       save(items.filter((i) => i.id !== id));
     },
 
-    // 6️⃣ Find multiple items based on a predicate
-    // A function that returns true for items we want to find
-    // Example: findMany(item => item.name === 'example')
-    // This is a higher-order function that takes a predicate function
-    // and returns a new function that can be called with the predicate.
-    findMany: async (predicate) => {
+    findMany: async (predicate: (item: T) => boolean): Promise<T[]> => {
       return load().filter(predicate);
     },
 
-    // 7️⃣ Remove multiple items based on a predicate
-    // Example: removeMany(item => item.completed)
-    // This is a higher-order function that takes a predicate function
-    // and returns a new function that can be called with the predicate.
-    // This allows us to remove multiple items in one go.
-    removeMany: async (predicate) => {
+    removeMany: async (predicate: (item: T) => boolean): Promise<void> => {
       const items = load();
       const filtered = items.filter((item) => !predicate(item));
       save(filtered);

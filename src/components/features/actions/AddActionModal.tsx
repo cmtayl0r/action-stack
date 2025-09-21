@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/toasts/ToastContext";
 import useStacks from "@/hooks/data/useStacks";
@@ -28,29 +28,29 @@ import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 // =============================================================================
 
 interface AddActionModalProps {
-  stackId?: string;
+  stackId: number;
 }
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
+function AddActionModal({ stackId }: AddActionModalProps) {
   // 🎯 Connect to modal system
   const { closeModal } = useModal();
 
   // 🔗 Connect to stacks, actions, and toast contexts
   const { stacks } = useStacks();
-  const { addAction } = useActions();
+  const { createAction } = useActions(stackId);
   const { success, error } = useToast();
 
   // Navigation
   const navigate = useNavigate();
 
   // 🎛️ Form State
-  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [priority, setPriority] = useState<Action["priority"]>("2");
+  const [name, setName] = useState("");
+  const [priority, setPriority] = useState<Action["priority"]>(0);
   const [selectedStackId, setSelectedStackId] = useState(stackId);
 
   // 🔧 Handle form submission
@@ -62,12 +62,14 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
+    const newData = { name: trimmedName, priority, stack_id: selectedStackId };
+
     // Set isSubmitting to true so we can show a loading indicator
     setIsSubmitting(true);
 
     try {
-      // Call the addAction function from the useActions hook
-      await addAction(trimmedName, Number(priority), selectedStackId);
+      // Call the createAction function from the useActions hook
+      await createAction(newData);
 
       // Success feedback
       const successMessage = `${trimmedName} added to ${selectedStackId}`;
@@ -79,7 +81,7 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
 
       // Reset form state
       setName("");
-      setPriority("medium");
+      setPriority(0);
       setSelectedStackId(stackId);
     } catch (err) {
       const errorMessage = "Failed to add action. Please try again.";
@@ -89,6 +91,13 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    console.log("AddActionModal opened with stackId:", stackId);
+    if (stackId) {
+      setSelectedStackId(stackId);
+    }
+  }, [stackId]);
 
   return (
     <BaseModal modalId={MODAL_IDS.ADD_ACTION} title="Add New Action" size="md">
@@ -111,6 +120,7 @@ function AddActionModal({ stackId = "inbox" }: AddActionModalProps) {
             onChange={(e) => setPriority(e.target.value as Action["priority"])}
             disabled={isSubmitting}
           >
+            <option value="0">None</option>
             <option value="1">Low</option>
             <option value="2">Medium</option>
             <option value="3">High</option>

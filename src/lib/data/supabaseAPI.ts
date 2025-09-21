@@ -1,5 +1,18 @@
 import { supabase } from "@/lib/supabase/client";
 import { TEST_USER_ID } from "@/types/database";
+import type { CreateActionData, CreateStackData } from "@/types/database";
+
+// 🛠️ Utility function to apply filters to Supabase queries
+function applyFilters(query: any, filters?: Record<string, any>) {
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        query = query.eq(key, value);
+      }
+    });
+  }
+  return query;
+}
 
 // ===============================================================
 // GENERIC CRUD OPERATIONS - Work with any table
@@ -12,14 +25,7 @@ export async function getAll<T>(
 ): Promise<T[]> {
   let query = supabase.from(tableName).select("*");
   // If filters are provided, apply them to the query
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      // If value is defined and not null or empty, apply the filter
-      if (value !== undefined && value !== null && value !== "") {
-        query = query.eq(key, value);
-      }
-    });
-  }
+  query = applyFilters(query, filters);
   // Await the query and handle errors from Supabase
   const { data, error } = await query;
   // If there's an error, log it and throw
@@ -38,13 +44,8 @@ export async function getById<T>(
   filters?: Record<string, any>
 ): Promise<T | null> {
   let query = supabase.from(tableName).select("*").eq("id", id);
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        query = query.eq(key, value);
-      }
-    });
-  }
+  // If filters are provided, apply them to the query
+  query = applyFilters(query, filters);
   // Use .single() to ensure only one record is returned
   const { data, error } = await query.single();
   if (error) {
@@ -61,7 +62,7 @@ export async function getById<T>(
 // 3️⃣ Create a new record
 export async function create<T>(
   tableName: string,
-  data: Record<string, any>
+  data: CreateStackData | CreateActionData
 ): Promise<T> {
   const { data: result, error } = await supabase
     .from(tableName)
@@ -88,13 +89,8 @@ export async function update<T>(
     .from(tableName)
     .update({ ...updates, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        query = query.eq(key, value);
-      }
-    });
-  }
+  // If filters are provided, apply them to the query
+  query = applyFilters(query, filters);
   const { data, error } = await query.select().single();
   if (error) {
     console.error(`Error updating ${tableName} by ID:`, error);
@@ -110,13 +106,8 @@ export async function remove(
   filters?: Record<string, any>
 ): Promise<void> {
   let query = supabase.from(tableName).delete().eq("id", id);
-  if (filters) {
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        query = query.eq(key, value);
-      }
-    });
-  }
+  // If filters are provided, apply them to the query
+  query = applyFilters(query, filters);
   const { error } = await query;
   if (error) {
     console.error(`Error deleting from ${tableName} by ID:`, error);
@@ -172,9 +163,9 @@ export const actionsAPI = {
 // USAGE EXAMPLE
 // ===============================================================
 // In your React components or hooks, you can now import and use these APIs:
-// import { stacksAPI, actionAPI } from '@/lib/data/supabaseAPI';
+// import { stacksAPI, actionsAPI } from '@/lib/data/supabaseAPI';
 // const stacks = await stacksAPI.getAll();
-// const newAction = await actionAPI.create({ name: 'New Task', stack_id: 1, priority: 2 });
+// const newAction = await actionsAPI.create({ name: 'New Task', stack_id: 1, priority: 2 });
 
 // ===============================================================
 // UTILITY FUNCTIONS

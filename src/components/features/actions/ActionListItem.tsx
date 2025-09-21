@@ -6,12 +6,12 @@ import type { Action } from "@/types/database";
 
 // TODO: Create Edit action modal for better UX
 
-type ActionListItemProps = {
+type ActionItemProps = {
   action: Action;
   stackId: number;
 };
 
-function ActionListItem({ action, stackId }: ActionListItemProps) {
+function ActionListItem({ action, stackId }: ActionItemProps) {
   // 🪝 Use the actions hook directly for all mutations
   const { updateAction, deleteAction, toggleComplete } = useActions(stackId);
 
