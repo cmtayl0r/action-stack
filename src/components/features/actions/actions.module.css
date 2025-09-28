@@ -16,15 +16,17 @@
   margin: 0;
 }
 
-.action-list__item {
+.action-item {
   display: flex;
   align-items: center;
   /* justify-content: space-between; */
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: var(--space-xs);
+  padding: var(--space-md);
   /* border-bottom: 1px solid var(--color-gray-light); */
+  border: 2px solid var(--border-faint);
+  border-radius: var(--border-radius-lg);
 }
 
-.action-list__name {
+.action-item__name {
   flex-grow: 1;
 }

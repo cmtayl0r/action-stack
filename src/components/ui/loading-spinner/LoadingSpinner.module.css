@@ -2,7 +2,7 @@
   --spinner-size-xs: 16px;
   --spinner-size-sm: 20px;
   --spinner-size-md: 24px;
-  --spinner-size-lg: 32px;
+  --spinner-size-lg: 40px;
 }
 
 /*
@@ -16,12 +16,16 @@ CORE STRUCTURE
   display: inline-block;
 
   /* Dynamic color that works in any context */
-  background:
-    radial-gradient(farthest-side, currentColor 94%, transparent) top/6px 6px no-repeat,
+  background: radial-gradient(farthest-side, currentColor 94%, transparent)
+      top/6px 6px no-repeat,
     conic-gradient(transparent 30%, currentColor);
 
   /* Mask for the donut shape */
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black 0);
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 6px),
+    black 0
+  );
   mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black 0);
   animation: loading 0.75s infinite linear;
 }

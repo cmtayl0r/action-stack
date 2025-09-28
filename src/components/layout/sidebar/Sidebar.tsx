@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
 import {
@@ -57,6 +57,11 @@ function Sidebar() {
     openModal(MODAL_IDS.ADD_STACK);
   };
 
+  useEffect(() => {
+    // Debug: Log stacks when they change
+    console.log("Stacks updated:", stacks);
+  }, [stacks]);
+
   return (
     <aside
       className={`stack stack--between p-sm ${styles["sidebar"]}`}
@@ -97,7 +102,7 @@ function Sidebar() {
                 ) : (
                   <Layers2 size={16} />
                 )}
-                {stack.name}{" "}
+                {stack.name}
               </NavLink>
             </li>
           ))}

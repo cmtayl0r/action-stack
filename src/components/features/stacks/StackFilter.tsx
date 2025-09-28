@@ -37,7 +37,7 @@ function StackFilter({ filters }: StackFilterProps) {
   // };
 
   return (
-    <div className={`p-sm ${styles["stack-filter"]}`}>
+    <div className={`${styles["stack-filter"]}`}>
       <div className={styles["stack-filter__group"]}>
         <strong>Filters:</strong> {getFilterSummary(filters) || "None"}
       </div>
@@ -95,12 +95,11 @@ function StackFilter({ filters }: StackFilterProps) {
           Show completed actions
         </label>
       </div>
-
-      <div className={styles["stack-filter__group"]}>
-        {hasActiveFilters && (
+      {hasActiveFilters && (
+        <div className={styles["stack-filter__group"]}>
           <button onClick={clearFilters}>Clear all filters</button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

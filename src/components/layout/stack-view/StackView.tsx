@@ -12,8 +12,10 @@ import { getCurrentStackId } from "@/router/router";
 import Header from "@/components/layout/header/Header";
 import StackFilter from "@/components/features/stacks/StackFilter";
 import StackList from "@/components/features/stacks/StackList";
+import { LoadingSpinner } from "@/components";
 // STYLES
 import styles from "./StackView.module.css";
+import { L } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 function StackView() {
   // 🌐 App context
@@ -41,7 +43,7 @@ function StackView() {
   );
 
   // Loading and error states
-  if (stackLoading || actionsLoading) return <div>Loading...</div>;
+  if (stackLoading || actionsLoading) return <LoadingSpinner size="lg" />;
   if (stackError || actionsError) return <div>Error loading data</div>;
   if (!currentStack) return <div>Stack not found</div>;
 

@@ -44,7 +44,7 @@ function ActionListItem({ action, stackId }: ActionItemProps) {
   };
 
   return (
-    <li className={styles["action-list__item"]}>
+    <li className={styles["action-item"]}>
       {isEditing ? (
         <form onSubmit={handleSubmit}>
           <input
@@ -68,7 +68,12 @@ function ActionListItem({ action, stackId }: ActionItemProps) {
               action.completed ? "incomplete" : "complete"
             }`}
           />
-          <span className={styles["action-list__name"]}>{action.name}</span>
+          <span
+            className={styles["action-item__name"]}
+            onClick={() => setIsEditing((prev) => !prev)}
+          >
+            {action.name}
+          </span>
           <small>{formatDate(action.created_at)}</small>
           <Flag
             className={styles[`label-priority--${action.priority}`]}

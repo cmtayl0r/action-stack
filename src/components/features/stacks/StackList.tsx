@@ -30,7 +30,7 @@ function StackList({
 
   return (
     <div className={styles["stack-list"]}>
-      <ul>
+      <ul className="stack stack--sm">
         {filteredActions.map((action) => (
           <ActionListItem key={action.id} action={action} stackId={stackId} />
         ))}
