@@ -24,7 +24,7 @@ export function applyFiltersToActions(
 
   // Sort
   filtered.sort((a, b) => {
-    let aValue: any, bValue: any;
+    let aValue: string | number | null, bValue: string | number | null;
 
     switch (filters.sort_by) {
       case "priority":

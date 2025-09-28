@@ -1,6 +1,11 @@
-import { supabase } from "@/lib/supabase/client";
 import { TEST_USER_ID } from "@/types/database";
 import type { CreateActionData, CreateStackData } from "@/types/database";
+import { createClient } from "@supabase/supabase-js";
+
+// Setup Supabase client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // 🛠️ Utility function to apply filters to Supabase queries
 function applyFilters(query: any, filters?: Record<string, any>) {

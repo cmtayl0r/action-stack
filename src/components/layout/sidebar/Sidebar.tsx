@@ -8,6 +8,7 @@ import {
   Layers2,
   Moon,
   Sun,
+  Contrast,
 } from "lucide-react";
 
 import useStacks from "@/hooks/data/useStacks";
@@ -25,7 +26,7 @@ function Sidebar() {
   const { stacks } = useStacks();
 
   // 🌐 Connect to app context for theme and stacks
-  const { state, toggleTheme } = useAppContext();
+  const { state, toggleTheme, toggleContrast } = useAppContext();
 
   // 🗺️ Get current stack from URL for highlighting active stack and modals
   const params = useParams();
@@ -115,14 +116,28 @@ function Sidebar() {
       </div>
 
       {/* Theme switch */}
-      <div className="cluster">
-        <Button
-          onClick={toggleTheme}
-          icon={state.theme === "dark" ? Moon : Sun}
-          aria-label="Toggle theme"
-          isIconOnly
-        />
-        <small>Theme is {state.theme}</small>
+      <div className="stack">
+        <div className="cluster">
+          <Button
+            onClick={toggleTheme}
+            icon={state.theme === "dark" ? Moon : Sun}
+            aria-label="Toggle theme"
+            isIconOnly
+          />
+          <small>{state.theme}</small>
+        </div>
+        <div className="cluster">
+          <Button
+            onClick={toggleContrast}
+            icon={Contrast}
+            aria-label="Toggle high contrast"
+            variant={state.highContrast ? "primary" : "outline"}
+            isIconOnly
+          />
+          <small>
+            {state.highContrast ? "High Contrast" : "Normal Contrast"}
+          </small>
+        </div>
       </div>
     </aside>
   );

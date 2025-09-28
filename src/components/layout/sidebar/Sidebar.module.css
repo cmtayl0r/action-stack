@@ -1,6 +1,6 @@
 .sidebar {
   width: 260px;
-  border-right: 1px solid var(--color-gray-dark);
+  border-right: 1px solid var(--border-base);
 }
 
 .sidebar__stacks {
@@ -12,5 +12,4 @@
   color: brown;
   text-transform: capitalize;
   font-weight: bold;
-  background-color: var(--color-gray-light);
 }
