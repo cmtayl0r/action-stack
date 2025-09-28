@@ -10,10 +10,10 @@ import { useUrlFilters } from "@/hooks/data/useUrlFilters";
 import { getCurrentStackId } from "@/router/router";
 // COMPONENTS
 import Header from "@/components/layout/header/Header";
-import ActionsFilter from "../actions/ActionsFilter";
-import ActionsList from "../actions/ActionsList";
+import StackFilter from "@/components/features/stacks/StackFilter";
+import StackList from "@/components/features/stacks/StackList";
 // STYLES
-import styles from "./stacks.module.css";
+import styles from "./StackView.module.css";
 
 function StackView() {
   // 🌐 App context
@@ -52,8 +52,8 @@ function StackView() {
         toggleSidebar={toggleSidebar}
         stackName={currentStack?.name}
       />
-      <ActionsFilter filters={filters} />
-      <ActionsList
+      <StackFilter filters={filters} />
+      <StackList
         stackId={stackId}
         actions={actions}
         filters={filters}

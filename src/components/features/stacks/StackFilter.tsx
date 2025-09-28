@@ -1,4 +1,4 @@
-import styles from "./actions.module.css";
+import styles from "./stacks.module.css";
 import type { StackFilters } from "@/types/filters";
 import { SORT_OPTIONS } from "@/types/filters";
 import { useUrlFilters, getFilterSummary } from "@/hooks/data/useUrlFilters";
@@ -6,11 +6,11 @@ import { useState } from "react";
 
 // TODO: Debounce search input for better performance
 
-interface ActionsFilterProps {
+interface StackFilterProps {
   filters: StackFilters;
 }
 
-function ActionsFilter({ filters }: ActionsFilterProps) {
+function StackFilter({ filters }: StackFilterProps) {
   // 🔍 URL filter management hook
   const {
     setSearch,
@@ -37,12 +37,12 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
   // };
 
   return (
-    <div className={`p-sm ${styles["actions-filter"]}`}>
-      <div className={styles["actions-filter__group"]}>
+    <div className={`p-sm ${styles["stack-filter"]}`}>
+      <div className={styles["stack-filter__group"]}>
         <strong>Filters:</strong> {getFilterSummary(filters) || "None"}
       </div>
 
-      <div className={styles["actions-filter__group"]}>
+      <div className={styles["stack-filter__group"]}>
         <label htmlFor="search-actions">Search actions</label>
         <input
           type="text"
@@ -57,7 +57,7 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
         )}
       </div>
 
-      <div className={styles["actions-filter__group"]}>
+      <div className={styles["stack-filter__group"]}>
         <label htmlFor="sort-by">Sort by</label>
         <select
           id="sort-by"
@@ -85,7 +85,7 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
       </div>
 
       {/* Show all actions including completed ones */}
-      <div className={styles["actions-filter__group"]}>
+      <div className={styles["stack-filter__group"]}>
         <label>
           <input
             type="checkbox"
@@ -96,7 +96,7 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
         </label>
       </div>
 
-      <div className={styles["actions-filter__group"]}>
+      <div className={styles["stack-filter__group"]}>
         {hasActiveFilters && (
           <button onClick={clearFilters}>Clear all filters</button>
         )}
@@ -105,4 +105,4 @@ function ActionsFilter({ filters }: ActionsFilterProps) {
   );
 }
 
-export default ActionsFilter;
+export default StackFilter;

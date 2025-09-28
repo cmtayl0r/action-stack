@@ -5,7 +5,7 @@ import { INBOX_STACK_ID } from "@/types/database";
 // LAYOUTS
 import AppLayout from "@/components/layout/app-layout/AppLayout";
 import ErrorView from "@/components/layout/error-view/ErrorView";
-import StackView from "@/components/features/stacks/StackView";
+import StackView from "@/components/layout/stack-view/StackView";
 
 // COMPONENTS
 import { LoadingSpinner } from "@/components";

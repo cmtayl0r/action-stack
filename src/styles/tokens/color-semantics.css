@@ -336,7 +336,9 @@ HIGH CONTRAST LIGHT MODE
 /* 🔆 High contrast light - stronger borders and text */
 [data-theme="light"][data-contrast="high"] {
   --border-base: var(--color-neutral-950);
-  --border-focus: var(--color-secondary-800);
+  --border-muted: var(--color-neutral-950);
+  --border-focus: var(--color-secondary-950);
+  --border-faint: var(--color-neutral-800);
   --content-muted: var(--color-neutral-800);
   --content-faint: var(--color-neutral-700);
 }
@@ -350,6 +352,8 @@ HIGH CONTRAST DARK MODE
 /* 🌙 High contrast dark - stronger borders and text */
 [data-theme="dark"][data-contrast="high"] {
   --border-base: var(--color-white);
+  --border-muted: var(--color-white);
+  --border-faint: var(--color-white);
   --border-focus: var(--color-secondary-300);
   --content-muted: var(--color-neutral-200);
   --content-faint: var(--color-neutral-300);

@@ -1,41 +1,41 @@
-import styles from "./actions.module.css";
-import ActionListItem from "./ActionListItem";
+import styles from "./stacks.module.css";
+import ActionListItem from "@/components/features/actions/ActionListItem";
 import { applyFiltersToActions } from "@/lib/filters";
 import type { Action } from "@/types/database";
 import type { StackFilters } from "@/types/filters";
 
-type ActionsListProps = {
+type StackListProps = {
   stackId: number;
   actions: Action[];
   filters: StackFilters;
   emptyMessage?: string;
 };
 
-function ActionsList({
+function StackList({
   stackId,
   actions,
   filters,
   emptyMessage = "No actions found",
-}: ActionsListProps) {
+}: StackListProps) {
   // 🔍 Apply filters to actions list
   const filteredActions = applyFiltersToActions(actions, filters);
 
   if (filteredActions.length === 0) {
     return (
-      <div className="actions-list-empty">
+      <div className="stack-list__empty">
         <p>{emptyMessage}</p>
       </div>
     );
   }
 
   return (
-    <div className={styles["actions-list"]}>
+    <div className={styles["stack-list"]}>
       <ul>
         {filteredActions.map((action) => (
           <ActionListItem key={action.id} action={action} stackId={stackId} />
         ))}
       </ul>
-      <div className="actions-list-summary">
+      <div className="stack-list__summary">
         <small>
           {actions.length} action{actions.length !== 1 ? "s" : ""}
           {" • "}
@@ -48,4 +48,4 @@ function ActionsList({
   );
 }
 
-export default ActionsList;
+export default StackList;
