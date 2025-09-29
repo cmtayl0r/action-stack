@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/toasts/ToastContext";
 import useStacks from "@/hooks/data/useStacks";
 import useActions from "@/hooks/data/useActions";
-import { BaseModal, Button } from "@/components/ui";
 import { Action, CreateActionData } from "@/types";
+import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 
 /**
- * MODAL SYSTEM: Feature Modal
+ * FEATURE MODAL: Add Action Modal
  *
- * Purpose: Specific modal for adding actions - uses Modal compound components
+ * Purpose: Specific modal for adding actions
  *
  * Flow:
  * 1. Receives isOpen/onClose from ModalHost
@@ -24,37 +24,31 @@ import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
  */
 
 // =============================================================================
-// TYPES
-// =============================================================================
-
-interface AddActionModalProps {
-  stackId: number;
-}
-
-// =============================================================================
 // COMPONENT
 // =============================================================================
 
-function AddActionModal({ stackId }: AddActionModalProps) {
-  // 🎯 Connect to modal system
-  const { closeModal } = useModal();
+function AddActionModal() {
+  // 🪝 Connect to modal system
+  const { closeModal, modalProps } = useModal();
+  // Extract custom props passed when opening the modal
+  const { stackId } = modalProps;
 
-  // 🔗 Connect to stacks, actions
+  // 🪝 Connect to stacks, actions
   const { stacks } = useStacks();
   const { createAction, isCreating } = useActions(stackId);
 
   // 🪝 Connect to Toasts hook
   const toast = useToast();
 
-  // Navigation
+  // 🧭 Navigation
   const navigate = useNavigate();
 
-  // 🎛️ Form State
+  // 📦 Form State
   const [name, setName] = useState("");
   const [priority, setPriority] = useState<0 | 1 | 2 | 3>(0);
   const [selectedStackId, setSelectedStackId] = useState(stackId);
 
-  // 🔧 Handle form submission
+  // ⚡️ Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedName = name.trim();
@@ -89,13 +83,6 @@ function AddActionModal({ stackId }: AddActionModalProps) {
       console.error("Error adding action:", err);
     }
   };
-
-  useEffect(() => {
-    console.log("AddActionModal opened with stackId:", stackId);
-    if (stackId) {
-      setSelectedStackId(stackId);
-    }
-  }, [stackId]);
 
   return (
     <BaseModal id={MODAL_IDS.ADD_ACTION} title="Add New Action" size="md">

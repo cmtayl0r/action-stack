@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
 import {
@@ -19,7 +19,7 @@ import { getCurrentStackId } from "@/router/router";
 import styles from "./Sidebar.module.css";
 
 function Sidebar() {
-  // 🎯 Connect to modal system
+  // 🪝 Connect to modal system
   const { openModal } = useModal();
 
   // 🪝 Connect to stacks hook
@@ -28,11 +28,11 @@ function Sidebar() {
   // 🌐 Connect to app context for theme and stacks
   const { state, toggleTheme, toggleContrast } = useAppContext();
 
-  // 🗺️ Get current stack from URL for highlighting active stack and modals
+  // 🧭 Get current stack from URL for highlighting active stack and modals
   const params = useParams();
   const currentStackId = getCurrentStackId(params);
 
-  // 📊 Sort stacks: Inbox first
+  // 🧠 Sort stacks: Inbox first
   const sortedStacks = useMemo(() => {
     return [...stacks].sort((a, b) => {
       // Inbox stacks come first
@@ -43,9 +43,8 @@ function Sidebar() {
     });
   }, [stacks]);
 
-  // 🔧 Modal trigger handlers, IDs from ModalHost
+  // ⚡️ Modal trigger handlers, IDs from ModalHost
   const handleAddAction = () => {
-    console.log("currentStackId being passed:", currentStackId);
     openModal(MODAL_IDS.ADD_ACTION, { stackId: currentStackId });
   };
 
@@ -56,11 +55,6 @@ function Sidebar() {
   const handleAddStack = () => {
     openModal(MODAL_IDS.ADD_STACK);
   };
-
-  useEffect(() => {
-    // Debug: Log stacks when they change
-    console.log("Stacks updated:", stacks);
-  }, [stacks]);
 
   return (
     <aside
@@ -90,7 +84,7 @@ function Sidebar() {
 
         <p>Stacks</p>
         <ul className={`stack stack--none ${styles["sidebar__stacks"]}`}>
-          {sortedStacks.map((stack: Stack) => (
+          {sortedStacks.map((stack) => (
             <li key={stack.id}>
               <NavLink
                 to={`/stack/${stack.id}`}

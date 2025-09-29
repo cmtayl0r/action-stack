@@ -1,22 +1,42 @@
 import { useModal } from "@/context/modals/ModalContext";
-
-// 🗂️ Import all modal components - clean and simple
 import AddActionModal from "@/components/features/actions/AddActionModal";
 import AddStackModal from "@/components/features/stacks/AddStackModal";
 import SearchActionsModal from "@/components/features/search/SearchActionsModal";
 
 /**
- * MODAL HOST: Simplified modal management
+ * MODAL HOST: Central modal registry and renderer
  *
- * Purpose: Single responsibility for modal rendering
- * Benefits: Less complex types, easier to maintain, cleaner imports
+ * Purpose: Single component responsible for rendering the active modal
  *
- * Pattern: Direct component mapping without complex type gymnastics
+ * Benefits:
+ * - Central registry - see all modals in one place
+ * - Single modal instance (better performance)
+ * - Easy to add/remove modals (update MODAL_IDS + register)
+ * - Lazy loading ready (can use React.lazy)
+ * - Type-safe modal IDs with autocomplete
+ *
+ * Pattern: Registry + Dynamic Component Rendering
+ * - MODAL_IDS constant defines all available modals
+ * - MODAL_COMPONENTS maps IDs to components
+ * - Renders active modal based on context state
+ * - Returns null when no modal is open
+ *
+ * Usage:
+ * 1. Add modal ID to MODAL_IDS
+ * 2. Import modal component
+ * 3. Register in MODAL_COMPONENTS
+ * 4. Place <ModalHost /> in AppLayout
+ *
+ * Location: Should be rendered once in your root layout (AppLayout.tsx)
  */
 
 // =============================================================================
-// MODAL IDS - Type-safe modal identifiers
+// MODAL IDS
 // =============================================================================
+/**
+ * Type-safe identifiers for all modals
+ * Add new modal IDs here as you create them
+ */
 
 export const MODAL_IDS = {
   ADD_ACTION: "addAction",
@@ -26,60 +46,41 @@ export const MODAL_IDS = {
   // USER_PROFILE: "userProfile",
 } as const;
 
-// =============================================================================
-// TYPE DEFINITIONS - Modal prop interfaces
-// =============================================================================
-
-/**
- * Simple registry: modal ID maps directly to component
- * No complex prop interfaces needed - each component handles its own props
- */
-const MODAL_COMPONENTS = {
-  [MODAL_IDS.ADD_ACTION]: AddActionModal,
-  [MODAL_IDS.SEARCH]: SearchActionsModal,
-  [MODAL_IDS.ADD_STACK]: AddStackModal,
-} as const;
+// Type helper - ensures only valid modal IDs are used
+export type ModalId = (typeof MODAL_IDS)[keyof typeof MODAL_IDS];
 
 // =============================================================================
 // MODAL HOST COMPONENT
-// Purpose: Renders the active modal component based on the current modal state.
 // =============================================================================
+/**
+ * Modal Host Component
+ * Renders whichever modal is currently active
+ * Place this at the root of your app (in AppLayout or layout.tsx)
+ */
 
 export function ModalHost() {
-  const { modalState } = useModal();
+  const { activeModalId } = useModal();
 
-  // Early return if no modal is open
-  if (!modalState.id) {
-    return null;
-  }
-
-  // Get the modal component - simple lookup
-  const ModalComponent =
-    MODAL_COMPONENTS[modalState.id as keyof typeof MODAL_COMPONENTS];
-
-  // Error handling for missing modals
-  if (!ModalComponent) {
-    console.error(`Modal component not found for ID: "${modalState.id}"`);
-    return null;
-  }
-
-  // Render the modal with its props from the registry
-  return <ModalComponent {...modalState.props} />;
-}
-
-// =============================================================================
-// TYPE HELPERS - Optional, only if you need type safety
-// =============================================================================
-
-export type ModalId = keyof typeof MODAL_COMPONENTS;
-
-// Simple typed hook - no complex generics needed
-export function useTypedModal() {
-  const modal = useModal();
-
-  return {
-    ...modal,
-    // Simple overload for type safety
-    openModal: (id: ModalId, props?: any) => modal.openModal(id, props),
+  // Map of modal IDs to their components
+  // Add new modals here as you create them
+  const MODAL_COMPONENTS: Record<string, React.ComponentType> = {
+    [MODAL_IDS.ADD_ACTION]: AddActionModal,
+    [MODAL_IDS.SEARCH]: SearchActionsModal,
+    [MODAL_IDS.ADD_STACK]: AddStackModal,
   };
+
+  // No modal open - render nothing
+  if (!activeModalId) return null;
+
+  // Get the modal component for the active ID
+  const ModalComponent = MODAL_COMPONENTS[activeModalId];
+
+  // Modal not found in registry - log error
+  if (!ModalComponent) {
+    console.error(`Modal component not found for ID: "${activeModalId}"`);
+    return null;
+  }
+
+  // Render the active modal
+  return <ModalComponent />;
 }

@@ -8,73 +8,90 @@ import {
 } from "react";
 
 /**
- * MODAL REGISTRY: Centralized modal state management
+ * MODAL CONTEXT: Global modal state management
  *
- * Purpose: Single source of truth for which modal is open and modal data
- * Benefits: Type-safe, clean separation, easy to extend
+ * Purpose: Provides centralized control for opening/closing modals throughout the app
  *
- * Flow: Component calls openModal(id, props) → Registry updates → BaseModal renders → Focus management handled by React Aria
+ * Benefits:
+ * - Single source of truth for modal state
+ * - No prop drilling - access from any component
+ * - Type-safe modal IDs and props
+ * - Prevents multiple modals from conflicting
+ *
+ * Pattern: Context + Provider + Custom Hook
+ * - ModalProvider wraps your app (in main.tsx)
+ * - useModal() hook provides access anywhere
+ * - Tracks activeModalId and modalProps in state
+ *
+ * Usage:
+ * const { openModal, closeModal } = useModal();
+ * openModal(MODAL_IDS.ADD_ACTION, { stackId: 1 });
  */
 
 // =============================================================================
-// 1. CONTEXT
+// TYPE DEFINITIONS
 // =============================================================================
 
-interface ModalState<T = any> {
-  id: string | null;
-  props: T;
-}
+/**
+ * Context value shape - what useModal() returns
+ * This is our public API boundary, so we type it explicitly
+ */
 interface ModalContextValue {
-  // Current modal state
-  modalState: ModalState;
-  // Core actions - simple and focused
-  openModal: <T = any>(id: string, props?: T) => void;
+  activeModalId: string | null; // Currently active modal ID
+  modalProps: Record<string, any>; // Props to pass to the active modal
+  openModal: (modalId: string, props?: Record<string, any>) => void;
   closeModal: () => void;
-  // Helper to check if specific modal is open
-  isModalOpen: (id: string) => boolean;
+  isModalOpen: (modalId: string) => boolean;
 }
+
+// =============================================================================
+// CONTEXT
+// =============================================================================
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 
 // =============================================================================
-// 2. MODAL PROVIDER
+// MODAL PROVIDER
 // =============================================================================
 
-interface ModalProviderProps {
-  children: ReactNode;
-}
+export const ModalProvider = ({ children }: { children: ReactNode }) => {
+  // 📦 Track which modal is open (null = none)
+  const [activeModalId, setActiveModalId] = useState<string | null>(null);
+  // 📦 Store props to pass to active modal
+  const [modalProps, setModalProps] = useState<Record<string, any>>({});
 
-export const ModalProvider = ({ children }: ModalProviderProps) => {
-  // 🎛️ State for Modal
-  const [modalState, setModalState] = useState<ModalState>({
-    id: null,
-    props: {},
-  });
+  // ⚡ Open a modal by ID with optional props
+  const openModal = useCallback(
+    (modalId: string, props: Record<string, any> = {}) => {
+      setActiveModalId(modalId);
+      setModalProps(props);
+    },
+    []
+  );
 
-  // 🔧 Open any modal with optional props
-  const openModal = useCallback(<T = any,>(id: string, props: T = {} as T) => {
-    setModalState({ id, props });
-  }, []);
-
-  // 🔧 Close modal and clear state
+  // ⚡ Close the currently active modal
   const closeModal = useCallback(() => {
-    setModalState({ id: null, props: {} });
+    setActiveModalId(null);
+    setModalProps({});
   }, []);
 
-  // 🔧 Helper to check if specific modal is open
+  // ⚡ Check if a specific modal is currently open
   const isModalOpen = useCallback(
-    (id: string) => modalState.id === id,
-    [modalState.id]
+    (modalId: string) => {
+      return activeModalId === modalId;
+    },
+    [activeModalId]
   );
 
   const contextValue: ModalContextValue = useMemo(
     () => ({
-      modalState,
+      activeModalId,
+      modalProps, // Props could be anything
       openModal,
       closeModal,
       isModalOpen,
     }),
-    [modalState, openModal, closeModal, isModalOpen]
+    [activeModalId, modalProps, openModal, closeModal, isModalOpen]
   );
 
   return (
@@ -85,7 +102,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
 };
 
 // =============================================================================
-// 3. PUBLIC HOOK
+// PUBLIC HOOK TO ACCESS CONTEXT
 // =============================================================================
 
 export const useModal = (): ModalContextValue => {

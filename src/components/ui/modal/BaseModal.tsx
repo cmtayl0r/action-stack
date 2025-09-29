@@ -7,23 +7,29 @@ import styles from "./Modal.module.css";
 import clsx from "clsx";
 
 /**
- * BASE MODAL: Foundation component with Framer Motion animations
+ * BASE MODAL: Foundation component
  */
 
+// ? can isDismissable just be applied to ModalOverlay?
+// ? can isKeyboardDismissDisabled just be applied to ModalOverlay?
+
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
+
 interface BaseModalProps {
-  // Modal identification - must match MODAL_IDS constant
-  id: string;
-  // Modal content and configuration
-  children: ReactNode;
-  title?: string;
-  // Behavior options
-  isDismissable?: boolean;
-  isKeyboardDismissDisabled?: boolean;
-  // Size variants for different content types
-  size?: "sm" | "md" | "lg" | "full";
-  // Additional styling
-  className?: string;
+  id: string; // Unique modal ID
+  children: ReactNode; // Modal content
+  title?: string; // Optional title/header
+  isDismissable?: boolean; // Click outside or close button
+  isKeyboardDismissDisabled?: boolean; // Disable Esc key
+  size?: "sm" | "md" | "lg" | "full"; // Size variants
+  className?: string; // Custom CSS classes
 }
+
+// =============================================================================
+// COMPONENT
+// =============================================================================
 
 export function BaseModal({
   id,
@@ -36,9 +42,8 @@ export function BaseModal({
   ...props
 }: BaseModalProps) {
   const { closeModal, isModalOpen } = useModal();
-
-  // Check if this modal is currently open by ID
   const isOpen = isModalOpen(id);
+
   // if modal is not open, return null
   if (!isOpen) return null;
 
@@ -46,41 +51,34 @@ export function BaseModal({
   const modalClasses = clsx(styles.modal, styles[`modal--${size}`], className);
 
   return (
-    <>
-      {isOpen && (
-        <ModalOverlay
-          className={styles["modal__overlay"]}
-          isDismissable={isDismissable}
-          isKeyboardDismissDisabled={isKeyboardDismissDisabled}
-          isOpen={isOpen}
-          onOpenChange={(open) => {
-            // React Aria calls this when user closes modal (ESC, click outside, etc.)
-            if (!open) closeModal();
-          }}
-        >
-          <Modal className={modalClasses} {...props}>
-            <Dialog>
-              <div className="stack">
-                {title && (
-                  <Heading level={2} slot="title">
-                    {title}
-                  </Heading>
-                )}
-                {children}
-              </div>
-              <Button
-                isIconOnly
-                variant="ghost"
-                onPress={closeModal}
-                icon={X}
-                aria-label="Close modal"
-                className={styles["modal__close-button"]}
-              />
-            </Dialog>
-          </Modal>
-        </ModalOverlay>
-      )}
-    </>
+    <ModalOverlay
+      className={styles["modal__overlay"]}
+      isOpen={isOpen}
+      onOpenChange={(open) => !open && closeModal()}
+      isDismissable={isDismissable}
+      isKeyboardDismissDisabled={isKeyboardDismissDisabled}
+    >
+      <Modal className={modalClasses} {...props}>
+        <Dialog>
+          <div className="stack">
+            {title && (
+              <Heading level={2} slot="title">
+                {title}
+              </Heading>
+            )}
+            {children}
+          </div>
+          <Button
+            isIconOnly
+            variant="ghost"
+            onPress={closeModal}
+            icon={X}
+            aria-label="Close modal"
+            className={styles["modal__close-button"]}
+          />
+        </Dialog>
+      </Modal>
+    </ModalOverlay>
   );
 }
 
