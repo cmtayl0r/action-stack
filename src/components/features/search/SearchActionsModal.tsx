@@ -41,7 +41,7 @@ function SearchActionsModal() {
   }, [actions, query]);
 
   return (
-    <BaseModal modalId={MODAL_IDS.SEARCH} title="Search Actions" size="lg">
+    <BaseModal id={MODAL_IDS.SEARCH} title="Search Actions" size="lg">
       <div className="stack">
         {/* F-004.1: Proper labeling for accessibility */}
         <label htmlFor="search-actions-input" className="sr-only">

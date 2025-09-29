@@ -98,7 +98,7 @@ function AddActionModal({ stackId }: AddActionModalProps) {
   }, [stackId]);
 
   return (
-    <BaseModal modalId={MODAL_IDS.ADD_ACTION} title="Add New Action" size="md">
+    <BaseModal id={MODAL_IDS.ADD_ACTION} title="Add New Action" size="md">
       <form onSubmit={handleSubmit} className="stack">
         {/* <Modal.Header>Add New Action</Modal.Header> */}
         <div className="stack">

@@ -8,20 +8,11 @@ import clsx from "clsx";
 
 /**
  * BASE MODAL: Foundation component with Framer Motion animations
- *
- * Purpose: Provides consistent structure, accessibility, and smooth animations
- * Benefits:
- * - React Aria for accessibility (focus management, ARIA, keyboard navigation)
- * - Framer Motion for reliable, smooth animations
- * - AnimatePresence handles mount/unmount animations
- * - Clean separation between modal logic and content
- * - Reusable across different modal types
- *
  */
 
 interface BaseModalProps {
   // Modal identification - must match MODAL_IDS constant
-  modalId: string;
+  id: string;
   // Modal content and configuration
   children: ReactNode;
   title?: string;
@@ -35,7 +26,7 @@ interface BaseModalProps {
 }
 
 export function BaseModal({
-  modalId,
+  id,
   children,
   title,
   isDismissable = true,
@@ -47,7 +38,7 @@ export function BaseModal({
   const { closeModal, isModalOpen } = useModal();
 
   // Check if this modal is currently open by ID
-  const isOpen = isModalOpen(modalId);
+  const isOpen = isModalOpen(id);
   // if modal is not open, return null
   if (!isOpen) return null;
 

@@ -76,7 +76,7 @@ function AddStackModal() {
   };
 
   return (
-    <BaseModal modalId={MODAL_IDS.ADD_STACK} title="Add New Stack" size="md">
+    <BaseModal id={MODAL_IDS.ADD_STACK} title="Add New Stack" size="md">
       <form onSubmit={handleSubmit} className="stack">
         <div className="stack">
           <label htmlFor="stack-name">Stack Name</label>
