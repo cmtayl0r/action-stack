@@ -44,9 +44,14 @@ REACT ARIA SPECIFIC STYLE SELECTORS
 }
 
 .btn[data-pressed] {
-  transform: scale(0.98) translateY(0.1rem);
+  /* transform: scale(0.98) translateY(0.1rem);
+   */
+  transform: translateY(4px);
 }
 
+.interactive--outline {
+  border-bottom: 4px solid var(--border-muted);
+}
 /*
 ================================================================================
 SIZES

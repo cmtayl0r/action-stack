@@ -6,12 +6,8 @@ COMPLETE INTERACTIVE STATES SYSTEM
 
 /* ===== BASE INTERACTIVE BEHAVIOR ===== */
 .interactive {
-  transition:
-    background-color 0.15s ease-out,
-    border-color 0.15s ease-out,
-    color 0.15s ease-out,
-    box-shadow 0.15s ease-out,
-    transform 0.1s ease-out;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out,
+    color 0.15s ease-out, box-shadow 0.15s ease-out, transform 0.1s ease-out;
 
   /* Respect reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
@@ -99,7 +95,6 @@ HOVER STATES (POINTER DEVICES ONLY)
     border-color: var(--border-base);
   }
 
-
   .interactive--ghost:hover {
     background-color: var(--surface-hover);
   }
@@ -107,9 +102,7 @@ HOVER STATES (POINTER DEVICES ONLY)
   /* Card hover elevation */
   .card.interactive:hover {
     transform: translateY(-2px);
-    box-shadow:
-      0 8px 25px rgba(0, 0, 0, 0.12),
-      0 4px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
   }
 }
 
@@ -161,7 +154,6 @@ SELECTED STATES
 
 /* Selected + hover combination */
 @media (hover: hover) and (pointer: fine) {
-
   .interactive--selected-strong:hover {
     background-color: var(--surface-primary-hover);
   }
@@ -198,9 +190,7 @@ DRAG & DROP STATES
 .interactive--dragging {
   opacity: 0.8;
   transform: rotate(2deg) scale(1.02);
-  box-shadow:
-    0 8px 25px rgba(0, 0, 0, 0.2),
-    0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   cursor: grabbing;
 }
@@ -249,17 +239,18 @@ HIGH CONTRAST MODE
 ================================================================================
 */
 @media (prefers-contrast: high) {
-
   .interactive--selected {
     border-width: 2px;
   }
 
   .interactive:disabled {
     opacity: 0.6;
-    background: repeating-linear-gradient(45deg,
-        transparent,
-        transparent 2px,
-        var(--border-disabled) 2px,
-        var(--border-disabled) 4px);
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      var(--border-disabled) 2px,
+      var(--border-disabled) 4px
+    );
   }
 }
