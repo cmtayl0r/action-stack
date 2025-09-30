@@ -1,22 +1,21 @@
-// Top-level components barrel
-// Follow root index rules:
-// - Named exports only (no `export *`)
-// - Re-export specific items from category barrels (ui, layout, features) to keep imports clean
-
 /*
 ================================================================================
-UI
+UI PRIMITIVES
 ================================================================================
 */
 
+// Modal components
 export { default as BaseModal } from "./ui/modal/BaseModal";
 export { ModalHost } from "./ui/modal/ModalHost";
 export { MODAL_IDS } from "./ui/modal/ModalHost";
+// Button component
 export { default as Button } from "./ui/button/Button";
+export type { ButtonProps } from "./ui/button/Button";
+// Toast components
 export { Toast, ToastContainer } from "./ui/toast/Toast";
+// Loading and theme
 export { default as LoadingSpinner } from "./ui/loading-spinner/LoadingSpinner";
 export { default as ThemeSelector } from "./ui/theme-selector/ThemeSelector";
-export type { ButtonProps } from "./ui/button/Button";
 
 /*
 ================================================================================

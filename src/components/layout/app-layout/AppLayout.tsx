@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { useAppContext } from "@/context/app/AppContext";
-import Sidebar from "@/components/layout/sidebar/Sidebar";
+import { Sidebar } from "@/components";
 import { ModalHost } from "@/components";
+import { ToastContainer } from "@/components";
 import styles from "./AppLayout.module.css";
-import { ToastContainer } from "@/components/ui/toast";
 
 function AppLayout() {
   const { state } = useAppContext();

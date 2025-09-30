@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/toasts/ToastContext";
 import useStacks from "@/hooks/data/useStacks";
 import useActions from "@/hooks/data/useActions";
-import { Action, CreateActionData } from "@/types";
+import { CreateActionData } from "@/types";
 import { BaseModal, Button } from "@/components/ui";
 import { useModal } from "@/context/modals/ModalContext";
 import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
@@ -30,7 +30,7 @@ import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 function AddActionModal() {
   // 🪝 Connect to modal system
   const { closeModal, modalProps } = useModal();
-  // Extract custom props passed when opening the modal
+  // Custom prop passed when opening modal
   const { stackId } = modalProps;
 
   // 🪝 Connect to stacks, actions

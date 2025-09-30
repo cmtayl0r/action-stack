@@ -2,17 +2,15 @@
 // components/ui/index.ts
 
 // Toast components
-export { Toast, ToastContainer } from "./toast";
-// export type { ToastProps, ToastHostProps } from "./toast";
-
+export { Toast, ToastContainer } from "./toast/Toast";
 // Modal components
-export { BaseModal, ModalHost } from "./modal";
-// export type { ModalProps } from "./modal";
-
-// Loading Spinner components
-export { LoadingSpinner } from "./loading-spinner";
-// export type { LoadingSpinnerProps } from "./loading-spinner";
-
-// Button components
-export { Button } from "./button";
-// export type { ButtonProps } from "./button";
+export { default as BaseModal } from "./modal/BaseModal";
+export { ModalHost } from "./modal/ModalHost";
+export { MODAL_IDS } from "./modal/ModalHost";
+// Button component
+export { default as Button } from "./button/Button";
+export type { ButtonProps } from "./button/Button";
+// Loading spinner
+export { default as LoadingSpinner } from "./loading-spinner/LoadingSpinner";
+// Theme selector
+export { default as ThemeSelector } from "./theme-selector/ThemeSelector";

@@ -4,8 +4,12 @@
 // Displays individual action with inline editing, completion toggle, and delete
 
 import { useState } from "react";
-import { Action, UpdateActionData } from "../database";
-import { useActions, getPriorityInfo, isActionOverdue } from "../useActions";
+// import { Action, UpdateActionData } from "@/types/database";
+import {
+  useActions,
+  getPriorityInfo,
+  isActionOverdue,
+// } from "@/hooks/data/useActions";
 
 interface ActionListItemProps {
   action: Action;
