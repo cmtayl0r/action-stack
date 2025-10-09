@@ -16,15 +16,19 @@ const ToastContainer = () => {
     }
   }, []);
 
-  // Keep the container mounted to allow exit animations
+  // Don't render portal until root is ready
   if (!portalRoot) return null;
 
+  // 🎯 Portal stays mounted, but only renders when needed
+  // We use AnimatePresence to handle mounting/unmounting animations
   return createPortal(
     <div
       className={styles["toast-container"]}
       aria-label="Notifications"
       role="region"
       aria-live="polite"
+      // Hide container from accessibility tree when empty
+      aria-hidden={toasts.length === 0}
     >
       <AnimatePresence>
         {toasts.map((toast) => (

@@ -59,13 +59,8 @@ export function BaseModal({
   const { closeModal, isModalOpen } = useModal();
   const isOpen = isModalOpen(id);
 
-  // if modal is not open, return null
-  // if (!isOpen) return null;
-
   // 🎨 Build CSS classes with size variant and custom overrides
   const modalClasses = clsx(styles.modal, styles[`modal--${size}`], className);
-
-  console.log("Rendering BaseModal:", { id, isOpen });
 
   return (
     <ModalOverlay
