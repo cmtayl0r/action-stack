@@ -2,6 +2,7 @@ import { useModal } from "@/context/modals/ModalContext";
 import AddActionModal from "@/components/features/actions/AddActionModal";
 import AddStackModal from "@/components/features/stacks/AddStackModal";
 import SearchActionsModal from "@/components/features/search/SearchActionsModal";
+import { AnimatePresence } from "motion/react";
 
 /**
  * MODAL HOST: Central modal registry and renderer
@@ -69,18 +70,14 @@ export function ModalHost() {
     [MODAL_IDS.ADD_STACK]: AddStackModal,
   };
 
-  // No modal open - render nothing
-  if (!activeModalId) return null;
+  // 🔍 Get modal component (can be null/undefined)
+  const ModalComponent = activeModalId ? MODAL_COMPONENTS[activeModalId] : null;
 
-  // Get the modal component for the active ID
-  const ModalComponent = MODAL_COMPONENTS[activeModalId];
-
-  // Modal not found in registry - log error
-  if (!ModalComponent) {
+  // ⚠️ Error check BEFORE rendering (optional - only for dev warnings)
+  if (activeModalId && !ModalComponent) {
     console.error(`Modal component not found for ID: "${activeModalId}"`);
-    return null;
   }
 
   // Render the active modal
-  return <ModalComponent />;
+  return ModalComponent && <ModalComponent key={activeModalId} />;
 }

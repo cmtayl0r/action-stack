@@ -6,12 +6,27 @@ import { X } from "lucide-react";
 import styles from "./Modal.module.css";
 import clsx from "clsx";
 
-/**
- * BASE MODAL: Foundation component
- */
-
 // ? can isDismissable just be applied to ModalOverlay?
 // ? can isKeyboardDismissDisabled just be applied to ModalOverlay?
+
+/**
+ * =============================================================================
+ * BASE MODAL
+ * =============================================================================
+ *
+ * PURPOSE & CONTEXT:
+ * - Core modal component for the application
+ *
+ * COMPONENT ARCHITECTURE:
+ * - Layer: Styled (Layer 2) - Wraps React Aria headless with design system
+ * - Design Pattern: Controlled component
+ * - Reusability: Foundation for all modals in application
+ *
+ * @see ModalHost.tsx for portal rendering
+ * @see ModalContext.tsx for state management
+ * @see Modal.module.css for base styles
+ * =============================================================================
+ */
 
 // =============================================================================
 // TYPE DEFINITIONS
