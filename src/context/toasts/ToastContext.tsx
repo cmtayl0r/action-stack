@@ -1,26 +1,35 @@
 import {
   createContext,
-  useReducer,
   useMemo,
   useCallback,
   useContext,
   ReactNode,
+  useState,
 } from "react";
-import { toastReducer, initialToastState } from "./reducer";
-import * as actions from "./actions";
-import { ToastContextValue, Toast } from "@/context/toasts/types";
 
 // ! Voiceover does not announce toasts
 
 // =============================================================================
-// 🏗️ CONTEXT CREATION
+// TYPE DEFINITIONS
 // =============================================================================
 
-const ToastContext = createContext<ToastContextValue | null>(null);
+export interface Toast {
+  id: string;
+  message: string;
+  type: "info" | "success" | "error" | "warning";
+  duration: number;
+}
 
-// =============================================================================
-// 🎯 TOAST PROVIDER COMPONENT
-// =============================================================================
+export interface ToastContextValue {
+  toasts: Toast[];
+  showToast: (message: string, type?: Toast["type"], duration?: number) => void;
+  hideToast: (id: string) => void;
+  clearAllToasts: () => void;
+  success: (message: string) => void;
+  error: (message: string) => void;
+  warning: (message: string) => void;
+  info: (message: string) => void;
+}
 
 interface ToastProviderProps {
   children: ReactNode;
@@ -28,49 +37,61 @@ interface ToastProviderProps {
   maxToasts?: number;
 }
 
+// =============================================================================
+// 🆔 UTILITY FUNCTIONS
+// =============================================================================
+
+const generateToastId = (): string => {
+  return `toast-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+};
+
+// =============================================================================
+// CONTEXT CREATION
+// =============================================================================
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+// =============================================================================
+// TOAST PROVIDER
+// =============================================================================
+
 export const ToastProvider = ({
   children,
   maxToasts = 5,
 }: ToastProviderProps) => {
-  // 🧠 State management using reducer pattern
-  const [state, dispatch] = useReducer(toastReducer, initialToastState);
+  // 📦 State management using useState
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // 🎬 ACTION DISPATCHERS - Memoized for performance
-  /**
-   * Shows a new toast notification
-   * Automatically enforces maximum toast limit
-   */
+  // ⚡ ACTION FUNCTIONS - Direct state updates
   const showToast = useCallback(
     (message: string, type: Toast["type"] = "info", duration = 3000) => {
-      // If at max capacity, remove oldest toast first
-      if (state.toasts.length >= maxToasts) {
-        const oldestToastId = state.toasts[0]?.id;
-        if (oldestToastId) {
-          dispatch(actions.hideToast(oldestToastId));
-        }
-      }
+      setToasts((prev) => {
+        // If at max capacity, remove oldest toast first
+        const updatedToasts = prev.length >= maxToasts ? prev.slice(1) : prev;
 
-      dispatch(actions.showToast(message, type, duration));
+        // Create new toast
+        const newToast = {
+          id: generateToastId(),
+          message: message.trim(),
+          type,
+          duration,
+        };
+
+        return [...updatedToasts, newToast];
+      });
     },
-    [state.toasts.length, maxToasts]
+    [maxToasts]
   );
 
-  /**
-   * Hides a specific toast by ID
-   */
   const hideToast = useCallback((id: string) => {
-    dispatch(actions.hideToast(id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
-  /**
-   * Clears all visible toasts
-   */
   const clearAllToasts = useCallback(() => {
-    dispatch(actions.clearAllToasts());
+    setToasts([]);
   }, []);
 
   // 🎨 CONVENIENCE METHODS - Pre-configured toast types
-
   const success = useCallback(
     (message: string) => showToast(message, "success"),
     [showToast]
@@ -95,8 +116,7 @@ export const ToastProvider = ({
   const contextValue = useMemo(
     () => ({
       // State
-      state,
-      toasts: state.toasts,
+      toasts,
 
       // Actions
       showToast,
@@ -110,10 +130,19 @@ export const ToastProvider = ({
       info,
 
       // Utility
-      hasToasts: state.toasts.length > 0,
-      toastCount: state.toasts.length,
+      hasToasts: toasts.length > 0,
+      toastCount: toasts.length,
     }),
-    [state, showToast, hideToast, clearAllToasts, success, error, warning, info]
+    [
+      toasts,
+      showToast,
+      hideToast,
+      clearAllToasts,
+      success,
+      error,
+      warning,
+      info,
+    ]
   );
 
   return (
@@ -127,22 +156,6 @@ export const ToastProvider = ({
 // 🪝 CUSTOM HOOK - Safe context consumption
 // =============================================================================
 
-/**
- * Hook to access toast functionality
- * Must be used within a ToastProvider
- *
- * @example
- * const { showToast, success, error } = useToastContext();
- *
- * // Show basic toast
- * showToast('Hello world!');
- *
- * // Show success toast
- * success('Operation completed!');
- *
- * // Show error toast
- * error('Something went wrong');
- */
 export const useToast = (): ToastContextValue => {
   const context = useContext(ToastContext);
 
