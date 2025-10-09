@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { BadgeInfo, CircleCheck, TriangleAlert, X } from "lucide-react";
 import styles from "./Toast.module.css";
-import { useToast } from "@/context/toasts/ToastContext";
-import type { Toast as ToastType } from "@/context/toasts/types";
+import type { Toast as ToastType } from "@/context/toasts/ToastContext";
 import { Button } from "@/components";
+import { motion } from "motion/react";
 
 /*
   Toast Component
@@ -32,7 +31,7 @@ interface ToastItemProps {
 // 🍞 Individual Toast Component
 // -----------------------------------------------------------------------------
 
-export const Toast = ({ toast, onClose }: ToastItemProps) => {
+const Toast = ({ toast, onClose }: ToastItemProps) => {
   const [isPaused, setIsPaused] = useState(false);
   const Icon = ICONS[toast.type];
 
@@ -60,7 +59,7 @@ export const Toast = ({ toast, onClose }: ToastItemProps) => {
   };
 
   return (
-    <div
+    <motion.div
       className={`${styles.toast} ${styles[`toast--${toast.type}`]}`}
       role="alertdialog"
       aria-live={getAriaLive()}
@@ -72,6 +71,14 @@ export const Toast = ({ toast, onClose }: ToastItemProps) => {
       onFocus={handleFocus}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
+      // Motion animation props
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 30 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut", // Use easeOut for both enter/exit for consistency
+      }}
     >
       <Icon className={styles.toast__icon} size={32} aria-hidden="true" />
       <div className={styles["toast__message"]}>{toast.message}</div>
@@ -83,38 +90,8 @@ export const Toast = ({ toast, onClose }: ToastItemProps) => {
         onClick={() => onClose(toast.id)}
         aria-label="Dismiss notification"
       />
-    </div>
+    </motion.div>
   );
 };
 
-// -----------------------------------------------------------------------------
-// 🪣 ToastContainer Component
-// -----------------------------------------------------------------------------
-
-export const ToastContainer = () => {
-  const { toasts, hideToast } = useToast();
-  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const root = document.getElementById("toast-root");
-    if (root) {
-      setPortalRoot(root);
-    }
-  }, []);
-
-  if (!toasts.length || !portalRoot) return null;
-
-  return createPortal(
-    <div
-      className={styles["toast-container"]}
-      aria-label="Notifications"
-      role="region"
-      aria-live="polite"
-    >
-      {toasts.map((toast) => (
-        <Toast key={toast.id} toast={toast} onClose={hideToast} />
-      ))}
-    </div>,
-    portalRoot
-  );
-};
+export default Toast;

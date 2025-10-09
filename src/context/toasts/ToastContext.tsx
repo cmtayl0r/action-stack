@@ -38,7 +38,7 @@ interface ToastProviderProps {
 }
 
 // =============================================================================
-// 🆔 UTILITY FUNCTIONS
+// UTILITY FUNCTION
 // =============================================================================
 
 const generateToastId = (): string => {
@@ -98,12 +98,12 @@ export const ToastProvider = ({
   );
 
   const error = useCallback(
-    (message: string) => showToast(message, "error", 5000),
+    (message: string) => showToast(message, "error"),
     [showToast]
   );
 
   const warning = useCallback(
-    (message: string) => showToast(message, "warning", 4000),
+    (message: string) => showToast(message, "warning"),
     [showToast]
   );
 

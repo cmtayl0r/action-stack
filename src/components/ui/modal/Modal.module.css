@@ -17,7 +17,14 @@ OVERLAY
 
   /* Backdrop styling */
   background-color: var(--surface-scrim, rgba(0, 0, 0, 0.5));
-  backdrop-filter: blur(4px);
+
+  &[data-entering] {
+    animation: overlay-fade-in 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &[data-exiting] {
+    animation: overlay-fade-in 300ms cubic-bezier(0.4, 0, 0.2, 1) reverse;
+  }
 }
 
 /*
@@ -49,13 +56,13 @@ CORE STRUCTURE
 
   /* Focus outline */
   outline: none;
-}
 
-/* Starting style for modal entrance */
-@starting-style {
-  .modal {
-    transform: scale(0.95);
-    opacity: 0;
+  &[data-entering] {
+    animation: modal-slide-up 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &[data-exiting] {
+    animation: modal-slide-up 250ms cubic-bezier(0.4, 0, 0.2, 1) reverse;
   }
 }
 
@@ -67,18 +74,19 @@ CORE STRUCTURE
   outline: none;
 }
 
-.modal__header {}
+.modal__header {
+}
 
-.modal__title {}
+.modal__title {
+}
 
-.modal__body {}
+.modal__body {
+}
 
 .modal__footer {
   display: flex;
   justify-content: flex-end;
 }
-
-
 
 .modal__close-button {
   position: absolute;
@@ -114,8 +122,7 @@ SIZE VARIANTS
 
 .modal--sm {
   width: min(100% - var(--space-xl, 1.5rem), 32rem);
-  padding: var(--space-xl,
-      1.5rem);
+  padding: var(--space-xl, 1.5rem);
 }
 
 .modal--md {
@@ -124,8 +131,7 @@ SIZE VARIANTS
     or 40rem, whichever is smaller
   */
   width: min(100% - var(--space-xl, 1.5rem), 48rem);
-  padding: var(--space-xl,
-      1.5rem);
+  padding: var(--space-xl, 1.5rem);
 }
 
 .modal--lg {
@@ -147,12 +153,55 @@ SIZE VARIANTS
 
 /*
 ================================================================================
+ANIMATIONS
+================================================================================
+*/
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal__overlay[data-entering],
+  .modal__overlay[data-exiting],
+  .modal[data-entering],
+  .modal[data-exiting] {
+    animation-duration: 0.01ms !important;
+  }
+
+  @keyframes modal-slide-up {
+    from,
+    to {
+      transform: none;
+    }
+  }
+}
+
+/*
+================================================================================
 RESPONSIVE BEHAVIOUR
 ================================================================================
 */
 
 @media (max-width: 768px) {
-
   /*
   TODO: This class approach seems inefficient for responsive behavior
   I've used .modal[open] because it doesn't work (display properly) without it

@@ -12,7 +12,8 @@ export { MODAL_IDS } from "./ui/modal/ModalHost";
 export { default as Button } from "./ui/button/Button";
 export type { ButtonProps } from "./ui/button/Button";
 // Toast components
-export { Toast, ToastContainer } from "./ui/toast/Toast";
+export { default as Toast } from "./ui/toast/Toast";
+export { default as ToastContainer } from "./ui/toast/ToastContainer";
 // Loading and theme
 export { default as LoadingSpinner } from "./ui/loading-spinner/LoadingSpinner";
 export { default as ThemeSelector } from "./ui/theme-selector/ThemeSelector";

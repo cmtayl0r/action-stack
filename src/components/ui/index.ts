@@ -2,7 +2,8 @@
 // components/ui/index.ts
 
 // Toast components
-export { Toast, ToastContainer } from "./toast/Toast";
+export { default as Toast } from "./toast/Toast";
+export { default as ToastContainer } from "./toast/ToastContainer";
 // Modal components
 export { default as BaseModal } from "./modal/BaseModal";
 export { ModalHost } from "./modal/ModalHost";

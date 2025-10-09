@@ -17,6 +17,7 @@ import { MODAL_IDS } from "@/components/ui/modal/ModalHost";
 import { Button } from "@/components";
 import { getCurrentStackId } from "@/router/router";
 import styles from "./Sidebar.module.css";
+import { useToast } from "@/context/toasts/ToastContext";
 
 function Sidebar() {
   // 🪝 Connect to modal system
@@ -24,6 +25,8 @@ function Sidebar() {
 
   // 🪝 Connect to stacks hook
   const { stacks } = useStacks();
+
+  const { showToast } = useToast();
 
   // 🌐 Connect to app context for theme and stacks
   const { state, toggleTheme, toggleContrast } = useAppContext();
@@ -112,6 +115,8 @@ function Sidebar() {
         >
           Add Stack
         </Button>
+
+        <Button onPress={() => showToast("Hello World")}>Show Toast</Button>
       </div>
 
       {/* Theme switch */}
