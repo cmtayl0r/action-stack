@@ -12,8 +12,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { actionsAPI } from "@/lib/data/supabaseAPI";
-import { TEST_USER_ID } from "@/types/database";
-import type { Action, CreateActionData } from "@/types/database";
+import type { Action } from "@/types/database";
 import { queryKeys } from "@/lib/query-keys";
 
 // ===============================================================
