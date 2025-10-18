@@ -7,7 +7,11 @@ import {
   useEffect,
 } from "react";
 import { AppContextType, AppAction, AppState, Theme } from "@/types/app";
-import { applyTheme, getInitialTheme, getInitialContrast } from "@/lib/theme";
+import {
+  applyTheme,
+  getInitialTheme,
+  getInitialContrast,
+} from "@/lib/utils/theme";
 
 // =============================================================================
 // REDUCER & INITIAL STATE
