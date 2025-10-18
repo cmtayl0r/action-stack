@@ -1,3 +1,7 @@
+// Reusable factory pattern for typing react-query keys
+// Why? Because react-query keys are arrays of strings and/or numbers
+// and we want to have type safety and autocompletion when using them.
+
 export const queryKeys = {
   stacks: {
     all: ["stacks"] as const,

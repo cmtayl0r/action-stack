@@ -8,7 +8,6 @@ import {
 } from "react";
 import { AppContextType, AppAction, AppState, Theme } from "@/types/app";
 import { applyTheme, getInitialTheme, getInitialContrast } from "@/lib/theme";
-import { stat } from "fs";
 
 // =============================================================================
 // REDUCER & INITIAL STATE
